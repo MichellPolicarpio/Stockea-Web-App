@@ -1,4 +1,3 @@
-// force re-deploy
 'use client'
 
 import * as React from 'react'
@@ -10,11 +9,7 @@ import {
   useFormContext,
   useFormState,
 } from 'react-hook-form'
-import type {
-  ControllerProps,
-  FieldPath,
-  FieldValues,
-} from 'react-hook-form'
+import type * as HookForm from 'react-hook-form'
 
 import { cn } from '@/lib/utils'
 import { Label } from '@/components/ui/label'
@@ -22,8 +17,8 @@ import { Label } from '@/components/ui/label'
 const Form = FormProvider
 
 type FormFieldContextValue<
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+  TFieldValues extends HookForm.FieldValues = HookForm.FieldValues,
+  TName extends HookForm.FieldPath<TFieldValues> = HookForm.FieldPath<TFieldValues>,
 > = {
   name: TName
 }
@@ -33,11 +28,11 @@ const FormFieldContext = React.createContext<FormFieldContextValue>(
 )
 
 const FormField = <
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+  TFieldValues extends HookForm.FieldValues = HookForm.FieldValues,
+  TName extends HookForm.FieldPath<TFieldValues> = HookForm.FieldPath<TFieldValues>,
 >({
   ...props
-}: ControllerProps<TFieldValues, TName>) => {
+}: HookForm.ControllerProps<TFieldValues, TName>) => {
   return (
     <FormFieldContext.Provider value={{ name: props.name }}>
       <Controller {...props} />
