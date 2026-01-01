@@ -166,8 +166,8 @@ export function Sidebar({ collapsed, onToggle }: DashboardSidebarProps) {
                     <button
                         onClick={() => logout()}
                         className={cn(
-                            "flex items-center text-slate-500 dark:text-slate-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors min-h-[40px]",
-                            collapsed ? "justify-center w-10 h-10" : "w-full gap-2 px-2 py-2 text-xs font-medium mb-4"
+                            "flex items-center justify-center text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors min-h-[40px]",
+                            collapsed ? "w-10 h-10" : "w-full gap-2 px-2 py-2 text-xs font-medium mb-4"
                         )}
                         title="Cerrar Sesión"
                     >

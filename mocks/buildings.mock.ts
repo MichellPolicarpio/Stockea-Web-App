@@ -3,9 +3,9 @@ import { Building } from '@/types/building'
 export const mockBuildings: Building[] = [
   {
     id: 'building-1',
-    name: 'Torre Residencial Norte',
-    address: 'Av. Principal 123, Ciudad',
-    totalApartments: 24,
+    name: 'Casa Tortuga',
+    address: 'C. Francisco Canal y Av. Revillagigedo',
+    totalApartments: 4,
     createdAt: new Date('2024-01-01'),
     updatedAt: new Date('2024-01-01'),
   },
