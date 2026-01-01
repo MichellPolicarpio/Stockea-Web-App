@@ -57,7 +57,7 @@ export function Sidebar({ collapsed, onToggle }: DashboardSidebarProps) {
                 {/* Mobile Close Button */}
                 <button
                     onClick={onToggle}
-                    className="md:hidden absolute top-7 right-4 z-[60] text-slate-400 hover:text-slate-900 dark:text-slate-500 dark:hover:text-white transition-colors"
+                    className="md:hidden absolute top-9 right-4 z-[60] text-slate-400 hover:text-slate-900 dark:text-slate-500 dark:hover:text-white transition-colors"
                 >
                     <X className="w-6 h-6" />
                 </button>

@@ -31,9 +31,15 @@ export function Header({ sidebarCollapsed, onToggleSidebar }: DashboardHeaderPro
     if (!user) return null
 
     // Título simple basado en la página actual
-    const getPageTitle = (): string => {
+    // Título simple basado en la página actual
+    const getPageTitle = () => {
         if (pathname === '/') return 'Dashboard'
-        if (pathname.startsWith('/buildings')) return 'Gestión de Edificios'
+        if (pathname.startsWith('/buildings')) return (
+            <>
+                <span className="md:hidden">Edificios</span>
+                <span className="hidden md:inline">Gestión de Edificios</span>
+            </>
+        )
         if (pathname.startsWith('/users')) return 'Usuarios'
         if (pathname.startsWith('/reports')) return 'Reportes'
         if (pathname.startsWith('/settings')) return 'Settings'
