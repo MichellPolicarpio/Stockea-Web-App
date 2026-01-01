@@ -65,6 +65,10 @@ export default function LoginPage() {
                   <span>Owner</span>
                   <span className="text-white group-hover:text-blue-200">juan.perez / owner123</span>
                 </div>
+                <div className="flex justify-between px-3 py-2 rounded hover:bg-white/5 transition-colors cursor-pointer group">
+                  <span>Verifier</span>
+                  <span className="text-white group-hover:text-blue-200">carlos.rodriguez / verifier123</span>
+                </div>
               </div>
             </div>
           </div>

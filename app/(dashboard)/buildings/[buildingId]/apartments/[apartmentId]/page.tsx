@@ -12,7 +12,7 @@ import { ArrowLeft, Package, CheckSquare, LayoutDashboard } from 'lucide-react'
 import Link from 'next/link'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { InventoryManager } from '@/components/apartments/InventoryManager'
-import { AreaEvaluator } from '@/components/apartments/AreaEvaluator'
+import { AreaConfigurator } from '@/components/apartments/AreaConfigurator'
 import { ApartmentDashboard } from '@/components/apartments/ApartmentDashboard'
 import { Spinner } from '@/components/ui/spinner'
 
@@ -127,7 +127,7 @@ export default function ApartmentDetailPage() {
         </TabsContent>
 
         <TabsContent value="areas" className="animate-in fade-in slide-in-from-right-4 duration-300">
-          <AreaEvaluator apartmentId={apartmentId} />
+          <AreaConfigurator apartmentId={apartmentId} />
         </TabsContent>
       </Tabs>
     </div>
