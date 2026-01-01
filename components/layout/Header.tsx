@@ -177,7 +177,7 @@ export function Header({ sidebarCollapsed, onToggleSidebar }: DashboardHeaderPro
                 </div>
 
                 {/* ROW 2: The Full Width Line */}
-                <div className="h-[2px] w-full bg-black dark:bg-slate-700 rounded-full hidden md:block opacity-90 transition-all" />
+                <div className="h-[2px] w-full bg-black dark:bg-slate-700 rounded-full block opacity-90 transition-all" />
 
             </div>
         </header>

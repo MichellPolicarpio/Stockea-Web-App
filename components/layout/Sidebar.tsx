@@ -11,7 +11,8 @@ import {
     LogOut,
     HelpCircle,
     PanelLeftClose,
-    PanelLeftOpen
+    PanelLeftOpen,
+    X
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -53,6 +54,14 @@ export function Sidebar({ collapsed, onToggle }: DashboardSidebarProps) {
                     collapsed ? "-translate-x-full md:translate-x-0" : "translate-x-0"
                 )}
             >
+                {/* Mobile Close Button */}
+                <button
+                    onClick={onToggle}
+                    className="md:hidden absolute top-7 right-4 z-[60] text-slate-400 hover:text-slate-900 dark:text-slate-500 dark:hover:text-white transition-colors"
+                >
+                    <X className="w-6 h-6" />
+                </button>
+
                 {/* LOGO SECTION - STOCKEA BRANDING with Matching Line */}
                 <div className={cn("flex flex-col justify-between w-full h-24", collapsed ? "items-center" : "px-6")}>
                     {/* Logo Content - Centered Vertically */}

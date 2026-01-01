@@ -63,7 +63,7 @@ export default function DashboardLayout({
         onToggleSidebar={handleToggleSidebar}
       />
       <main
-        className={`pt-[116px] transition-all duration-300 min-h-screen flex flex-col ${sidebarCollapsed ? "ml-0 md:ml-20" : "ml-0 md:ml-64"
+        className={`pt-[80px] md:pt-[100px] transition-all duration-300 min-h-screen flex flex-col ${sidebarCollapsed ? "ml-0 md:ml-20" : "ml-0 md:ml-64"
           }`}
       >
         <div className="flex-1 px-8 pb-8">
