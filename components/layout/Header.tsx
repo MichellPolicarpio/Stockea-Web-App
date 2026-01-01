@@ -54,7 +54,7 @@ export function Header({ sidebarCollapsed, onToggleSidebar }: DashboardHeaderPro
 
     return (
         <header
-            className={`fixed top-0 right-0 h-[100px] z-40 transition-all duration-300 left-0 ${sidebarCollapsed ? "md:left-20" : "md:left-64"} flex items-center bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-b border-slate-200/50 dark:border-slate-800/50 support-[backdrop-filter]:bg-white/60`}
+            className={`fixed top-0 right-0 h-[100px] z-40 transition-all duration-300 left-0 ${sidebarCollapsed ? "md:left-20" : "md:left-64"} flex items-center bg-white/80 dark:bg-slate-950/80 backdrop-blur-md support-[backdrop-filter]:bg-white/60`}
         >
             <div className="w-full flex flex-col justify-end px-8 h-full gap-6 pb-1">
 
