@@ -431,7 +431,7 @@ function AdminDashboard() {
                                         <div className="h-8 w-8 rounded-md bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
                                             <Armchair className="h-4 w-4 text-slate-600 dark:text-slate-400" />
                                         </div>
-                                        <span className="font-bold text-slate-900 dark:text-white text-sm">Mobiliario</span>
+                                        <span className="font-bold text-slate-600 dark:text-slate-400 text-sm">Mobiliario</span>
                                     </div>
                                     <span className="text-xs font-bold text-slate-900 dark:text-white">450 items</span>
                                 </div>
@@ -447,7 +447,7 @@ function AdminDashboard() {
                                         <div className="h-8 w-8 rounded-md bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
                                             <Tv className="h-4 w-4 text-slate-600 dark:text-slate-400" />
                                         </div>
-                                        <span className="font-bold text-slate-900 dark:text-white text-sm">Electrónicos</span>
+                                        <span className="font-bold text-slate-600 dark:text-slate-400 text-sm">Electrónicos</span>
                                     </div>
                                     <span className="text-xs font-bold text-slate-900 dark:text-white">210 items</span>
                                 </div>
@@ -463,7 +463,7 @@ function AdminDashboard() {
                                         <div className="h-8 w-8 rounded-md bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
                                             <Utensils className="h-4 w-4 text-slate-600 dark:text-slate-400" />
                                         </div>
-                                        <span className="font-bold text-slate-900 dark:text-white text-sm">Cocina</span>
+                                        <span className="font-bold text-slate-600 dark:text-slate-400 text-sm">Cocina</span>
                                     </div>
                                     <span className="text-xs font-bold text-slate-900 dark:text-white">185 items</span>
                                 </div>
@@ -478,7 +478,7 @@ function AdminDashboard() {
                                         <div className="h-8 w-8 rounded-md bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
                                             <Palette className="h-4 w-4 text-slate-600 dark:text-slate-400" />
                                         </div>
-                                        <span className="font-bold text-slate-900 dark:text-white text-sm">Decoración</span>
+                                        <span className="font-bold text-slate-600 dark:text-slate-400 text-sm">Decoración</span>
                                     </div>
                                     <span className="text-xs font-bold text-slate-900 dark:text-white">120 items</span>
                                 </div>
