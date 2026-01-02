@@ -56,7 +56,7 @@ export default function InspectionPage() {
     // STATE
     // Initialize with some mock "bad" statuses for demo if in view mode
     const [inventoryState, setInventoryState] = useState<{
-        [key: string]: { status: 'good' | 'bad' | 'missing', comment?: string, found?: boolean }
+        [key: string]: { status: 'good' | 'bad' | 'missing', comment?: string, found?: boolean, image?: string }
     }>({})
 
     const [physicalState, setPhysicalState] = useState<{
@@ -188,11 +188,11 @@ export default function InspectionPage() {
                 </div>
 
                 <Tabs defaultValue="mobiliario" className="w-full">
-                    <TabsList className="w-full justify-start h-auto p-1 bg-slate-100 dark:bg-slate-800 overflow-x-auto flex-wrap">
-                        <TabsTrigger value="mobiliario" className="flex-1 min-w-[120px]">Mobiliario</TabsTrigger>
-                        <TabsTrigger value="electrodomesticos" className="flex-1 min-w-[120px]">Electrodomésticos</TabsTrigger>
-                        <TabsTrigger value="decoracion" className="flex-1 min-w-[120px]">Decoración</TabsTrigger>
-                        <TabsTrigger value="fisico" className="flex-1 min-w-[120px]">Estado Físico</TabsTrigger>
+                    <TabsList className="w-full justify-start h-14 p-1 bg-slate-100 dark:bg-slate-800 overflow-x-auto flex-wrap no-scrollbar">
+                        <TabsTrigger value="mobiliario" className="flex-1 min-w-[110px] h-10 data-[state=active]:bg-white data-[state=active]:shadow-sm">Mobiliario</TabsTrigger>
+                        <TabsTrigger value="electrodomesticos" className="flex-1 min-w-[130px] h-10 data-[state=active]:bg-white data-[state=active]:shadow-sm">Electrodomésticos</TabsTrigger>
+                        <TabsTrigger value="decoracion" className="flex-1 min-w-[110px] h-10 data-[state=active]:bg-white data-[state=active]:shadow-sm">Decoración</TabsTrigger>
+                        <TabsTrigger value="fisico" className="flex-1 min-w-[110px] h-10 data-[state=active]:bg-white data-[state=active]:shadow-sm">Estado Físico</TabsTrigger>
                     </TabsList>
 
                     {/* 1. MOBILIARIO */}
@@ -209,7 +209,7 @@ export default function InspectionPage() {
 
                                     return (
                                         <div key={item.id} className={cn(
-                                            "flex flex-col sm:flex-row gap-4 p-4 rounded-lg border",
+                                            "flex flex-col sm:flex-row gap-4 p-5 rounded-lg border",
                                             isGood ? 'border-slate-100 bg-white dark:border-slate-800 dark:bg-slate-900' : 'border-red-200 bg-red-50 dark:border-red-900 dark:bg-red-900/10'
                                         )}>
                                             <div className="flex-1">
@@ -249,8 +249,30 @@ export default function InspectionPage() {
                                                                     value={state.comment || ''}
                                                                     onChange={(e) => handleInventoryChange(item.id, 'comment', e.target.value)}
                                                                 />
-                                                                <Button variant="outline" size="sm" className="w-full mt-2 gap-2 text-slate-500">
-                                                                    <Camera className="h-3 w-3" /> Agregar Foto
+                                                                <input
+                                                                    type="file"
+                                                                    id={`file-${item.id}`}
+                                                                    className="hidden"
+                                                                    accept="image/*"
+                                                                    capture="environment"
+                                                                    onChange={(e) => {
+                                                                        const file = e.target.files?.[0]
+                                                                        if (file) {
+                                                                            handleInventoryChange(item.id, 'image', file.name)
+                                                                        }
+                                                                    }}
+                                                                />
+                                                                <Button
+                                                                    variant="outline"
+                                                                    size="sm"
+                                                                    className={cn(
+                                                                        "w-full mt-3 h-10 gap-2 font-medium border-slate-300",
+                                                                        state.image ? "text-green-600 border-green-200 bg-green-50" : "text-slate-600"
+                                                                    )}
+                                                                    onClick={() => document.getElementById(`file-${item.id}`)?.click()}
+                                                                >
+                                                                    {state.image ? <CheckCircle2 className="h-4 w-4" /> : <Camera className="h-4 w-4" />}
+                                                                    {state.image ? 'Foto Adjunta' : 'Agregar Foto'}
                                                                 </Button>
                                                             </>
                                                         ) : (
@@ -446,8 +468,8 @@ export default function InspectionPage() {
                         ))}
 
                         {mode === 'edit' && (
-                            <div className="pt-6">
-                                <Button size="lg" className="w-full bg-blue-600 hover:bg-blue-700 h-12 text-lg font-bold shadow-lg" onClick={handleSubmit}>
+                            <div className="pt-8 pb-12">
+                                <Button size="lg" className="w-full bg-blue-600 hover:bg-blue-700 h-14 text-lg font-bold shadow-xl rounded-xl" onClick={handleSubmit}>
                                     <Save className="mr-2 h-5 w-5" /> Finalizar y Guardar Reporte
                                 </Button>
                             </div>
