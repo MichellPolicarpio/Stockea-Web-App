@@ -169,15 +169,14 @@ function AdminDashboard() {
         { name: 'Malo', value: 10, color: '#FF5A5F' },
     ]
 
-    // 3. Activity Trend (Items Verified)
+    // 3. Activity Trend (Inspections Monthly)
     const activityData = [
-        { day: 'Lun', verified: 12 },
-        { day: 'Mar', verified: 18 },
-        { day: 'Mie', verified: 15 },
-        { day: 'Jue', verified: 25 },
-        { day: 'Vie', verified: 20 },
-        { day: 'Sab', verified: 8 },
-        { day: 'Dom', verified: 5 },
+        { month: 'Ene', inspections: 12 },
+        { month: 'Feb', inspections: 18 },
+        { month: 'Mar', inspections: 15 },
+        { month: 'Abr', inspections: 25 },
+        { month: 'May', inspections: 20 },
+        { month: 'Jun', inspections: 32 },
     ]
 
     // 4. Radar Data: Wear & Tear by Zone (Incidents)
@@ -331,12 +330,12 @@ function AdminDashboard() {
                                 {/* Custom Legend */}
                                 <div className="flex flex-col gap-2 text-sm flex-1">
                                     {conditionData.map((item) => (
-                                        <div key={item.name} className="flex items-center justify-between">
-                                            <div className="flex items-center gap-2">
+                                        <div key={item.name} className="flex items-center gap-3">
+                                            <div className="flex items-center gap-2 min-w-[80px]">
                                                 <div className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }} />
                                                 <span className="text-slate-600 dark:text-slate-400 font-medium">{item.name}</span>
                                             </div>
-                                            <span className="text-slate-400 dark:text-slate-500">{item.value}%</span>
+                                            <span className="text-slate-900 dark:text-white font-bold text-xs">{item.value}%</span>
                                         </div>
                                     ))}
                                 </div>
@@ -347,17 +346,34 @@ function AdminDashboard() {
 
                         {/* AREA CHART: Verification Activity */}
                         <div className="space-y-4">
-                            <h4 className="text-base font-bold text-slate-900 dark:text-white">Actividad de Verificación</h4>
+                            <div className="flex items-baseline justify-between">
+                                <h4 className="text-base font-bold text-slate-900 dark:text-white">Inspecciones</h4>
+                                <span className="text-xs text-slate-500 dark:text-slate-400">Historial Semestral</span>
+                            </div>
                             <div className="h-[180px] w-full">
                                 <ResponsiveContainer width="100%" height="100%">
-                                    <AreaChart data={activityData}>
+                                    <AreaChart data={activityData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                                         <defs>
-                                            <linearGradient id="colorVerified" x1="0" y1="0" x2="0" y2="1">
+                                            <linearGradient id="colorInspections" x1="0" y1="0" x2="0" y2="1">
                                                 <stop offset="5%" stopColor="#00A699" stopOpacity={0.1} />
                                                 <stop offset="95%" stopColor="#00A699" stopOpacity={0} />
                                             </linearGradient>
                                         </defs>
+                                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={isDark ? "#334155" : "#f1f5f9"} />
+                                        <XAxis
+                                            dataKey="month"
+                                            axisLine={false}
+                                            tickLine={false}
+                                            tick={{ fill: isDark ? '#94a3b8' : '#64748b', fontSize: 12 }}
+                                            dy={10}
+                                        />
+                                        <YAxis
+                                            axisLine={false}
+                                            tickLine={false}
+                                            tick={{ fill: isDark ? '#94a3b8' : '#64748b', fontSize: 12 }}
+                                        />
                                         <Tooltip
+                                            formatter={(value) => [`${value}`, 'Inspecciones']}
                                             contentStyle={{
                                                 backgroundColor: isDark ? '#0f172a' : '#fff',
                                                 borderRadius: '8px',
@@ -368,11 +384,11 @@ function AdminDashboard() {
                                         />
                                         <Area
                                             type="monotone"
-                                            dataKey="verified"
+                                            dataKey="inspections"
                                             stroke="#00A699"
                                             strokeWidth={2}
                                             fillOpacity={1}
-                                            fill="url(#colorVerified)"
+                                            fill="url(#colorInspections)"
                                         />
                                     </AreaChart>
                                 </ResponsiveContainer>
