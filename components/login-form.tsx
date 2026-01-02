@@ -126,6 +126,11 @@ export function LoginForm() {
                     <div className="space-y-6">
 
 
+                        <div className="hidden lg:block space-y-2 text-center sm:text-left">
+                            <h1 className="text-2xl font-bold tracking-tight text-slate-900">Bienvenido</h1>
+                            <p className="text-slate-500 text-sm">Ingrese a su cuenta corporativa</p>
+                        </div>
+
                         <form onSubmit={handleLoginSubmit} className="space-y-5">
                             <div className="space-y-4">
                                 <div className="space-y-2">
