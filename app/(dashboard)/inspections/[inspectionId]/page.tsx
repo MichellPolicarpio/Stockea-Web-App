@@ -360,6 +360,13 @@ export default function InspectionPage() {
                                 })}
                             </CardContent>
                         </Card>
+                        {mode === 'edit' && (
+                            <div className="flex justify-end pt-4">
+                                <Button onClick={() => setActiveTab('decoracion')}>
+                                    Siguiente: Decoración <ArrowRight className="ml-2 h-4 w-4" />
+                                </Button>
+                            </div>
+                        )}
                     </TabsContent>
 
                     {/* 3. DECORACION */}
@@ -409,6 +416,13 @@ export default function InspectionPage() {
                                 })}
                             </CardContent>
                         </Card>
+                        {mode === 'edit' && (
+                            <div className="flex justify-end pt-4">
+                                <Button onClick={() => setActiveTab('fisico')}>
+                                    Siguiente: Estado Físico <ArrowRight className="ml-2 h-4 w-4" />
+                                </Button>
+                            </div>
+                        )}
                     </TabsContent>
 
                     {/* 4. ESTADO FISICO */}
@@ -470,8 +484,8 @@ export default function InspectionPage() {
                         ))}
 
                         {mode === 'edit' && (
-                            <div className="pt-8 pb-12">
-                                <Button size="lg" className="w-full bg-blue-600 hover:bg-blue-700 h-14 text-lg font-bold shadow-xl rounded-xl" onClick={handleSubmit}>
+                            <div className="flex justify-end pt-8 pb-12">
+                                <Button size="lg" className="w-full md:w-auto px-8 bg-blue-600 hover:bg-blue-700 h-14 text-lg font-bold shadow-xl rounded-xl" onClick={handleSubmit}>
                                     <Save className="mr-2 h-5 w-5" /> Finalizar y Guardar Reporte
                                 </Button>
                             </div>
