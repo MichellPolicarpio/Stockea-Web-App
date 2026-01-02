@@ -142,13 +142,13 @@ function AdminDashboard() {
 
     // MOCK DATA: Inventory Focus
     // 1. Inventory Volume per Building
+    // 1. Inventory Volume per Building
     const inventoryByBuilding = [
-        { name: 'Casa Tortuga', items: 450, totalValue: 120000 },
-        { name: 'Casa Bamba', items: 320, totalValue: 85000 },
-        { name: 'Villa Sol', items: 280, totalValue: 72000 },
-        { name: 'Vista Mar', items: 190, totalValue: 95000 },
-        { name: 'El Palmar', items: 150, totalValue: 45000 },
-        { name: 'Coral', items: 210, totalValue: 58000 },
+        { name: 'Casa Tortuga', items: 85, totalValue: 120000 },
+        { name: 'Casa Bamba', items: 62, totalValue: 85000 },
+        { name: 'Villa Sol', items: 58, totalValue: 72000 },
+        { name: 'Vista Mar', items: 45, totalValue: 95000 },
+        { name: 'El Palmar', items: 92, totalValue: 45000 },
     ]
 
     // 2. Condition Status
@@ -181,12 +181,12 @@ function AdminDashboard() {
                         <Box className="h-4 w-4 text-slate-400" />
                     </div>
                     <div className="flex items-baseline gap-2">
-                        <h2 className="text-4xl font-bold text-slate-900 dark:text-white tracking-tight">1,600</h2>
+                        <h2 className="text-4xl font-bold text-slate-900 dark:text-white tracking-tight">342</h2>
                     </div>
                     <div className="flex items-center gap-2 text-sm mt-1">
                         <span className="flex items-center text-emerald-600 dark:text-emerald-400 font-medium bg-emerald-50 dark:bg-emerald-900/30 px-1.5 py-0.5 rounded-md">
                             <ArrowUpRight className="h-3 w-3 mr-1" />
-                            +124
+                            +12
                         </span>
                         <span className="text-slate-400">nuevos este mes</span>
                     </div>
@@ -195,15 +195,15 @@ function AdminDashboard() {
                 {/* Metric 2 */}
                 <div className="flex flex-col gap-2">
                     <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium text-slate-500 dark:text-slate-400">Valor Estimado</span>
-                        <span className="text-xs text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full">MXN</span>
+                        <span className="text-sm font-medium text-slate-500 dark:text-slate-400">Inspecciones Totales</span>
+                        <ClipboardList className="h-4 w-4 text-slate-400" />
                     </div>
                     <div className="flex items-baseline gap-2">
-                        <h2 className="text-4xl font-bold text-slate-900 dark:text-white tracking-tight">$475k</h2>
+                        <h2 className="text-4xl font-bold text-slate-900 dark:text-white tracking-tight">14</h2>
                     </div>
                     <div className="flex items-center gap-2 text-sm mt-1">
                         <span className="flex items-center text-slate-500 dark:text-slate-400 font-medium">
-                            Inventario Activo
+                            Realizadas este mes
                         </span>
                     </div>
                 </div>
@@ -215,13 +215,13 @@ function AdminDashboard() {
                         <AlertTriangle className="h-4 w-4 text-amber-500" />
                     </div>
                     <div className="flex items-baseline gap-2">
-                        <h2 className="text-4xl font-bold text-slate-900 dark:text-white tracking-tight">28</h2>
+                        <h2 className="text-4xl font-bold text-slate-900 dark:text-white tracking-tight">4</h2>
                     </div>
                     <div className="flex items-center gap-2 text-sm mt-1">
                         <span className="flex items-center text-amber-600 dark:text-amber-400 font-medium bg-amber-50 dark:bg-amber-900/30 px-1.5 py-0.5 rounded-md">
-                            15 Dañados
+                            3 Dañados
                         </span>
-                        <span className="text-slate-400">13 Faltantes</span>
+                        <span className="text-slate-400">1 Faltante</span>
                     </div>
                 </div>
             </div>
