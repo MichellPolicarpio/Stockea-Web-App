@@ -55,6 +55,8 @@ export default function InspectionPage() {
 
     // STATE
     // Initialize with some mock "bad" statuses for demo if in view mode
+    const [activeTab, setActiveTab] = useState('mobiliario')
+
     const [inventoryState, setInventoryState] = useState<{
         [key: string]: { status: 'good' | 'bad' | 'missing', comment?: string, found?: boolean, image?: string }
     }>({})
@@ -187,12 +189,12 @@ export default function InspectionPage() {
                     </div>
                 </div>
 
-                <Tabs defaultValue="mobiliario" className="w-full">
-                    <TabsList className="w-full justify-start h-14 p-1 bg-slate-100 dark:bg-slate-800 overflow-x-auto flex-wrap no-scrollbar">
-                        <TabsTrigger value="mobiliario" className="flex-1 min-w-[110px] h-10 data-[state=active]:bg-white data-[state=active]:shadow-sm">Mobiliario</TabsTrigger>
-                        <TabsTrigger value="electrodomesticos" className="flex-1 min-w-[130px] h-10 data-[state=active]:bg-white data-[state=active]:shadow-sm">Electrodomésticos</TabsTrigger>
-                        <TabsTrigger value="decoracion" className="flex-1 min-w-[110px] h-10 data-[state=active]:bg-white data-[state=active]:shadow-sm">Decoración</TabsTrigger>
-                        <TabsTrigger value="fisico" className="flex-1 min-w-[110px] h-10 data-[state=active]:bg-white data-[state=active]:shadow-sm">Estado Físico</TabsTrigger>
+                <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                    <TabsList className="w-full justify-start h-auto p-1.5 bg-slate-100 dark:bg-slate-800 overflow-x-auto flex-nowrap gap-2 no-scrollbar">
+                        <TabsTrigger value="mobiliario" className="flex-shrink-0 px-4 py-2 h-auto data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-md transition-all">Mobiliario</TabsTrigger>
+                        <TabsTrigger value="electrodomesticos" className="flex-shrink-0 px-4 py-2 h-auto data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-md transition-all">Electrodomésticos</TabsTrigger>
+                        <TabsTrigger value="decoracion" className="flex-shrink-0 px-4 py-2 h-auto data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-md transition-all">Decoración</TabsTrigger>
+                        <TabsTrigger value="fisico" className="flex-shrink-0 px-4 py-2 h-auto data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-md transition-all">Estado Físico</TabsTrigger>
                     </TabsList>
 
                     {/* 1. MOBILIARIO */}
@@ -289,8 +291,8 @@ export default function InspectionPage() {
                             </CardContent>
                         </Card>
                         {mode === 'edit' && (
-                            <div className="flex justify-end">
-                                <Button onClick={() => document.getElementById('tab-electrodomesticos')?.click()}>
+                            <div className="flex justify-end pt-4">
+                                <Button onClick={() => setActiveTab('electrodomesticos')}>
                                     Siguiente: Electrodomésticos <ArrowRight className="ml-2 h-4 w-4" />
                                 </Button>
                             </div>
