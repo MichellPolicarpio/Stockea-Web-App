@@ -23,6 +23,8 @@ const MOCK_ASSIGNMENTS = [
   { id: 2, building: 'Villa Sol', apartment: '304', date: '2024-10-16', status: 'pending', priority: 'medium', address: 'Calle Sol 45', notes: 'Entrega de llaves' },
   { id: 3, building: 'Casa Bamba', apartment: '002', date: '2024-10-10', status: 'overdue', priority: 'high', address: 'Blvd. Las Palmas 88', notes: 'Reporte de daños previo' },
   { id: 4, building: 'El Palmar', apartment: 'PH-1', date: '2024-10-20', status: 'completed', priority: 'low', address: 'Zona Hotelera Km 5', notes: 'Limpieza finalizada' },
+  // Owner specific mock
+  { id: 5, building: 'Casa Tortuga', apartment: '102', date: '2024-10-25', status: 'completed', priority: 'low', address: 'Av. Costera 123', notes: 'Mantenimiento Preventivo' },
 ]
 
 export default function AssignedApartmentsPage() {
@@ -31,8 +33,10 @@ export default function AssignedApartmentsPage() {
 
   if (!user) return null
 
-  // Filter logic placeholder (can be expanded)
-  const assignments = MOCK_ASSIGNMENTS
+  // Filter logic: Owner sees ONLY their specific unit (Casa Tortuga 102 for demo)
+  const assignments = user.role === 'owner'
+    ? MOCK_ASSIGNMENTS.filter(a => a.building === 'Casa Tortuga' && a.apartment === '102')
+    : MOCK_ASSIGNMENTS.filter(a => a.apartment !== '102') // Verifiers see the rest
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -56,9 +60,11 @@ export default function AssignedApartmentsPage() {
     <div className="space-y-6 animate-in fade-in duration-500">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Departamentos Asignados</h1>
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+            {user.role === 'owner' ? 'Mis Propiedades' : 'Departamentos Asignados'}
+          </h1>
           <p className="text-muted-foreground mt-1">
-            Gestiona tus visitas y reportes de inspección.
+            {user.role === 'owner' ? 'Visualiza el estado y reportes de tus inmuebles.' : 'Gestiona tus visitas y reportes de inspección.'}
           </p>
         </div>
         {/* Search / Filters */}
