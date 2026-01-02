@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -20,6 +20,9 @@ export function LoginForm() {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState("")
     const [showSplash, setShowSplash] = useState(false)
+
+    // Refs para navegación con teclado
+    const passwordRef = useRef<HTMLInputElement>(null)
 
     // Login Data
     const [loginData, setLoginData] = useState({ username: "", password: "" })
@@ -85,7 +88,7 @@ export function LoginForm() {
         return (
             <div className="fixed inset-0 bg-white z-[100] flex flex-col items-center justify-center animate-in fade-in duration-300">
                 <div className="flex flex-col items-center gap-6">
-                    {/* Isotipo animado Stockea */}
+                    {/* Isotipo animado Stokea */}
                     <div className="w-12 h-12 bg-black flex items-center justify-center animate-[spin_1s_ease-in-out]">
                         <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
                             <path d="M4 4h16v16H4z" />
@@ -139,6 +142,12 @@ export function LoginForm() {
                                         placeholder="usuario o correo"
                                         value={loginData.username}
                                         onChange={(e) => setLoginData({ ...loginData, username: e.target.value })}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') {
+                                                e.preventDefault();
+                                                passwordRef.current?.focus();
+                                            }
+                                        }}
                                         className="h-11 bg-slate-50 border-slate-200 focus:bg-white transition-all"
                                         disabled={loading}
                                     />
@@ -155,6 +164,7 @@ export function LoginForm() {
                                         placeholder="••••••••"
                                         value={loginData.password}
                                         onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+                                        ref={passwordRef}
                                         className="h-11 bg-slate-50 border-slate-200 focus:bg-white transition-all"
                                         disabled={loading}
                                     />
