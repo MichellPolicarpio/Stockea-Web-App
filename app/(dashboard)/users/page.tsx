@@ -19,7 +19,9 @@ import {
   Trash2,
   CheckCircle2,
   XCircle,
-  Save
+  Save,
+  Camera,
+  Upload
 } from 'lucide-react'
 import {
   DropdownMenu,
@@ -126,6 +128,9 @@ export default function UsersPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [isEditOpen, setIsEditOpen] = useState(false)
   const [editingUser, setEditingUser] = useState<User | null>(null)
+  const [editFirstName, setEditFirstName] = useState('')
+  const [editLastName, setEditLastName] = useState('')
+  const fileInputRef = React.useRef<HTMLInputElement>(null)
 
   // Filter Logic
   const filteredUsers = users.filter(u =>
@@ -137,15 +142,45 @@ export default function UsersPage() {
 
   const handleEditClick = (user: User) => {
     setEditingUser(user)
+    // Separar nombre y apellido para edición granular
+    const parts = user.name.trim().split(/\s+/)
+    if (parts.length > 0) {
+      // Asumimos: Primer token es nombre, el resto apellidos. El usuario puede corregir.
+      setEditFirstName(parts[0])
+      setEditLastName(parts.slice(1).join(' '))
+    } else {
+      setEditFirstName(user.name)
+      setEditLastName('')
+    }
     setIsEditOpen(true)
+  }
+
+  const handleAvatarUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file && editingUser) {
+      const imageUrl = URL.createObjectURL(file)
+      setEditingUser({ ...editingUser, avatar: imageUrl })
+    }
+  }
+
+  const handleRemoveAvatar = () => {
+    if (editingUser) {
+      setEditingUser({ ...editingUser, avatar: '' })
+    }
+  }
+
+  const handleTriggerUpload = () => {
+    fileInputRef.current?.click()
   }
 
   const handleSaveUser = (e: React.FormEvent) => {
     e.preventDefault()
     if (!editingUser) return
 
+    const fullName = `${editFirstName} ${editLastName}`.trim()
+
     // Validación simple
-    if (!editingUser.name || !editingUser.email) {
+    if (!fullName || !editingUser.email) {
       toast({
         title: "Error",
         description: "El nombre y el correo son obligatorios.",
@@ -154,13 +189,15 @@ export default function UsersPage() {
       return
     }
 
+    const updatedUser = { ...editingUser, name: fullName }
+
     // Update User State
-    setUsers(prev => prev.map(u => u.id === editingUser.id ? editingUser : u))
+    setUsers(prev => prev.map(u => u.id === updatedUser.id ? updatedUser : u))
 
     setIsEditOpen(false)
     toast({
       title: "Usuario Actualizado",
-      description: `Los datos de ${editingUser.name} han sido guardados.`,
+      description: `Los datos de ${fullName} han sido guardados.`,
     })
   }
 
@@ -359,76 +396,121 @@ export default function UsersPage() {
 
       {/* EDIT USER DIALOG */}
       <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
             <DialogTitle>Editar Usuario</DialogTitle>
             <DialogDescription>
-              Modifica los detalles del usuario. Haz clic en guardar al terminar.
+              Modifica los detalles del usuario, incluyendo foto de perfil.
             </DialogDescription>
           </DialogHeader>
 
           {editingUser && (
-            <form onSubmit={handleSaveUser} className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right">
-                  Nombre
-                </Label>
-                <Input
-                  id="name"
-                  value={editingUser.name}
-                  onChange={(e) => setEditingUser({ ...editingUser, name: e.target.value })}
-                  className="col-span-3"
+            <form onSubmit={handleSaveUser} className="grid gap-6 py-4">
+
+              {/* Avatar Section */}
+              <div className="flex flex-col items-center gap-4">
+                <div className="relative group">
+                  <Avatar className="h-24 w-24 border-4 border-slate-100 dark:border-slate-800 shadow-md cursor-pointer transition-opacity group-hover:opacity-90" onClick={handleTriggerUpload}>
+                    <AvatarImage src={editingUser.avatar} className="object-cover" />
+                    <AvatarFallback className="text-2xl bg-slate-200 dark:bg-slate-700 font-bold text-slate-500">
+                      {editFirstName && editFirstName[0]}{editLastName && editLastName[0]}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="absolute bottom-0 right-0 bg-blue-600 text-white p-1.5 rounded-full shadow-sm cursor-pointer hover:bg-blue-700 transition-colors" onClick={(e) => { e.stopPropagation(); handleTriggerUpload(); }}>
+                    <Camera className="h-4 w-4" />
+                  </div>
+                </div>
+
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  className="hidden"
+                  accept="image/*"
+                  onChange={handleAvatarUpload}
                 />
+
+                <div className="flex gap-2">
+                  <Button type="button" variant="outline" size="sm" onClick={handleTriggerUpload}>
+                    <Upload className="h-3.5 w-3.5 mr-2" />
+                    Subir Foto
+                  </Button>
+                  {editingUser.avatar && (
+                    <Button type="button" variant="ghost" size="sm" className="text-rose-600 hover:text-rose-700 hover:bg-rose-50" onClick={handleRemoveAvatar}>
+                      <Trash2 className="h-3.5 w-3.5 mr-2" />
+                      Eliminar
+                    </Button>
+                  )}
+                </div>
               </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="email" className="text-right">
-                  Correo
-                </Label>
+
+              {/* Name Fields */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="firstName">Nombres</Label>
+                  <Input
+                    id="firstName"
+                    value={editFirstName}
+                    onChange={(e) => setEditFirstName(e.target.value)}
+                    placeholder="Ej. Juan Carlos"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="lastName">Apellidos</Label>
+                  <Input
+                    id="lastName"
+                    value={editLastName}
+                    onChange={(e) => setEditLastName(e.target.value)}
+                    placeholder="Ej. Pérez González"
+                  />
+                </div>
+              </div>
+
+              {/* Other Fields */}
+              <div className="space-y-2">
+                <Label htmlFor="email">Correo Electrónico</Label>
                 <Input
                   id="email"
                   value={editingUser.email}
                   onChange={(e) => setEditingUser({ ...editingUser, email: e.target.value })}
-                  className="col-span-3"
                 />
               </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="role" className="text-right">
-                  Rol
-                </Label>
-                <Select
-                  value={editingUser.role}
-                  onValueChange={(val: UserRole) => setEditingUser({ ...editingUser, role: val })}
-                >
-                  <SelectTrigger className="col-span-3">
-                    <SelectValue placeholder="Selecciona un rol" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="admin">Administrador</SelectItem>
-                    <SelectItem value="verifier">Verificador</SelectItem>
-                    <SelectItem value="owner">Propietario</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="status" className="text-right">
-                  Estado
-                </Label>
-                <Select
-                  value={editingUser.status}
-                  onValueChange={(val: UserStatus) => setEditingUser({ ...editingUser, status: val })}
-                >
-                  <SelectTrigger className="col-span-3">
-                    <SelectValue placeholder="Estado" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="active">Activo</SelectItem>
-                    <SelectItem value="inactive">Inactivo</SelectItem>
-                  </SelectContent>
-                </Select>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="role">Rol</Label>
+                  <Select
+                    value={editingUser.role}
+                    onValueChange={(val: UserRole) => setEditingUser({ ...editingUser, role: val })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Rol" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="admin">Administrador</SelectItem>
+                      <SelectItem value="verifier">Verificador</SelectItem>
+                      <SelectItem value="owner">Propietario</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="status">Estado</Label>
+                  <Select
+                    value={editingUser.status}
+                    onValueChange={(val: UserStatus) => setEditingUser({ ...editingUser, status: val })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Estado" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="active">Activo</SelectItem>
+                      <SelectItem value="inactive">Inactivo</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
 
               <DialogFooter className="mt-4">
-                <Button type="submit" className="bg-airbnb-rausch hover:bg-[#ff385c] text-white">
+                <Button type="submit" className="bg-airbnb-rausch hover:bg-[#ff385c] text-white w-full sm:w-auto">
                   <Save className="mr-2 h-4 w-4" />
                   Guardar Cambios
                 </Button>
