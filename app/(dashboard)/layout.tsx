@@ -65,7 +65,7 @@ export default function DashboardLayout({
         />
       </div>
       <main
-        className={`pt-[80px] md:pt-[130px] transition-all duration-300 min-h-screen flex flex-col print:m-0 print:p-0 print:pt-0 ${sidebarCollapsed ? "ml-0 md:ml-20" : "ml-0 md:ml-64"
+        className={`pt-[110px] md:pt-[130px] transition-all duration-300 min-h-screen flex flex-col print:m-0 print:p-0 print:pt-0 ${sidebarCollapsed ? "ml-0 md:ml-20" : "ml-0 md:ml-64"
           }`}
       >
         <div className="flex-1 px-8 pb-8 print:p-0">

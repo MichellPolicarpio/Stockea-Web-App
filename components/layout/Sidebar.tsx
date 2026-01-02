@@ -111,6 +111,12 @@ export function Sidebar({ collapsed, onToggle }: DashboardSidebarProps) {
                             <Link
                                 key={item.title}
                                 href={item.url || '#'}
+                                onClick={() => {
+                                    // Auto-close on mobile with delay
+                                    if (window.innerWidth < 768) {
+                                        setTimeout(onToggle, 150)
+                                    }
+                                }}
                                 className={cn(
                                     "group flex items-center rounded-lg transition-all duration-200 min-h-[44px]", // Altura mínima para click target
                                     collapsed ? "justify-center px-0 w-12 h-12 mx-auto" : "gap-3 px-3 py-2.5 w-full",
