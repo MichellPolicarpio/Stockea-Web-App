@@ -77,7 +77,7 @@ export default function LoginPage() {
 
       {/* Columna Derecha: Formulario Sliding */}
       <div className="flex-1 flex flex-col justify-center px-6 sm:px-12 lg:px-16 xl:px-24 bg-slate-50 lg:bg-white z-10 transition-colors duration-500">
-        <div className="w-full max-w-[420px] mx-auto">
+        <div className="w-full max-w-[420px] mx-auto mt-12 sm:mt-16">
           {/* Header Móvil */}
           <div className="lg:hidden mb-10 flex flex-col items-center animate-in fade-in slide-in-from-top-4 duration-700">
             <div className="h-14 w-14 bg-gradient-to-tr from-slate-900 to-slate-800 rounded-2xl flex items-center justify-center shadow-xl mb-4 transform -rotate-6 border border-slate-700">
