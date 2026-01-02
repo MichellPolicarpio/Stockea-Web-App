@@ -76,13 +76,22 @@ export default function LoginPage() {
       </div>
 
       {/* Columna Derecha: Formulario Sliding */}
-      <div className="flex-1 flex flex-col justify-center px-4 sm:px-12 lg:px-16 xl:px-24 bg-white z-10">
+      <div className="flex-1 flex flex-col justify-center px-6 sm:px-12 lg:px-16 xl:px-24 bg-slate-50 lg:bg-white z-10 transition-colors duration-500">
         <div className="w-full max-w-[420px] mx-auto">
           {/* Header Móvil */}
-          <div className="lg:hidden mb-12 text-center">
-            <h1 className="text-3xl font-bold tracking-tighter text-slate-900">
-              Stockea<span className="text-blue-600">.</span>
+          <div className="lg:hidden mb-10 flex flex-col items-center animate-in fade-in slide-in-from-top-4 duration-700">
+            <div className="h-14 w-14 bg-gradient-to-tr from-slate-900 to-slate-800 rounded-2xl flex items-center justify-center shadow-xl mb-4 transform -rotate-6 border border-slate-700">
+              <svg className="w-7 h-7 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <path d="M4 4h16v16H4z" />
+                <path d="M9 9h6M9 13h6M9 17h4" strokeLinecap="round" />
+              </svg>
+            </div>
+            <h1 className="text-4xl font-bold tracking-tighter text-slate-900">
+              Stockea<span className="text-blue-600 text-5xl leading-none">.</span>
             </h1>
+            <p className="text-slate-500 font-medium text-sm mt-1 tracking-wide">
+              Tu inventario, bajo control.
+            </p>
           </div>
 
           {/* Componente del Formulario con Sliding Logic */}
