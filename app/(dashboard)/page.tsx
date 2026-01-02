@@ -192,55 +192,54 @@ function AdminDashboard() {
     return (
         <div className="space-y-8 animate-in fade-in duration-500">
             {/* 1. TOP METRICS ROW - Inventory Focused */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-3 gap-2 md:gap-8">
                 {/* Metric 1 */}
-                <div className="flex flex-col gap-2">
-                    <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium text-slate-500 dark:text-slate-400">Total de Items</span>
-                        <Box className="h-4 w-4 text-slate-400" />
+                <div className="flex flex-col gap-1 md:gap-2 p-2 md:p-0 bg-slate-50 dark:bg-slate-900/50 md:bg-transparent rounded-lg md:rounded-none">
+                    <div className="flex items-center justify-center md:justify-between">
+                        <span className="text-[10px] md:text-sm font-medium text-slate-500 dark:text-slate-400 text-center md:text-left leading-tight">Total Items</span>
+                        <Box className="hidden md:block h-4 w-4 text-slate-400" />
                     </div>
-                    <div className="flex items-baseline gap-2">
-                        <h2 className="text-4xl font-bold text-slate-900 dark:text-white tracking-tight">342</h2>
+                    <div className="flex items-baseline justify-center md:justify-start gap-2">
+                        <h2 className="text-2xl md:text-4xl font-bold text-slate-900 dark:text-white tracking-tight">342</h2>
                     </div>
-                    <div className="flex items-center gap-2 text-sm mt-1">
+                    <div className="flex flex-col md:flex-row items-center md:justify-start gap-1 md:gap-2 text-[10px] md:text-sm mt-1">
                         <span className="flex items-center text-emerald-600 dark:text-emerald-400 font-medium bg-emerald-50 dark:bg-emerald-900/30 px-1.5 py-0.5 rounded-md">
-                            <ArrowUpRight className="h-3 w-3 mr-1" />
+                            <ArrowUpRight className="h-2 w-2 md:h-3 md:w-3 mr-0.5 md:mr-1" />
                             +12
                         </span>
-                        <span className="text-slate-400">nuevos este mes</span>
+                        <span className="text-slate-400 hidden sm:inline">nuevos</span>
                     </div>
                 </div>
 
                 {/* Metric 2 */}
-                <div className="flex flex-col gap-2">
-                    <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium text-slate-500 dark:text-slate-400">Inspecciones Totales</span>
-                        <ClipboardList className="h-4 w-4 text-slate-400" />
+                <div className="flex flex-col gap-1 md:gap-2 p-2 md:p-0 bg-slate-50 dark:bg-slate-900/50 md:bg-transparent rounded-lg md:rounded-none">
+                    <div className="flex items-center justify-center md:justify-between">
+                        <span className="text-[10px] md:text-sm font-medium text-slate-500 dark:text-slate-400 text-center md:text-left leading-tight">Inspecciones</span>
+                        <ClipboardList className="hidden md:block h-4 w-4 text-slate-400" />
                     </div>
-                    <div className="flex items-baseline gap-2">
-                        <h2 className="text-4xl font-bold text-slate-900 dark:text-white tracking-tight">14</h2>
+                    <div className="flex items-baseline justify-center md:justify-start gap-2">
+                        <h2 className="text-2xl md:text-4xl font-bold text-slate-900 dark:text-white tracking-tight">14</h2>
                     </div>
-                    <div className="flex items-center gap-2 text-sm mt-1">
-                        <span className="flex items-center text-slate-500 dark:text-slate-400 font-medium">
-                            Realizadas este mes
+                    <div className="flex flex-col md:flex-row items-center md:justify-start gap-1 md:gap-2 text-[10px] md:text-sm mt-1">
+                        <span className="flex items-center text-slate-500 dark:text-slate-400 font-medium text-center leading-none">
+                            Este mes
                         </span>
                     </div>
                 </div>
 
                 {/* Metric 3 */}
-                <div className="flex flex-col gap-2">
-                    <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium text-slate-500 dark:text-slate-400">Requieren Atención</span>
-                        <AlertTriangle className="h-4 w-4 text-amber-500" />
+                <div className="flex flex-col gap-1 md:gap-2 p-2 md:p-0 bg-slate-50 dark:bg-slate-900/50 md:bg-transparent rounded-lg md:rounded-none">
+                    <div className="flex items-center justify-center md:justify-between">
+                        <span className="text-[10px] md:text-sm font-medium text-slate-500 dark:text-slate-400 text-center md:text-left leading-tight">Atención</span>
+                        <AlertTriangle className="hidden md:block h-4 w-4 text-amber-500" />
                     </div>
-                    <div className="flex items-baseline gap-2">
-                        <h2 className="text-4xl font-bold text-slate-900 dark:text-white tracking-tight">4</h2>
+                    <div className="flex items-baseline justify-center md:justify-start gap-2">
+                        <h2 className="text-2xl md:text-4xl font-bold text-slate-900 dark:text-white tracking-tight">4</h2>
                     </div>
-                    <div className="flex items-center gap-2 text-sm mt-1">
+                    <div className="flex flex-col md:flex-row items-center md:justify-start gap-1 md:gap-2 text-[10px] md:text-sm mt-1">
                         <span className="flex items-center text-amber-600 dark:text-amber-400 font-medium bg-amber-50 dark:bg-amber-900/30 px-1.5 py-0.5 rounded-md">
                             3 Dañados
                         </span>
-                        <span className="text-slate-400">1 Faltante</span>
                     </div>
                 </div>
             </div>
