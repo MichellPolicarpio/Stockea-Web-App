@@ -2,7 +2,7 @@
 
 import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import {
     MoreVertical,
     ArrowUpRight,
@@ -10,7 +10,12 @@ import {
     Box,
     AlertTriangle,
     CheckCircle2,
-    Download
+    Download,
+    ClipboardList,
+    Building as BuildingIcon,
+    Home,
+    Clock,
+    MapPin
 } from 'lucide-react'
 import {
     BarChart,
@@ -27,15 +32,115 @@ import {
     Area
 } from 'recharts'
 import { useTheme } from 'next-themes'
+import { useRouter } from 'next/navigation'
 
-export default function DashboardPage() {
-    const { user } = useAuth()
+// MOCK DATA FOR VERIFIER
+const MOCK_ASSIGNMENTS = [
+    { id: 1, building: 'Casa Tortuga', apartment: '101', date: '2024-10-15', status: 'pending', priority: 'high', address: 'Av. Costera 123' },
+    { id: 2, building: 'Villa Sol', apartment: '304', date: '2024-10-16', status: 'pending', priority: 'medium', address: 'Calle Sol 45' },
+    { id: 3, building: 'Casa Bamba', apartment: '002', date: '2024-10-10', status: 'overdue', priority: 'high', address: 'Blvd. Las Palmas 88' },
+    { id: 4, building: 'El Palmar', apartment: 'PH-1', date: '2024-10-20', status: 'completed', priority: 'low', address: 'Zona Hotelera Km 5' },
+]
+
+function VerifierDashboard({ user }: { user: any }) {
+    const router = useRouter()
+
+    return (
+        <div className="space-y-8 animate-in fade-in duration-500">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Hola, {user?.name?.split(' ')[0] || 'Verificador'}</h1>
+                    <p className="text-muted-foreground mt-1">Tienes {MOCK_ASSIGNMENTS.filter(a => a.status !== 'completed').length} inspecciones pendientes para esta semana.</p>
+                </div>
+                <div className="flex gap-3">
+                    <Card className="px-4 py-2 flex items-center gap-3 bg-blue-50 dark:bg-blue-900/20 border-blue-100 dark:border-blue-900 text-blue-700 dark:text-blue-400">
+                        <ClipboardList className="h-5 w-5" />
+                        <div className="flex flex-col">
+                            <span className="text-xs font-semibold uppercase">Pendientes</span>
+                            <span className="text-lg font-bold leading-none">3</span>
+                        </div>
+                    </Card>
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Main List */}
+                <div className="lg:col-span-2 space-y-6">
+                    <h2 className="text-xl font-bold flex items-center gap-2">
+                        <Calendar className="h-5 w-5 text-blue-500" />
+                        Próximas Asignaciones
+                    </h2>
+
+                    <div className="grid gap-4">
+                        {MOCK_ASSIGNMENTS.map((task) => (
+                            <Card key={task.id} className="hover:shadow-md transition-shadow cursor-pointer border-l-4" style={{
+                                borderLeftColor: task.status === 'overdue' ? '#ef4444' : task.status === 'completed' ? '#10b981' : '#3b82f6'
+                            }}>
+                                <CardContent className="p-6 flex flex-col sm:flex-row justify-between gap-4 items-start sm:items-center">
+                                    <div className="space-y-1">
+                                        <div className="flex items-center gap-2">
+                                            {task.status === 'overdue' && <span className="text-[10px] font-bold bg-red-100 text-red-600 px-2 py-0.5 rounded-full uppercase tracking-wider">Atrasado</span>}
+                                            {task.status === 'completed' && <span className="text-[10px] font-bold bg-green-100 text-green-600 px-2 py-0.5 rounded-full uppercase tracking-wider">Completado</span>}
+                                            {task.status === 'pending' && <span className="text-[10px] font-bold bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full uppercase tracking-wider">Pendiente</span>}
+
+                                            <span className="text-xs text-slate-400 flex items-center gap-1">
+                                                <Clock className="h-3 w-3" /> {new Date(task.date).toLocaleDateString()}
+                                            </span>
+                                        </div>
+                                        <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                            {task.building} <span className="text-slate-300">•</span> Depto {task.apartment}
+                                        </h3>
+                                        <div className="flex items-center gap-4 text-sm text-slate-500">
+                                            <div className="flex items-center gap-1">
+                                                <MapPin className="h-3.5 w-3.5" />
+                                                {task.address}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col gap-2 w-full sm:w-auto">
+                                        <Button className="w-full sm:w-auto" onClick={() => router.push(`/inspections/${task.id}`)}>
+                                            Iniciar Inspección
+                                        </Button>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Sidebar Info */}
+                <div className="space-y-6">
+                    <Card className="bg-slate-900 text-white border-none">
+                        <CardHeader>
+                            <CardTitle>Rendimiento</CardTitle>
+                            <CardDescription className="text-slate-400">Tu actividad este mes</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            <div className="flex justify-between items-center border-b border-white/10 pb-4">
+                                <span>Inspecciones Realizadas</span>
+                                <span className="font-bold text-xl">12</span>
+                            </div>
+                            <div className="flex justify-between items-center border-b border-white/10 pb-4">
+                                <span>Tiempo Promedio</span>
+                                <span className="font-bold text-xl">45m</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                                <span>Precisión</span>
+                                <span className="font-bold text-xl text-green-400">98%</span>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+function AdminDashboard() {
     const { theme } = useTheme()
-
     const isDark = theme === 'dark'
 
     // MOCK DATA: Inventory Focus
-
     // 1. Inventory Volume per Building
     const inventoryByBuilding = [
         { name: 'Casa Tortuga', items: 450, totalValue: 120000 },
@@ -67,7 +172,6 @@ export default function DashboardPage() {
 
     return (
         <div className="space-y-8 animate-in fade-in duration-500">
-
             {/* 1. TOP METRICS ROW - Inventory Focused */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {/* Metric 1 */}
@@ -356,4 +460,15 @@ export default function DashboardPage() {
 
         </div>
     )
+}
+
+export default function DashboardPage() {
+    const { user } = useAuth()
+
+    // Si es verificador, mostrar dashboard personalizado
+    if (user?.role === 'verifier') {
+        return <VerifierDashboard user={user} />
+    }
+
+    return <AdminDashboard />
 }
