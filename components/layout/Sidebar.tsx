@@ -107,8 +107,8 @@ export function Sidebar({ collapsed, onToggle }: DashboardSidebarProps) {
 
                             {/* Brand Name */}
                             {!collapsed && (
-                                <div className="flex-1 font-bold text-xl tracking-tighter text-slate-900 dark:text-white flex items-baseline opacity-100 transition-opacity">
-                                    Stockea<span className="text-blue-600 dark:text-blue-400 text-2xl leading-none">.</span>
+                                <div className="flex-1 font-bold text-2xl tracking-tighter text-slate-900 dark:text-white flex items-baseline opacity-100 transition-opacity">
+                                    Stockea<span className="text-blue-600 dark:text-blue-400 text-3xl leading-none">.</span>
                                 </div>
                             )}
                         </div>

@@ -54,13 +54,13 @@ export function Header({ sidebarCollapsed, onToggleSidebar }: DashboardHeaderPro
         )
         if (pathname.startsWith('/reports')) return (
             <div className="flex items-center gap-2">
-                <Calendar className="h-8 w-8 text-slate-700 dark:text-slate-300" />
+                <Calendar className="hidden md:block h-8 w-8 text-slate-700 dark:text-slate-300" />
                 <span>Programación</span>
             </div>
         )
         if (pathname.startsWith('/settings')) return (
             <div className="flex items-center gap-2">
-                <Settings className="h-8 w-8 text-slate-700 dark:text-slate-300" />
+                <Settings className="hidden md:block h-8 w-8 text-slate-700 dark:text-slate-300" />
                 <span>Configuración</span>
             </div>
         )
