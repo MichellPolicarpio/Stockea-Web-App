@@ -128,15 +128,7 @@ export default function HelpPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold flex items-center gap-2">
-          <HelpCircle className="h-8 w-8 text-[#0D94B1]" />
-          Ayuda
-        </h1>
-        <p className="text-muted-foreground">
-          Guía de uso del Sistema de Inventarios
-        </p>
-      </div>
+
 
       <Card>
         <CardHeader>
@@ -205,28 +197,28 @@ export default function HelpPage() {
           <div>
             <h3 className="font-semibold mb-2">¿Cómo agrego un nuevo item al inventario?</h3>
             <p className="text-sm text-muted-foreground">
-              Solo los administradores y propietarios pueden agregar items. Ve al departamento correspondiente, 
+              Solo los administradores y propietarios pueden agregar items. Ve al departamento correspondiente,
               luego a la sección de Inventario y haz clic en "Agregar Item".
             </p>
           </div>
           <div>
             <h3 className="font-semibold mb-2">¿Cómo creo una nueva inspección?</h3>
             <p className="text-sm text-muted-foreground">
-              Los verificadores pueden crear inspecciones. Ve al departamento asignado, luego a Inspecciones 
+              Los verificadores pueden crear inspecciones. Ve al departamento asignado, luego a Inspecciones
               y haz clic en "Nueva Inspección". Evalúa cada item y guarda los resultados.
             </p>
           </div>
           <div>
             <h3 className="font-semibold mb-2">¿Puedo cambiar mi rol?</h3>
             <p className="text-sm text-muted-foreground">
-              No, los roles son asignados por el administrador del sistema. Contacta con un administrador 
+              No, los roles son asignados por el administrador del sistema. Contacta con un administrador
               si necesitas cambiar tu rol o permisos.
             </p>
           </div>
           <div>
             <h3 className="font-semibold mb-2">¿Los datos se guardan permanentemente?</h3>
             <p className="text-sm text-muted-foreground">
-              Actualmente el sistema funciona con datos simulados. Los datos se guardan en el navegador 
+              Actualmente el sistema funciona con datos simulados. Los datos se guardan en el navegador
               pero se perderán al limpiar el almacenamiento local.
             </p>
           </div>

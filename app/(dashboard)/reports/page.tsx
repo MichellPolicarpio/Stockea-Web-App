@@ -282,13 +282,35 @@ export default function ReportsPage() {
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="center">
-                  <div className="p-2">
+                  <div className="p-3">
                     <Calendar
                       mode="single"
                       selected={date}
                       onSelect={setDate}
                       initialFocus
-                      className="rounded-md border shadow-sm p-4 w-full [&_.rdp-cell]:w-10 [&_.rdp-cell]:h-10 [&_.rdp-head_cell]:w-10"
+                      className="p-3"
+                      classNames={{
+                        months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
+                        month: "space-y-4",
+                        caption: "flex justify-center pt-1 relative items-center w-full",
+                        caption_label: "text-sm font-medium",
+                        nav: "flex items-center justify-between absolute inset-x-0 top-0 w-full px-2 z-10",
+                        nav_button: "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100 border border-slate-100 dark:border-slate-800 rounded-md shadow-sm bg-white dark:bg-slate-900",
+                        nav_button_previous: "static",
+                        nav_button_next: "static",
+                        table: "w-full border-collapse space-y-1",
+                        head_row: "flex",
+                        head_cell: "text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]",
+                        row: "flex w-full mt-2",
+                        cell: "h-9 w-9 text-center text-sm p-0 relative [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
+                        day: "h-9 w-9 p-0 font-normal aria-selected:opacity-100 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors",
+                        day_selected: "bg-blue-600 text-white hover:bg-blue-700 hover:text-white focus:bg-blue-700 focus:text-white font-semibold",
+                        day_today: "bg-slate-100 text-accent-foreground",
+                        day_outside: "text-muted-foreground opacity-50",
+                        day_disabled: "text-muted-foreground opacity-50",
+                        day_range_middle: "aria-selected:bg-accent aria-selected:text-accent-foreground",
+                        day_hidden: "invisible",
+                      }}
                     />
                   </div>
                 </PopoverContent>

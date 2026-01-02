@@ -13,7 +13,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { LogOut, User as UserIcon, Menu, Bell, Search, Settings } from 'lucide-react'
+import { LogOut, User as UserIcon, Menu, Bell, Search, Settings, HelpCircle, Users, LayoutDashboard, FileText, Building2, Calendar } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import type { LucideIcon } from 'lucide-react'
 
@@ -33,17 +33,44 @@ export function Header({ sidebarCollapsed, onToggleSidebar }: DashboardHeaderPro
 
     // Título simple basado en la página actual
     const getPageTitle = () => {
-        if (pathname === '/') return 'Dashboard'
+        if (pathname === '/') return (
+            <div className="flex items-center gap-2">
+                <LayoutDashboard className="h-8 w-8 text-slate-700 dark:text-slate-300" />
+                <span>Panel</span>
+            </div>
+        )
         if (pathname.startsWith('/buildings')) return (
-            <>
+            <div className="flex items-center gap-2">
+                <Building2 className="h-8 w-8 text-slate-700 dark:text-slate-300" />
                 <span className="md:hidden">Edificios</span>
                 <span className="hidden md:inline">Gestión de Edificios</span>
-            </>
+            </div>
         )
-        if (pathname.startsWith('/users')) return 'Usuarios'
-        if (pathname.startsWith('/reports')) return 'Reportes'
-        if (pathname.startsWith('/settings')) return 'Settings'
+        if (pathname.startsWith('/users')) return (
+            <div className="flex items-center gap-2">
+                <Users className="h-8 w-8 text-slate-700 dark:text-slate-300" />
+                <span>Usuarios</span>
+            </div>
+        )
+        if (pathname.startsWith('/reports')) return (
+            <div className="flex items-center gap-2">
+                <Calendar className="h-8 w-8 text-slate-700 dark:text-slate-300" />
+                <span>Programación</span>
+            </div>
+        )
+        if (pathname.startsWith('/settings')) return (
+            <div className="flex items-center gap-2">
+                <Settings className="h-8 w-8 text-slate-700 dark:text-slate-300" />
+                <span>Configuración</span>
+            </div>
+        )
         if (pathname.startsWith('/profile')) return 'Mi Perfil'
+        if (pathname.startsWith('/help')) return (
+            <div className="flex items-center gap-2">
+                <HelpCircle className="h-8 w-8 text-[#0D94B1]" />
+                <span>Ayuda</span>
+            </div>
+        )
         return 'Panel'
     }
 

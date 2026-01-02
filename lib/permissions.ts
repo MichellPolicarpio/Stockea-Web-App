@@ -9,7 +9,7 @@ import {
   ClipboardList,
   History,
   User,
-  BarChart3,
+  Calendar,
 } from 'lucide-react'
 
 export function getMenuByRole(role: UserRole): SidebarItem[] {
@@ -38,9 +38,9 @@ export function getMenuByRole(role: UserRole): SidebarItem[] {
           url: '/users', // Simplificado para evitar subniveles vacíos por ahora
         },
         {
-          title: 'Reportes',
+          title: 'Programación',
           url: '/reports',
-          icon: BarChart3,
+          icon: Calendar,
         },
         {
           title: 'Configuración',
@@ -62,9 +62,9 @@ export function getMenuByRole(role: UserRole): SidebarItem[] {
           icon: Home,
         },
         {
-          title: 'Reportes',
+          title: 'Programación',
           url: '/reports',
-          icon: BarChart3,
+          icon: Calendar,
         },
         {
           title: 'Configuración',
