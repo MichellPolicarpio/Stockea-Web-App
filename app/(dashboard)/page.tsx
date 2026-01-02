@@ -192,12 +192,12 @@ function AdminDashboard() {
     return (
         <div className="space-y-8 animate-in fade-in duration-500">
             {/* 1. TOP METRICS ROW - Inventory Focused */}
-            <div className="grid grid-cols-3 gap-2 md:gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
                 {/* Metric 1 */}
                 <div className="flex flex-col gap-1 md:gap-2 p-2 md:p-0 bg-slate-50 dark:bg-slate-900/50 md:bg-transparent rounded-lg md:rounded-none">
-                    <div className="flex items-center justify-center md:justify-between">
+                    <div className="flex items-center gap-2 md:justify-start">
+                        <Box className="h-4 w-4 text-slate-400" />
                         <span className="text-[10px] md:text-sm font-medium text-slate-500 dark:text-slate-400 text-center md:text-left leading-tight">Total Items</span>
-                        <Box className="hidden md:block h-4 w-4 text-slate-400" />
                     </div>
                     <div className="flex items-baseline justify-center md:justify-start gap-2">
                         <h2 className="text-2xl md:text-4xl font-bold text-slate-900 dark:text-white tracking-tight">342</h2>
@@ -213,9 +213,9 @@ function AdminDashboard() {
 
                 {/* Metric 2 */}
                 <div className="flex flex-col gap-1 md:gap-2 p-2 md:p-0 bg-slate-50 dark:bg-slate-900/50 md:bg-transparent rounded-lg md:rounded-none">
-                    <div className="flex items-center justify-center md:justify-between">
+                    <div className="flex items-center gap-2 md:justify-start">
+                        <ClipboardList className="h-4 w-4 text-slate-400" />
                         <span className="text-[10px] md:text-sm font-medium text-slate-500 dark:text-slate-400 text-center md:text-left leading-tight">Inspecciones</span>
-                        <ClipboardList className="hidden md:block h-4 w-4 text-slate-400" />
                     </div>
                     <div className="flex items-baseline justify-center md:justify-start gap-2">
                         <h2 className="text-2xl md:text-4xl font-bold text-slate-900 dark:text-white tracking-tight">14</h2>
@@ -229,9 +229,9 @@ function AdminDashboard() {
 
                 {/* Metric 3 */}
                 <div className="flex flex-col gap-1 md:gap-2 p-2 md:p-0 bg-slate-50 dark:bg-slate-900/50 md:bg-transparent rounded-lg md:rounded-none">
-                    <div className="flex items-center justify-center md:justify-between">
+                    <div className="flex items-center gap-2 md:justify-start">
+                        <AlertTriangle className="h-4 w-4 text-amber-500" />
                         <span className="text-[10px] md:text-sm font-medium text-slate-500 dark:text-slate-400 text-center md:text-left leading-tight">Atención</span>
-                        <AlertTriangle className="hidden md:block h-4 w-4 text-amber-500" />
                     </div>
                     <div className="flex items-baseline justify-center md:justify-start gap-2">
                         <h2 className="text-2xl md:text-4xl font-bold text-slate-900 dark:text-white tracking-tight">4</h2>
@@ -239,6 +239,24 @@ function AdminDashboard() {
                     <div className="flex flex-col md:flex-row items-center md:justify-start gap-1 md:gap-2 text-[10px] md:text-sm mt-1">
                         <span className="flex items-center text-amber-600 dark:text-amber-400 font-medium bg-amber-50 dark:bg-amber-900/30 px-1.5 py-0.5 rounded-md">
                             3 Dañados
+                        </span>
+                    </div>
+                </div>
+
+                {/* Metric 4 - Properties */}
+                <div className="flex flex-col gap-1 md:gap-2 p-2 md:p-0 bg-slate-50 dark:bg-slate-900/50 md:bg-transparent rounded-lg md:rounded-none">
+                    <div className="flex items-center gap-2 md:justify-start">
+                        <BuildingIcon className="h-4 w-4 text-slate-400" />
+                        <span className="text-[10px] md:text-sm font-medium text-slate-500 dark:text-slate-400 text-center md:text-left leading-tight">Propiedades</span>
+                    </div>
+                    <div className="flex items-baseline justify-center md:justify-start gap-2">
+                        <h2 className="text-2xl md:text-4xl font-bold text-slate-900 dark:text-white tracking-tight">5</h2>
+                        <span className="text-sm text-slate-400 font-medium">Edificios</span>
+                    </div>
+                    <div className="flex flex-col md:flex-row items-center md:justify-start gap-1 md:gap-2 text-[10px] md:text-sm mt-1">
+                        <span className="flex items-center text-blue-600 dark:text-blue-400 font-medium bg-blue-50 dark:bg-blue-900/30 px-1.5 py-0.5 rounded-md">
+                            <Home className="h-3 w-3 mr-1" />
+                            24 Deptos
                         </span>
                     </div>
                 </div>
@@ -252,10 +270,8 @@ function AdminDashboard() {
 
                     {/* INVENTORY DISTRIBUTION CHART */}
                     <div className="space-y-4">
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Items por Edificio</h3>
-                            </div>
+                        <div className="flex items-center justify-center pb-2">
+                            <h3 className="text-lg font-bold text-slate-900 dark:text-white">Items por Edificio</h3>
                         </div>
 
                         <div className="h-[250px] w-full">
@@ -301,7 +317,7 @@ function AdminDashboard() {
 
                         {/* DONUT CHART: Condition */}
                         <div className="space-y-4">
-                            <h4 className="text-base font-bold text-slate-900 dark:text-white">Estado del Inventario</h4>
+                            <h4 className="text-base font-bold text-slate-900 dark:text-white text-center pb-2">Estado del Inventario</h4>
                             <div className="flex items-center gap-4 h-[180px]">
                                 <div className="w-[180px] h-full flex-shrink-0">
                                     <ResponsiveContainer width="100%" height="100%">
@@ -345,7 +361,7 @@ function AdminDashboard() {
 
                         {/* AREA CHART: Verification Activity */}
                         <div className="space-y-4">
-                            <div className="flex items-baseline justify-between">
+                            <div className="flex flex-col items-center justify-center pb-2">
                                 <h4 className="text-base font-bold text-slate-900 dark:text-white">Inspecciones</h4>
                                 <span className="text-xs text-slate-500 dark:text-slate-400">Historial Semestral</span>
                             </div>
@@ -403,7 +419,7 @@ function AdminDashboard() {
 
                     {/* Top Categories */}
                     <div className="space-y-6">
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-center pb-2">
                             <h3 className="text-lg font-bold text-slate-900 dark:text-white">Categorías Top</h3>
                         </div>
 
@@ -475,7 +491,7 @@ function AdminDashboard() {
 
                     {/* Incidents by Zone Card */}
                     <div className="pt-2">
-                        <h3 className="font-bold text-lg mb-2 text-slate-900 dark:text-white">Incidencias por Zona</h3>
+                        <h3 className="font-bold text-lg mb-2 text-slate-900 dark:text-white text-center">Incidencias por Zona</h3>
                         <div className="h-[180px] w-full">
                             <ResponsiveContainer width="100%" height="100%">
                                 <RadarChart cx="50%" cy="50%" outerRadius="70%" data={zoneHealthData}>
