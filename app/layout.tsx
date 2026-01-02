@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Stockea Web App",
+  title: "Stokea Web App",
   description: "Sistema de gestión de inventarios y verificaciones",
 };
 

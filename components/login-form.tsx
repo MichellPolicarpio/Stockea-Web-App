@@ -95,7 +95,7 @@ export function LoginForm() {
 
                     <div className="space-y-2 text-center">
                         <h2 className="text-2xl font-bold tracking-tight text-slate-900">
-                            Stockea<span className="text-blue-600">.</span>
+                            Stokea<span className="text-blue-600">.</span>
                         </h2>
                         <div className="h-1 w-24 bg-slate-100 rounded-full mx-auto overflow-hidden">
                             <div className="h-full bg-slate-900 animate-[loading_1s_ease-in-out_infinite]" />
