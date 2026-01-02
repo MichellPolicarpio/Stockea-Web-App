@@ -15,7 +15,11 @@ import {
     Building as BuildingIcon,
     Home,
     Clock,
-    MapPin
+    MapPin,
+    Armchair,
+    Tv,
+    Utensils,
+    Palette
 } from 'lucide-react'
 import {
     BarChart,
@@ -29,7 +33,12 @@ import {
     Pie,
     Cell,
     AreaChart,
-    Area
+    Area,
+    RadarChart,
+    Radar,
+    PolarGrid,
+    PolarAngleAxis,
+    PolarRadiusAxis
 } from 'recharts'
 import { useTheme } from 'next-themes'
 import { useRouter } from 'next/navigation'
@@ -152,11 +161,12 @@ function AdminDashboard() {
     ]
 
     // 2. Condition Status
+    // 2. Condition Status
     const conditionData = [
-        { name: 'Nuevo', value: 45, color: '#10b981' }, // emerald-500
-        { name: 'Bueno', value: 30, color: '#3b82f6' }, // blue-500
-        { name: 'Regular', value: 15, color: '#f59e0b' }, // amber-500
-        { name: 'Malo', value: 10, color: '#ef4444' }, // red-500
+        { name: 'Nuevo', value: 45, color: '#00A699' },
+        { name: 'Bueno', value: 30, color: '#484848' },
+        { name: 'Regular', value: 15, color: '#FC642D' },
+        { name: 'Malo', value: 10, color: '#FF5A5F' },
     ]
 
     // 3. Activity Trend (Items Verified)
@@ -168,6 +178,16 @@ function AdminDashboard() {
         { day: 'Vie', verified: 20 },
         { day: 'Sab', verified: 8 },
         { day: 'Dom', verified: 5 },
+    ]
+
+    // 4. Radar Data: Wear & Tear by Zone (Incidents)
+    const zoneHealthData = [
+        { subject: 'Cocina', A: 65, fullMark: 100 },
+        { subject: 'Sala', A: 45, fullMark: 100 },
+        { subject: 'Baño', A: 30, fullMark: 100 },
+        { subject: 'Recámaras', A: 25, fullMark: 100 },
+        { subject: 'Terraza', A: 55, fullMark: 100 },
+        { subject: 'Comedor', A: 20, fullMark: 100 },
     ]
 
     return (
@@ -268,7 +288,7 @@ function AdminDashboard() {
                                     />
                                     <Bar
                                         dataKey="items"
-                                        fill={isDark ? "#e2e8f0" : "#0f172a"}
+                                        fill="#FF5A5F"
                                         radius={[4, 4, 0, 0]}
                                         barSize={40}
                                     />
@@ -323,6 +343,8 @@ function AdminDashboard() {
                             </div>
                         </div>
 
+
+
                         {/* AREA CHART: Verification Activity */}
                         <div className="space-y-4">
                             <h4 className="text-base font-bold text-slate-900 dark:text-white">Actividad de Verificación</h4>
@@ -331,8 +353,8 @@ function AdminDashboard() {
                                     <AreaChart data={activityData}>
                                         <defs>
                                             <linearGradient id="colorVerified" x1="0" y1="0" x2="0" y2="1">
-                                                <stop offset="5%" stopColor={isDark ? "#e2e8f0" : "#0f172a"} stopOpacity={0.1} />
-                                                <stop offset="95%" stopColor={isDark ? "#e2e8f0" : "#0f172a"} stopOpacity={0} />
+                                                <stop offset="5%" stopColor="#00A699" stopOpacity={0.1} />
+                                                <stop offset="95%" stopColor="#00A699" stopOpacity={0} />
                                             </linearGradient>
                                         </defs>
                                         <Tooltip
@@ -347,7 +369,7 @@ function AdminDashboard() {
                                         <Area
                                             type="monotone"
                                             dataKey="verified"
-                                            stroke={isDark ? "#e2e8f0" : "#0f172a"}
+                                            stroke="#00A699"
                                             strokeWidth={2}
                                             fillOpacity={1}
                                             fill="url(#colorVerified)"
@@ -376,14 +398,14 @@ function AdminDashboard() {
                                 <div className="flex items-center justify-between mb-2">
                                     <div className="flex items-center gap-3">
                                         <div className="h-8 w-8 rounded-md bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
-                                            <span className="text-sm">🛋️</span>
+                                            <Armchair className="h-4 w-4 text-slate-600 dark:text-slate-400" />
                                         </div>
                                         <span className="font-bold text-slate-900 dark:text-white text-sm">Mobiliario</span>
                                     </div>
                                     <span className="text-xs font-bold text-slate-900 dark:text-white">450 items</span>
                                 </div>
                                 <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                                    <div className="h-full bg-slate-900 dark:bg-slate-200 w-[65%] rounded-full" />
+                                    <div className="h-full bg-airbnb-rausch w-[65%] rounded-full" />
                                 </div>
                             </div>
 
@@ -392,14 +414,14 @@ function AdminDashboard() {
                                 <div className="flex items-center justify-between mb-2">
                                     <div className="flex items-center gap-3">
                                         <div className="h-8 w-8 rounded-md bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
-                                            <span className="text-sm">📺</span>
+                                            <Tv className="h-4 w-4 text-slate-600 dark:text-slate-400" />
                                         </div>
                                         <span className="font-bold text-slate-900 dark:text-white text-sm">Electrónicos</span>
                                     </div>
                                     <span className="text-xs font-bold text-slate-900 dark:text-white">210 items</span>
                                 </div>
                                 <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                                    <div className="h-full bg-slate-900 dark:bg-slate-200 w-[35%] rounded-full" />
+                                    <div className="h-full bg-airbnb-babu w-[35%] rounded-full" />
                                 </div>
                             </div>
 
@@ -408,14 +430,14 @@ function AdminDashboard() {
                                 <div className="flex items-center justify-between mb-2">
                                     <div className="flex items-center gap-3">
                                         <div className="h-8 w-8 rounded-md bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
-                                            <span className="text-sm">🍽️</span>
+                                            <Utensils className="h-4 w-4 text-slate-600 dark:text-slate-400" />
                                         </div>
                                         <span className="font-bold text-slate-900 dark:text-white text-sm">Cocina</span>
                                     </div>
                                     <span className="text-xs font-bold text-slate-900 dark:text-white">185 items</span>
                                 </div>
                                 <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                                    <div className="h-full bg-slate-900 dark:bg-slate-200 w-[25%] rounded-full" />
+                                    <div className="h-full bg-airbnb-arches w-[25%] rounded-full" />
                                 </div>
                             </div>
                             {/* Category 4 */}
@@ -423,34 +445,49 @@ function AdminDashboard() {
                                 <div className="flex items-center justify-between mb-2">
                                     <div className="flex items-center gap-3">
                                         <div className="h-8 w-8 rounded-md bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
-                                            <span className="text-sm">🖼️</span>
+                                            <Palette className="h-4 w-4 text-slate-600 dark:text-slate-400" />
                                         </div>
                                         <span className="font-bold text-slate-900 dark:text-white text-sm">Decoración</span>
                                     </div>
                                     <span className="text-xs font-bold text-slate-900 dark:text-white">120 items</span>
                                 </div>
                                 <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                                    <div className="h-full bg-slate-900 dark:bg-slate-200 w-[15%] rounded-full" />
+                                    <div className="h-full bg-airbnb-hof w-[15%] rounded-full" />
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    {/* Quick Actions Card */}
-                    <div className="bg-slate-900 dark:bg-slate-800 rounded-2xl p-6 text-white space-y-4">
-                        <h3 className="font-bold text-lg text-white">Acciones Rápidas</h3>
-                        <p className="text-slate-400 dark:text-slate-300 text-sm">
-                            Gestiona tu inventario eficientemente.
-                        </p>
-                        <div className="space-y-2 pt-2">
-                            <Button variant="outline" className="w-full justify-start text-sky-950 dark:text-white border-slate-700 dark:border-slate-600 hover:bg-slate-800 dark:hover:bg-slate-700 hover:text-white transition-colors bg-white dark:bg-slate-700">
-                                <CheckCircle2 className="mr-2 h-4 w-4" />
-                                Verificar Inventario
-                            </Button>
-                            <Button variant="outline" className="w-full justify-start text-sky-950 dark:text-white border-slate-700 dark:border-slate-600 hover:bg-slate-800 dark:hover:bg-slate-700 hover:text-white transition-colors bg-white dark:bg-slate-700">
-                                <Download className="mr-2 h-4 w-4" />
-                                Exportar Reporte
-                            </Button>
+                    {/* Incidents by Zone Card */}
+                    <div className="pt-2">
+                        <h3 className="font-bold text-lg mb-2 text-slate-900 dark:text-white">Incidencias por Zona</h3>
+                        <div className="h-[180px] w-full">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <RadarChart cx="50%" cy="50%" outerRadius="70%" data={zoneHealthData}>
+                                    <PolarGrid stroke={isDark ? "#334155" : "#e2e8f0"} />
+                                    <PolarAngleAxis
+                                        dataKey="subject"
+                                        tick={{ fill: isDark ? '#94a3b8' : '#64748b', fontSize: 10, fontWeight: 'bold' }}
+                                    />
+                                    <Radar
+                                        name="Incidencias"
+                                        dataKey="A"
+                                        stroke="#FF5A5F"
+                                        strokeWidth={2}
+                                        fill="#FF5A5F"
+                                        fillOpacity={0.4}
+                                    />
+                                    <Tooltip
+                                        contentStyle={{
+                                            backgroundColor: isDark ? '#0f172a' : '#fff',
+                                            borderRadius: '8px',
+                                            border: isDark ? '1px solid #1e293b' : 'none',
+                                            boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+                                            color: isDark ? '#fff' : '#000'
+                                        }}
+                                    />
+                                </RadarChart>
+                            </ResponsiveContainer>
                         </div>
                     </div>
 

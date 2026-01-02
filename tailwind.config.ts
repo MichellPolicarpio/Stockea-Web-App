@@ -60,6 +60,12 @@ const config: Config = {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        airbnb: {
+          rausch: "#FF5A5F",
+          babu: "#00A699",
+          arches: "#FC642D",
+          hof: "#484848",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
