@@ -86,3 +86,48 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+
+  /* Efecto Hover Premium Airbnb: Cápsula y Gradiente Vivo */
+  .btn-airbnb-effect {
+    @apply relative overflow-hidden rounded-full transition-all duration-300 ease-out;
+
+    /* Gradiente característico de Airbnb (Rosa -> Rojo) */
+    background-image: linear-gradient(to right, #FF385C 0%, #E61E4D 50%, #D70466 100%);
+    background-size: 200% auto;
+
+    /* Sombra suave y colorida */
+    box-shadow: 0 4px 6px -1px rgba(255, 56, 92, 0.2), 0 2px 4px -1px rgba(255, 56, 92, 0.1);
+
+    /* Texto siempre blanco y legible */
+    color: white;
+    z-index: 1;
+  }
+
+  /* Efecto Hover: Movimiento sutil y brillo, sin oscurecer */
+  .btn-airbnb-effect:hover {
+    /* Mantenemos el mismo flow pero intensificamos ligeramente el brillo */
+    filter: brightness(1.02);
+    box-shadow: 0 6px 16px -2px rgba(255, 56, 92, 0.25);
+    transform: translateY(-1px);
+  }
+
+  /* Pseudo-elemento para brillo extra cristalino */
+  .btn-airbnb-effect::after {
+    content: "";
+    @apply absolute inset-0 opacity-0 transition-opacity duration-300;
+    /* Overlay blanco muy suave para iluminar en vez de oscurecer */
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2) 0%, transparent 100%);
+    pointer-events: none;
+  }
+
+  .btn-airbnb-effect:hover::after {
+    @apply opacity-100;
+  }
+
+  .btn-airbnb-effect:active {
+    transform: scale(0.98) translateY(0);
+    box-shadow: none;
+  }
+}

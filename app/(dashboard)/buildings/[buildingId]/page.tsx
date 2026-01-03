@@ -250,7 +250,7 @@ export default function BuildingDetailPage() {
 
         <Dialog open={isEditBuildingOpen} onOpenChange={setIsEditBuildingOpen}>
           <DialogTrigger asChild>
-            <Button variant="outline" className="gap-2">
+            <Button className="gap-2">
               <Edit className="h-4 w-4" />
               Editar Edificio
             </Button>
