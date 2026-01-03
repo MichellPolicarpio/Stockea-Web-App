@@ -97,9 +97,7 @@ export function LoginForm() {
                     </div>
 
                     <div className="space-y-2 text-center">
-                        <h2 className="text-2xl font-bold tracking-tight text-slate-900">
-                            Stokea<span className="text-blue-600">.</span>
-                        </h2>
+                        StockBnB<span className="text-blue-600">.</span>
                         <div className="h-1 w-24 bg-slate-100 rounded-full mx-auto overflow-hidden">
                             <div className="h-full bg-slate-900 animate-[loading_1s_ease-in-out_infinite]" />
                         </div>

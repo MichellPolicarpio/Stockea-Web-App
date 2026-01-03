@@ -13,7 +13,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { LogOut, User as UserIcon, Menu, Bell, Search, Settings, HelpCircle, Users, LayoutDashboard, FileText, Building2, Calendar, ClipboardList } from 'lucide-react'
+import { History as HistoryIcon, LogOut, User as UserIcon, Menu, Bell, Search, Settings, HelpCircle, Users, LayoutDashboard, FileText, Building2, Calendar, ClipboardList } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import type { LucideIcon } from 'lucide-react'
 
@@ -72,9 +72,12 @@ export function Header({ sidebarCollapsed, onToggleSidebar }: DashboardHeaderPro
             </div>
         )
         if (pathname.startsWith('/apartments')) return (
+            <span>{user.role === 'owner' ? 'Mis Propiedades' : 'Asignaciones'}</span>
+        )
+        if (pathname.startsWith('/inspections')) return (
             <div className="flex items-center gap-2">
-                <ClipboardList className="h-8 w-8 text-slate-700 dark:text-slate-300" />
-                <span>{user.role === 'owner' ? 'Mis Propiedades' : 'Asignaciones'}</span>
+                <HistoryIcon className="hidden md:block h-8 w-8 text-slate-700 dark:text-slate-300" />
+                <span>Historial</span>
             </div>
         )
         return 'Panel'
@@ -107,7 +110,7 @@ export function Header({ sidebarCollapsed, onToggleSidebar }: DashboardHeaderPro
                                 <path d="M10 10l4 4" strokeWidth="2" strokeLinecap="round" />
                             </svg>
                         </div>
-                        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white mb-2">Stokea<span className="text-blue-600">.</span></h2>
+                        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white mb-2">StockBnB<span className="text-blue-600">.</span></h2>
                         <p className="text-slate-500 dark:text-slate-400 font-medium">Cerrando sesión...</p>
                     </div>
                 </div>
