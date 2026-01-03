@@ -53,93 +53,92 @@ const MOCK_ASSIGNMENTS = [
 
 function VerifierDashboard({ user }: { user: any }) {
     const router = useRouter()
+    const pendingCount = MOCK_ASSIGNMENTS.filter(a => a.status !== 'completed').length
+    const nextAssignment = MOCK_ASSIGNMENTS.find(a => a.status === 'pending')
 
     return (
         <div className="space-y-8 animate-in fade-in duration-500">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                    <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Hola, {user?.name?.split(' ')[0] || 'Verificador'}</h1>
-                    <p className="text-muted-foreground mt-1">Tienes {MOCK_ASSIGNMENTS.filter(a => a.status !== 'completed').length} inspecciones pendientes para esta semana.</p>
-                </div>
-                <div className="flex gap-3">
-                    <Card className="px-4 py-2 flex items-center gap-3 bg-blue-50 dark:bg-blue-900/20 border-blue-100 dark:border-blue-900 text-blue-700 dark:text-blue-400">
-                        <ClipboardList className="h-5 w-5" />
-                        <div className="flex flex-col">
-                            <span className="text-xs font-semibold uppercase">Pendientes</span>
-                            <span className="text-lg font-bold leading-none">3</span>
-                        </div>
-                    </Card>
-                </div>
+            {/* Cabecera */}
+            <div>
+                <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Buenos días, {user?.name?.split(' ')[0] || 'Verificador'}</h1>
+                <p className="text-muted-foreground mt-1">Tienes {pendingCount} inspecciones pendientes. Aquí está tu agenda.</p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Main List */}
-                <div className="lg:col-span-2 space-y-6">
-                    <h2 className="text-xl font-bold flex items-center gap-2">
-                        <Calendar className="h-5 w-5 text-blue-500" />
-                        Próximas Asignaciones
-                    </h2>
+            {/* KPIs Rápidos - Compacto Móvil */}
+            <div className="grid grid-cols-2 gap-3 md:grid-cols-2 md:gap-6">
+                {/* Card 1: Pendientes */}
+                <Card className="border-blue-100 dark:border-blue-900/30 bg-blue-50/50 dark:bg-blue-900/10 text-center md:text-left">
+                    <CardContent className="p-3 md:p-6 flex flex-col md:flex-row items-center justify-between gap-2">
+                        <div>
+                            <p className="text-xs md:text-sm font-medium text-blue-600 dark:text-blue-400 uppercase tracking-widest truncate">Pendientes</p>
+                            <h3 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mt-1 md:mt-2">{pendingCount}</h3>
+                        </div>
+                        <div className="hidden md:flex h-12 w-12 rounded-full bg-blue-100 dark:bg-blue-900/30 items-center justify-center text-blue-600 dark:text-blue-400">
+                            <ClipboardList className="h-6 w-6" />
+                        </div>
+                    </CardContent>
+                </Card>
 
-                    <div className="grid gap-4">
+                {/* Card 2: Realizadas */}
+                <Card className="border-green-100 dark:border-green-900/30 bg-green-50/50 dark:bg-green-900/10 text-center md:text-left">
+                    <CardContent className="p-3 md:p-6 flex flex-col md:flex-row items-center justify-between gap-2">
+                        <div>
+                            <p className="text-xs md:text-sm font-medium text-green-600 dark:text-green-400 uppercase tracking-widest truncate">Realizadas</p>
+                            <h3 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mt-1 md:mt-2">12</h3>
+                        </div>
+                        <div className="hidden md:flex h-12 w-12 rounded-full bg-green-100 dark:bg-green-900/30 items-center justify-center text-green-600 dark:text-green-400">
+                            <CheckCircle2 className="h-6 w-6" />
+                        </div>
+                    </CardContent>
+                </Card>
+            </div>
+
+            {/* Listado Principal */}
+            <div>
+                <h2 className="text-xl font-bold mb-4 flex items-center gap-2 text-slate-900 dark:text-white">
+                    <Calendar className="h-5 w-5 text-slate-400" />
+                    Tu Agenda
+                </h2>
+                <Card className="border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+                    <div className="divide-y divide-slate-100 dark:divide-slate-800">
                         {MOCK_ASSIGNMENTS.map((task) => (
-                            <Card key={task.id} className="hover:shadow-md transition-shadow cursor-pointer border-l-4" style={{
-                                borderLeftColor: task.status === 'overdue' ? '#ef4444' : task.status === 'completed' ? '#10b981' : '#3b82f6'
-                            }}>
-                                <CardContent className="p-6 flex flex-col sm:flex-row justify-between gap-4 items-start sm:items-center">
-                                    <div className="space-y-1">
-                                        <div className="flex items-center gap-2">
-                                            {task.status === 'overdue' && <span className="text-[10px] font-bold bg-red-100 text-red-600 px-2 py-0.5 rounded-full uppercase tracking-wider">Atrasado</span>}
-                                            {task.status === 'completed' && <span className="text-[10px] font-bold bg-green-100 text-green-600 px-2 py-0.5 rounded-full uppercase tracking-wider">Completado</span>}
-                                            {task.status === 'pending' && <span className="text-[10px] font-bold bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full uppercase tracking-wider">Pendiente</span>}
+                            // Row Item Design
+                            <div key={task.id} className="p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors gap-4">
+                                {/* Left: Info */}
+                                <div className="flex gap-4">
+                                    {/* Date Box */}
+                                    <div className="flex flex-col items-center justify-center h-12 w-12 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 flex-shrink-0">
+                                        <span className="text-[10px] font-bold uppercase">{new Date(task.date).toLocaleString('es-ES', { month: 'short' }).replace('.', '')}</span>
+                                        <span className="text-lg font-bold leading-none">{new Date(task.date).getDate()}</span>
+                                    </div>
 
-                                            <span className="text-xs text-slate-400 flex items-center gap-1">
-                                                <Clock className="h-3 w-3" /> {new Date(task.date).toLocaleDateString()}
-                                            </span>
-                                        </div>
-                                        <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                                            {task.building} <span className="text-slate-300">•</span> Depto {task.apartment}
+                                    <div>
+                                        <h3 className="font-bold text-slate-900 dark:text-white text-base">
+                                            {task.building} <span className="text-slate-400 font-normal">/ {task.apartment}</span>
                                         </h3>
-                                        <div className="flex items-center gap-4 text-sm text-slate-500">
-                                            <div className="flex items-center gap-1">
-                                                <MapPin className="h-3.5 w-3.5" />
-                                                {task.address}
-                                            </div>
+                                        <div className="flex items-center gap-2 text-sm text-slate-500 mt-0.5">
+                                            <MapPin className="h-3.5 w-3.5" />
+                                            {task.address}
                                         </div>
                                     </div>
-                                    <div className="flex flex-col gap-2 w-full sm:w-auto">
-                                        <Button className="w-full sm:w-auto" onClick={() => router.push(`/inspections/${task.id}`)}>
-                                            Iniciar Inspección
-                                        </Button>
+                                </div>
+
+                                {/* Right: Status and Action */}
+                                <div className="flex items-center gap-4 w-full sm:w-auto mt-2 sm:mt-0 justify-between sm:justify-end">
+                                    <div className={`px-2.5 py-1 rounded-full text-xs font-semibold uppercase tracking-wider ${task.status === 'completed' ? 'bg-green-100 text-green-700' :
+                                            task.status === 'overdue' ? 'bg-red-100 text-red-700' :
+                                                'bg-blue-100 text-blue-700'
+                                        }`}>
+                                        {task.status === 'completed' ? 'Completado' : task.status === 'overdue' ? 'Atrasado' : 'Pendiente'}
                                     </div>
-                                </CardContent>
-                            </Card>
+                                    <Button size="sm" variant="outline" onClick={() => router.push(`/inspections/${task.id}`)} className="hidden sm:flex">
+                                        Ver Detalles
+                                    </Button>
+                                </div>
+                            </div>
                         ))}
                     </div>
-                </div>
-
-                {/* Sidebar Info */}
-                <div className="space-y-6">
-                    <Card className="bg-slate-900 text-white border-none">
-                        <CardHeader>
-                            <CardTitle>Rendimiento</CardTitle>
-                            <CardDescription className="text-slate-400">Tu actividad este mes</CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                            <div className="flex justify-between items-center border-b border-white/10 pb-4">
-                                <span>Inspecciones Realizadas</span>
-                                <span className="font-bold text-xl">12</span>
-                            </div>
-                            <div className="flex justify-between items-center border-b border-white/10 pb-4">
-                                <span>Tiempo Promedio</span>
-                                <span className="font-bold text-xl">45m</span>
-                            </div>
-                            <div className="flex justify-between items-center">
-                                <span>Precisión</span>
-                                <span className="font-bold text-xl text-green-400">98%</span>
-                            </div>
-                        </CardContent>
-                    </Card>
-                </div>
+                </Card>
             </div>
         </div>
     )
