@@ -39,7 +39,7 @@ export default function LoginPage() {
 
             <div className="space-y-4">
               <h1 className="text-5xl font-bold tracking-tighter text-white">
-                StockBnB<span className="text-blue-600">.</span>
+                Stockea<span className="text-blue-600">.</span>
               </h1>
               <p className="text-xl text-slate-400 font-light tracking-wide">
                 Sistema Operativo de Inventarios
@@ -87,7 +87,7 @@ export default function LoginPage() {
               </svg>
             </div>
             <h1 className="text-4xl font-bold tracking-tighter text-slate-900">
-              StockBnB<span className="text-blue-600 text-5xl leading-none">.</span>
+              Stockea<span className="text-blue-600 text-5xl leading-none">.</span>
             </h1>
             <p className="text-slate-500 font-medium text-sm mt-1 tracking-wide">
               Tu inventario, bajo control.
@@ -101,7 +101,7 @@ export default function LoginPage() {
             <a href="#" className="hover:text-slate-900 transition-colors">Privacidad</a>
             <a href="#" className="hover:text-slate-900 transition-colors">Términos</a>
             <span className="text-slate-300">|</span>
-            <span>StockBnB OS v1.2</span>
+            <span>Stockea OS v1.2</span>
           </div>
         </div>
       </div>

@@ -378,7 +378,7 @@ export default function BuildingDetailPage() {
             </div>
             <DialogFooter className="gap-2 sm:gap-0">
               <Button variant="ghost" onClick={() => setIsEditBuildingOpen(false)}>Cancelar</Button>
-              <Button onClick={handleUpdateBuilding} className="bg-slate-900 text-white">Guardar Cambios</Button>
+              <Button onClick={handleUpdateBuilding}>Guardar Cambios</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>

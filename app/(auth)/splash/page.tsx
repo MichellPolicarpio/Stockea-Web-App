@@ -69,7 +69,7 @@ export default function SplashPage() {
           {/* Logotipo Tipográfico: Stockea */}
           <div className="overflow-hidden h-14 flex items-center">
             <h1 className={`text-5xl font-extrabold tracking-tighter text-slate-900 transition-transform duration-1000 ease-out ${showLogo ? 'translate-y-0' : 'translate-y-20'}`}>
-              StockBnB<span className="text-blue-600">.</span>
+              Stockea<span className="text-blue-600">.</span>
             </h1>
           </div>
         </div>
@@ -92,7 +92,7 @@ export default function SplashPage() {
 
       {/* Footer Branding */}
       <div className="absolute bottom-8 text-[10px] text-slate-400 font-mono tracking-widest uppercase opacity-60">
-        Powered by StockBnB OS
+        Powered by Stockea OS
       </div>
 
       <style jsx>{`

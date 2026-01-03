@@ -94,7 +94,7 @@ export function LoginForm() {
                             <path d="M10 10l4 4" strokeWidth="2" strokeLinecap="round" />
                         </svg>
                     </div>
-                    <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white mb-2">StockBnB<span className="text-blue-600">.</span></h2>
+                    <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white mb-2">Stockea<span className="text-blue-600">.</span></h2>
                     <p className="text-slate-500 dark:text-slate-400 font-medium mb-6">Iniciando sesión...</p>
                     <div className="h-1 w-32 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
                         <div className="h-full bg-blue-600 animate-[loading_1s_ease-in-out_infinite]" />

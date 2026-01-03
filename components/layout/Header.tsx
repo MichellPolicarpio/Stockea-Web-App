@@ -110,7 +110,7 @@ export function Header({ sidebarCollapsed, onToggleSidebar }: DashboardHeaderPro
                                 <path d="M10 10l4 4" strokeWidth="2" strokeLinecap="round" />
                             </svg>
                         </div>
-                        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white mb-2">StockBnB<span className="text-blue-600">.</span></h2>
+                        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white mb-2">Stockea<span className="text-blue-600">.</span></h2>
                         <p className="text-slate-500 dark:text-slate-400 font-medium">Cerrando sesión...</p>
                     </div>
                 </div>

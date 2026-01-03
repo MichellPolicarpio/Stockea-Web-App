@@ -4,7 +4,7 @@ export const mockBuildings: Building[] = [
   {
     id: 'building-1',
     name: 'Casa Tortuga',
-    address: 'Av. Costera 123, Zona Hotelera',
+    address: 'C. Francisco Canal, entre Revillagigedo y Av. Pino Suarez',
     totalApartments: 4,
     createdAt: new Date('2024-01-01'),
     updatedAt: new Date('2024-01-01'),
@@ -13,7 +13,7 @@ export const mockBuildings: Building[] = [
   {
     id: 'building-2',
     name: 'Casa Bamba',
-    address: 'Blvd. Las Palmas 88, Playa Norte',
+    address: 'Av. Independencia 958, entre Emparam y Benito Juarez',
     totalApartments: 10,
     createdAt: new Date('2024-01-05'),
     updatedAt: new Date('2024-01-05'),

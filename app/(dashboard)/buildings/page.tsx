@@ -154,12 +154,11 @@ export default function BuildingsPage() {
 
     return (
         <div className="space-y-6 animate-in fade-in duration-500">
-            <div className="flex items-center justify-between">
-                <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Gestión de Edificios</h1>
+            <div className="flex items-center justify-end">
 
                 <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
                     <DialogTrigger asChild>
-                        <Button className="bg-slate-900 text-white hover:bg-slate-800 shadow-lg hover:shadow-xl transition-all">
+                        <Button className="shadow-lg hover:shadow-xl transition-all">
                             <Plus className="mr-2 h-4 w-4" /> Agregar Edificio
                         </Button>
                     </DialogTrigger>
@@ -284,7 +283,7 @@ export default function BuildingsPage() {
 
                             <DialogFooter>
                                 <Button type="button" variant="outline" onClick={() => setIsAddOpen(false)}>Cancelar</Button>
-                                <Button type="submit" className="bg-slate-900 text-white" disabled={isSubmitting}>
+                                <Button type="submit" disabled={isSubmitting}>
                                     {isSubmitting ? 'Guardando...' : 'Guardar Edificio'}
                                 </Button>
                             </DialogFooter>
