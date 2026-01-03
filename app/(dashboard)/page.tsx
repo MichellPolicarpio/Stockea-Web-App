@@ -436,7 +436,7 @@ function AdminDashboard() {
                                     <span className="text-xs font-bold text-slate-900 dark:text-white">450 items</span>
                                 </div>
                                 <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                                    <div className="h-full bg-airbnb-rausch w-[65%] rounded-full" />
+                                    <div className="h-full bg-rose-500 w-[65%] rounded-full" />
                                 </div>
                             </div>
 
@@ -452,7 +452,7 @@ function AdminDashboard() {
                                     <span className="text-xs font-bold text-slate-900 dark:text-white">210 items</span>
                                 </div>
                                 <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                                    <div className="h-full bg-airbnb-babu w-[35%] rounded-full" />
+                                    <div className="h-full bg-teal-500 w-[35%] rounded-full" />
                                 </div>
                             </div>
 
@@ -468,7 +468,7 @@ function AdminDashboard() {
                                     <span className="text-xs font-bold text-slate-900 dark:text-white">185 items</span>
                                 </div>
                                 <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                                    <div className="h-full bg-airbnb-arches w-[25%] rounded-full" />
+                                    <div className="h-full bg-orange-500 w-[25%] rounded-full" />
                                 </div>
                             </div>
                             {/* Category 4 */}
@@ -483,7 +483,7 @@ function AdminDashboard() {
                                     <span className="text-xs font-bold text-slate-900 dark:text-white">120 items</span>
                                 </div>
                                 <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                                    <div className="h-full bg-airbnb-hof w-[15%] rounded-full" />
+                                    <div className="h-full bg-slate-600 w-[15%] rounded-full" />
                                 </div>
                             </div>
                         </div>
