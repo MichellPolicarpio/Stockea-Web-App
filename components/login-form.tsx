@@ -176,7 +176,7 @@ export function LoginForm() {
                                 </Alert>
                             )}
 
-                            <Button type="submit" className="w-full h-11 bg-slate-900 hover:bg-slate-800 text-white" disabled={loading}>
+                            <Button type="submit" className="w-full h-11 bg-[#FF5A5F] hover:bg-[#FF5A5F]/90 text-white" disabled={loading}>
                                 {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Iniciar Sesión"}
                             </Button>
                         </form>
