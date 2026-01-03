@@ -81,7 +81,7 @@ export function getMenuByRole(role: UserRole): SidebarItem[] {
           icon: LayoutDashboard,
         },
         {
-          title: 'Departamentos Asignados',
+          title: 'Asignaciones',
           url: '/apartments',
           icon: ClipboardList,
         },

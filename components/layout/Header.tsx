@@ -13,7 +13,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { LogOut, User as UserIcon, Menu, Bell, Search, Settings, HelpCircle, Users, LayoutDashboard, FileText, Building2, Calendar } from 'lucide-react'
+import { LogOut, User as UserIcon, Menu, Bell, Search, Settings, HelpCircle, Users, LayoutDashboard, FileText, Building2, Calendar, ClipboardList } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import type { LucideIcon } from 'lucide-react'
 
@@ -69,6 +69,12 @@ export function Header({ sidebarCollapsed, onToggleSidebar }: DashboardHeaderPro
             <div className="flex items-center gap-2">
                 <HelpCircle className="h-8 w-8 text-[#0D94B1]" />
                 <span>Ayuda</span>
+            </div>
+        )
+        if (pathname.startsWith('/apartments')) return (
+            <div className="flex items-center gap-2">
+                <ClipboardList className="h-8 w-8 text-slate-700 dark:text-slate-300" />
+                <span>{user.role === 'owner' ? 'Mis Propiedades' : 'Asignaciones'}</span>
             </div>
         )
         return 'Panel'

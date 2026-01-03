@@ -58,15 +58,7 @@ export default function AssignedApartmentsPage() {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
-            {user.role === 'owner' ? 'Mis Propiedades' : 'Departamentos Asignados'}
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            {user.role === 'owner' ? 'Visualiza el estado y reportes de tus inmuebles.' : 'Gestiona tus visitas y reportes de inspección.'}
-          </p>
-        </div>
+      <div className="flex flex-col md:flex-row md:items-center justify-end gap-4">
         {/* Search / Filters */}
         <div className="flex gap-2 w-full md:w-auto">
           <div className="relative w-full md:w-64">
@@ -129,10 +121,7 @@ export default function AssignedApartmentsPage() {
                   <MapPin className="h-3 w-3 text-slate-400" />
                   <span className="truncate">{item.address}</span>
                 </div>
-                <div className="flex items-start gap-2">
-                  <BuildingIcon className="h-3 w-3 text-slate-400 mt-0.5" />
-                  <span className="italic text-slate-600 dark:text-slate-400 line-clamp-1">{item.notes}</span>
-                </div>
+                {/* Notes removed */}
               </div>
             </CardContent>
 
