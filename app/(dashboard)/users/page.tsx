@@ -1,5 +1,6 @@
 'use client'
 
+import { cn } from "@/lib/utils"
 import React, { useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -140,6 +141,21 @@ export default function UsersPage() {
 
   // --- HANDLERS ---
 
+  const handleCreateClick = () => {
+    setEditingUser({
+      id: '',
+      name: '',
+      email: '',
+      role: 'verifier',
+      status: 'active',
+      lastLogin: 'Nunca',
+      avatar: ''
+    })
+    setEditFirstName('')
+    setEditLastName('')
+    setIsEditOpen(true)
+  }
+
   const handleEditClick = (user: User) => {
     setEditingUser(user)
     // Separar nombre y apellido para edición granular
@@ -191,14 +207,24 @@ export default function UsersPage() {
 
     const updatedUser = { ...editingUser, name: fullName }
 
-    // Update User State
-    setUsers(prev => prev.map(u => u.id === updatedUser.id ? updatedUser : u))
+    if (!editingUser.id) {
+      // Crear nuevo usuario
+      const newUser = { ...updatedUser, id: Date.now().toString() }
+      setUsers([...users, newUser])
+      toast({
+        title: "Usuario Creado",
+        description: `${fullName} ha sido registrado exitosamente.`
+      })
+    } else {
+      // Actualizar existente
+      setUsers(prev => prev.map(u => u.id === updatedUser.id ? updatedUser : u))
+      toast({
+        title: "Usuario Actualizado",
+        description: `Los datos de ${fullName} han sido guardados.`,
+      })
+    }
 
     setIsEditOpen(false)
-    toast({
-      title: "Usuario Actualizado",
-      description: `Los datos de ${fullName} han sido guardados.`,
-    })
   }
 
   const toggleStatus = (userId: string) => {
@@ -219,18 +245,18 @@ export default function UsersPage() {
   // --- RENDER HELPERS ---
 
   const getRoleBadge = (role: UserRole) => {
-    const baseClasses = "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-
-    switch (role) {
-      case 'admin':
-        return <span className={`${baseClasses} border-rose-200 bg-rose-50 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400 dark:border-rose-900`}>Administrador</span>
-      case 'verifier':
-        return <span className={`${baseClasses} border-teal-200 bg-teal-50 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400 dark:border-teal-900`}>Verificador</span>
-      case 'owner':
-        return <span className={`${baseClasses} border-slate-200 bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700`}>Propietario</span>
-      default:
-        return <span className={`${baseClasses} border-slate-200 text-slate-900`}>Usuario</span>
-    }
+    return (
+      <span className={cn(
+        "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium border",
+        role === 'admin' && "bg-rose-50 text-rose-700 border-rose-100 dark:bg-rose-900/20 dark:text-rose-400 dark:border-rose-900/30",
+        role === 'verifier' && "bg-teal-50 text-teal-700 border-teal-100 dark:bg-teal-900/20 dark:text-teal-400 dark:border-teal-900/30",
+        role === 'owner' && "bg-slate-50 text-slate-700 border-slate-100 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700"
+      )}>
+        {role === 'admin' && 'Administrador'}
+        {role === 'verifier' && 'Verificador'}
+        {role === 'owner' && 'Propietario'}
+      </span>
+    )
   }
 
   const getStatusIndication = (status: UserStatus) => {
@@ -257,140 +283,118 @@ export default function UsersPage() {
 
       {/* Toolbar Section */}
       <div className="flex flex-col md:flex-row md:items-center justify-end gap-4">
-        <div className="flex items-center gap-3 w-full md:w-auto">
-          <div className="relative w-full md:w-64">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-500" />
-            <Input
-              placeholder="Buscar usuarios..."
-              className="pl-9 bg-white dark:bg-slate-900"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-          <Button variant="outline" className="border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200">
-            <UserPlus className="h-4 w-4 mr-2" />
-            Nuevo
-          </Button>
-        </div>
+        <Button className="shrink-0" onClick={handleCreateClick}>
+          <UserPlus className="h-4 w-4 mr-2" />
+          Nuevo Usuario
+        </Button>
       </div>
 
-      {/* Premium Users Table */}
-      <div className="overflow-x-auto pb-10">
-        <table className="w-full text-sm text-left border-separate border-spacing-y-3">
-          <thead>
-            <tr className="text-xs font-semibold tracking-wide text-slate-400 uppercase">
-              <th className="px-4 py-2 ml-4">Usuario</th>
-              <th className="px-4 py-2 hidden md:table-cell">Rol</th>
-              <th className="px-4 py-2 hidden md:table-cell">Asignación</th>
-              <th className="px-4 py-2 hidden md:table-cell">Estado</th>
-              <th className="px-4 py-2 text-right hidden md:table-cell">Última Actividad</th>
-              <th className="px-4 py-2 text-right pr-6">Acciones</th>
-            </tr>
-          </thead>
-          <tbody className="text-slate-600 dark:text-slate-300">
-            {filteredUsers.map((user) => (
-              <tr
-                key={user.id}
-                className="bg-white dark:bg-slate-900 shadow-sm hover:shadow-md transition-all duration-200 group border border-slate-100 dark:border-slate-800 rounded-xl"
-              >
-
-                {/* User Info with Status Ring */}
-                <td className="px-4 py-4 rounded-l-xl border-l border-y border-slate-100 dark:border-slate-800 group-hover:border-slate-200 dark:group-hover:border-slate-700">
-                  <div className="flex items-center gap-4 pl-2">
-                    <div className={`relative rounded-full p-0.5 ${user.status === 'active' ? 'bg-gradient-to-tr from-emerald-400 to-emerald-600' : 'bg-slate-200'}`}>
-                      <Avatar className="h-10 w-10 border-2 border-white dark:border-slate-900">
-                        <AvatarImage src={user.avatar} alt={user.name} />
-                        <AvatarFallback className="bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold text-xs">
-                          {user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
-                      {/* Online Dot */}
-                      <span className={`absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-white dark:border-slate-900 ${user.status === 'active' ? 'bg-emerald-500' : 'bg-slate-400'}`}></span>
-                    </div>
-                    <div>
-                      <div className="font-bold text-slate-900 dark:text-white text-base">{user.name}</div>
-                      <div className="text-xs text-slate-400 font-medium">{user.email}</div>
-                    </div>
-                  </div>
-                </td>
-
-                {/* Role */}
-                <td className="px-4 py-4 border-y border-slate-100 dark:border-slate-800 group-hover:border-slate-200 dark:group-hover:border-slate-700 hidden md:table-cell">
-                  {getRoleBadge(user.role)}
-                </td>
-
-                {/* Assignment */}
-                <td className="px-4 py-4 border-y border-slate-100 dark:border-slate-800 group-hover:border-slate-200 dark:group-hover:border-slate-700 hidden md:table-cell">
-                  {user.department ? (
-                    <div className="flex items-center gap-2">
-                      <div className="p-1.5 rounded-md bg-slate-50 dark:bg-slate-800 text-slate-500">
-                        {user.department === 'Gestor' ? <Briefcase className="h-3.5 w-3.5" /> : <Home className="h-3.5 w-3.5" />}
-                      </div>
-                      <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{user.department}</span>
-                    </div>
-                  ) : (
-                    <span className="text-xs text-slate-400 opacity-50 px-2">--</span>
-                  )}
-                </td>
-
-                {/* Status Text (Simplified) */}
-                <td className="px-4 py-4 border-y border-slate-100 dark:border-slate-800 group-hover:border-slate-200 dark:group-hover:border-slate-700 hidden md:table-cell">
-                  <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${user.status === 'active'
-                    ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400'
-                    : 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400'
-                    }`}>
-                    <div className={`w-1.5 h-1.5 rounded-full ${user.status === 'active' ? 'bg-emerald-500' : 'bg-slate-400'}`} />
-                    {user.status === 'active' ? 'Activo' : 'Inactivo'}
-                  </span>
-                </td>
-
-                {/* Last Activity */}
-                <td className="px-4 py-4 text-right border-y border-slate-100 dark:border-slate-800 group-hover:border-slate-200 dark:group-hover:border-slate-700 hidden md:table-cell">
-                  <span className="text-xs font-medium text-slate-400">{user.lastLogin}</span>
-                </td>
-
-                {/* Actions */}
-                <td className="px-4 py-4 text-right rounded-r-xl border-r border-y border-slate-100 dark:border-slate-800 group-hover:border-slate-200 dark:group-hover:border-slate-700 pr-6">
-                  <div className="flex items-center justify-end gap-1">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => handleEditClick(user)}
-                      className="h-8 w-8 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-full"
-                      title="Editar Perfil"
-                    >
-                      <Edit2 className="h-4 w-4" />
-                    </Button>
-
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => toggleStatus(user.id)}
-                      className={user.status === 'active'
-                        ? "h-8 w-8 text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-full"
-                        : "h-8 w-8 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 rounded-full"
-                      }
-                      title={user.status === 'active' ? "Desactivar Usuario" : "Activar Usuario"}
-                    >
-                      {user.status === 'active' ? (
-                        <XCircle className="h-4 w-4" />
-                      ) : (
-                        <CheckCircle2 className="h-4 w-4" />
-                      )}
-                    </Button>
-                  </div>
-                </td>
+      {/* Modern Clean Table */}
+      <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden shadow-sm">
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm text-left">
+            <thead>
+              <tr className="border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20 text-xs font-semibold tracking-wide text-slate-500 uppercase">
+                <th className="px-3 md:px-6 py-4">Usuario</th>
+                <th className="px-3 md:px-6 py-4">Rol</th>
+                <th className="px-6 py-4 hidden lg:table-cell">Asignación</th>
+                <th className="px-6 py-4 hidden lg:table-cell">Estado</th>
+                <th className="px-6 py-4 text-right hidden lg:table-cell">Actividad</th>
+                <th className="px-3 md:px-6 py-4 text-right">Acciones</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              {filteredUsers.map((user) => (
+                <tr
+                  key={user.id}
+                  className="group hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors"
+                >
+                  <td className="px-3 md:px-6 py-4">
+                    <div className="flex items-center gap-3 md:gap-4">
+                      <div className="relative shrink-0">
+                        <Avatar className="h-9 w-9 md:h-10 md:w-10 border border-slate-100 dark:border-slate-800">
+                          <AvatarImage src={user.avatar} alt={user.name} />
+                          <AvatarFallback className="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold text-xs">
+                            {user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+                        {user.status === 'active' && (
+                          <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white dark:border-slate-900 bg-emerald-500"></span>
+                        )}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="font-semibold text-slate-900 dark:text-white truncate max-w-[110px] sm:max-w-none">{user.name}</div>
+                        <div className="text-xs text-slate-500 truncate max-w-[110px] sm:max-w-none">{user.email}</div>
+                      </div>
+                    </div>
+                  </td>
 
-        {filteredUsers.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-12 text-slate-400 bg-white dark:bg-slate-900 rounded-xl border border-dashed border-slate-200 dark:border-slate-800 mt-4">
-            <Search className="h-8 w-8 mb-3 opacity-20" />
-            <p>No se encontraron usuarios</p>
-          </div>
-        )}
+                  <td className="px-3 md:px-6 py-4">
+                    {getRoleBadge(user.role)}
+                  </td>
+
+                  <td className="px-6 py-4 hidden lg:table-cell">
+                    {user.department ? (
+                      <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
+                        {user.department === 'Gestor' ? <Briefcase className="h-4 w-4 text-slate-400" /> : <Home className="h-4 w-4 text-slate-400" />}
+                        <span className="text-sm">{user.department}</span>
+                      </div>
+                    ) : (
+                      <span className="text-slate-400 text-xs italic">Sin asignar</span>
+                    )}
+                  </td>
+
+                  <td className="px-6 py-4 hidden lg:table-cell">
+                    <div className={cn(
+                      "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border",
+                      user.status === 'active'
+                        ? "bg-emerald-50 text-emerald-700 border-emerald-100 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-900/30"
+                        : "bg-slate-50 text-slate-600 border-slate-100 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700"
+                    )}>
+                      {user.status === 'active' ? 'Activo' : 'Inactivo'}
+                    </div>
+                  </td>
+
+                  <td className="px-6 py-4 text-right hidden lg:table-cell text-slate-500 text-xs">
+                    {user.lastLogin}
+                  </td>
+
+                  <td className="px-3 md:px-6 py-4 text-right">
+                    <div className="flex items-center justify-end gap-2">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 rounded-full text-primary hover:bg-rose-50 hover:text-primary transition-colors"
+                        onClick={() => handleEditClick(user)}
+                        title="Editar"
+                      >
+                        <Edit2 className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 rounded-full text-primary hover:bg-rose-50 hover:text-primary transition-colors"
+                        onClick={() => toggleStatus(user.id)}
+                        title={user.status === 'active' ? "Desactivar" : "Activar"}
+                      >
+                        {user.status === 'active' ? <XCircle className="h-4 w-4" /> : <CheckCircle2 className="h-4 w-4" />}
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          {filteredUsers.length === 0 && (
+            <div className="flex flex-col items-center justify-center py-16 text-slate-400">
+              <div className="h-12 w-12 bg-slate-50 rounded-full flex items-center justify-center mb-3">
+                <Search className="h-6 w-6 opacity-30" />
+              </div>
+              <p>No se encontraron resultados</p>
+            </div>
+          )}
+        </div>
       </div>
 
 
@@ -398,7 +402,7 @@ export default function UsersPage() {
       <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
-            <DialogTitle>Editar Usuario</DialogTitle>
+            <DialogTitle>{editingUser?.id ? 'Editar Usuario' : 'Registrar Nuevo Usuario'}</DialogTitle>
             <DialogDescription>
               Modifica los detalles del usuario, incluyendo foto de perfil.
             </DialogDescription>
@@ -416,7 +420,7 @@ export default function UsersPage() {
                       {editFirstName && editFirstName[0]}{editLastName && editLastName[0]}
                     </AvatarFallback>
                   </Avatar>
-                  <div className="absolute bottom-0 right-0 bg-blue-600 text-white p-1.5 rounded-full shadow-sm cursor-pointer hover:bg-blue-700 transition-colors" onClick={(e) => { e.stopPropagation(); handleTriggerUpload(); }}>
+                  <div className="absolute bottom-0 right-0 bg-primary text-white p-1.5 rounded-full shadow-sm cursor-pointer hover:bg-primary/90 transition-colors" onClick={(e) => { e.stopPropagation(); handleTriggerUpload(); }}>
                     <Camera className="h-4 w-4" />
                   </div>
                 </div>
@@ -510,9 +514,9 @@ export default function UsersPage() {
               </div>
 
               <DialogFooter className="mt-4">
-                <Button type="submit" className="bg-airbnb-rausch hover:bg-[#ff385c] text-white w-full sm:w-auto">
+                <Button type="submit" className="w-full sm:w-auto">
                   <Save className="mr-2 h-4 w-4" />
-                  Guardar Cambios
+                  {editingUser.id ? 'Guardar Cambios' : 'Registrar Usuario'}
                 </Button>
               </DialogFooter>
             </form>
