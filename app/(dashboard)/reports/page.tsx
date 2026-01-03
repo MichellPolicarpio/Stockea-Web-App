@@ -207,28 +207,48 @@ export default function ReportsPage() {
 
       {/* KPI STATS */}
       <div className="grid gap-4 md:grid-cols-3">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Asignaciones Totales</CardTitle>
+        {/* Totales */}
+        <Card className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden group">
+          <div className="absolute right-0 top-0 h-full w-24 bg-gradient-to-l from-slate-50 to-transparent dark:from-slate-900 opacity-50" />
+          <CardHeader className="flex flex-row items-center justify-between pb-1 space-y-0 z-10 relative">
+            <CardTitle className="text-sm font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider">
+              Total
+            </CardTitle>
+            <ClipboardCheck className="h-4 w-4 text-slate-400 group-hover:text-blue-600 transition-colors" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{total}</div>
+          <CardContent className="z-10 relative pt-0 pb-3">
+            <div className="text-2xl font-bold text-slate-900 dark:text-white">{total}</div>
+            <p className="text-xs text-slate-500">Asignaciones globales</p>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-amber-600 dark:text-amber-500">Pendientes</CardTitle>
+
+        {/* Pendientes */}
+        <Card className="bg-white dark:bg-slate-950 border-amber-100 dark:border-amber-900/30 shadow-sm relative overflow-hidden group">
+          <div className="absolute right-0 top-0 h-full w-24 bg-gradient-to-l from-amber-50 to-transparent dark:from-amber-900/20 opacity-50" />
+          <CardHeader className="flex flex-row items-center justify-between pb-1 space-y-0 z-10 relative">
+            <CardTitle className="text-sm font-semibold text-amber-600 dark:text-amber-500 uppercase tracking-wider">
+              Pendientes
+            </CardTitle>
+            <CircleDashed className="h-4 w-4 text-amber-400 group-hover:text-amber-600 transition-colors" />
           </CardHeader>
-          <CardContent>
+          <CardContent className="z-10 relative pt-0 pb-3">
             <div className="text-2xl font-bold text-amber-600 dark:text-amber-500">{pending}</div>
+            <p className="text-xs text-amber-500/80">Por verificar</p>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-green-600 dark:text-green-500">Completadas</CardTitle>
+
+        {/* Completadas */}
+        <Card className="bg-white dark:bg-slate-950 border-green-100 dark:border-green-900/30 shadow-sm relative overflow-hidden group">
+          <div className="absolute right-0 top-0 h-full w-24 bg-gradient-to-l from-green-50 to-transparent dark:from-green-900/20 opacity-50" />
+          <CardHeader className="flex flex-row items-center justify-between pb-1 space-y-0 z-10 relative">
+            <CardTitle className="text-sm font-semibold text-green-600 dark:text-green-500 uppercase tracking-wider">
+              Completas
+            </CardTitle>
+            <CheckCircle2 className="h-4 w-4 text-green-400 group-hover:text-green-600 transition-colors" />
           </CardHeader>
-          <CardContent>
+          <CardContent className="z-10 relative pt-0 pb-3">
             <div className="text-2xl font-bold text-green-600 dark:text-green-500">{completed}</div>
+            <p className="text-xs text-green-500/80">Finalizadas</p>
           </CardContent>
         </Card>
       </div>
