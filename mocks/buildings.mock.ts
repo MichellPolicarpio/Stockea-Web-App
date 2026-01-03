@@ -8,6 +8,7 @@ export const mockBuildings: Building[] = [
     totalApartments: 4,
     createdAt: new Date('2024-01-01'),
     updatedAt: new Date('2024-01-01'),
+    imageUrl: '/Edificio_CasaTortuga.PNG',
   },
   {
     id: 'building-2',
@@ -16,6 +17,7 @@ export const mockBuildings: Building[] = [
     totalApartments: 10,
     createdAt: new Date('2024-01-05'),
     updatedAt: new Date('2024-01-05'),
+    imageUrl: '/Edificio_CasaBamba.PNG',
   },
   {
     id: 'building-3',

@@ -6,6 +6,7 @@ export interface Building {
   totalApartments: number
   createdAt: Date
   updatedAt: Date
+  imageUrl?: string
 }
 
 
