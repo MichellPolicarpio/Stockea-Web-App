@@ -86,21 +86,18 @@ export function LoginForm() {
     // Mini Splash Screen de transición
     if (showSplash) {
         return (
-            <div className="fixed inset-0 bg-white z-[100] flex flex-col items-center justify-center animate-in fade-in duration-300">
-                <div className="flex flex-col items-center gap-6">
-                    {/* Isotipo animado Stokea */}
-                    <div className="w-12 h-12 bg-black flex items-center justify-center animate-[spin_1s_ease-in-out]">
-                        <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+            <div className="fixed inset-0 z-[100] bg-white dark:bg-slate-950 flex flex-col items-center justify-center animate-in fade-in duration-300">
+                <div className="flex flex-col items-center animate-pulse">
+                    <div className="bg-slate-900 dark:bg-white p-4 rounded-2xl mb-6 shadow-2xl">
+                        <svg className="w-12 h-12 text-white dark:text-slate-900" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
                             <path d="M4 4h16v16H4z" />
                             <path d="M10 10l4 4" strokeWidth="2" strokeLinecap="round" />
                         </svg>
                     </div>
-
-                    <div className="space-y-2 text-center">
-                        StockBnB<span className="text-blue-600">.</span>
-                        <div className="h-1 w-24 bg-slate-100 rounded-full mx-auto overflow-hidden">
-                            <div className="h-full bg-slate-900 animate-[loading_1s_ease-in-out_infinite]" />
-                        </div>
+                    <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white mb-2">StockBnB<span className="text-blue-600">.</span></h2>
+                    <p className="text-slate-500 dark:text-slate-400 font-medium mb-6">Iniciando sesión...</p>
+                    <div className="h-1 w-32 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                        <div className="h-full bg-blue-600 animate-[loading_1s_ease-in-out_infinite]" />
                     </div>
                 </div>
                 <style jsx>{`
