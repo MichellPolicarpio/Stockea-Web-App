@@ -152,9 +152,9 @@ export function Header({ sidebarCollapsed, onToggleSidebar }: DashboardHeaderPro
                             {/* Notification Center */}
                             <DropdownMenu modal={false}>
                                 <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" size="icon" className="relative text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors rounded-full h-10 w-10">
-                                        <Bell className="h-5 w-5" strokeWidth={1.5} />
-                                        <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-blue-500 rounded-full border-2 border-white dark:border-slate-950 pointer-events-none" />
+                                    <Button variant="ghost" size="icon" className="relative text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors rounded-full h-10 w-10">
+                                        <Bell className="h-6 w-6" strokeWidth={2} />
+                                        <span className="absolute top-2 right-2.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white dark:border-slate-950 pointer-events-none" />
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end" className="w-80 p-0 rounded-xl shadow-lg border border-slate-100 dark:border-slate-800 mt-2 bg-white dark:bg-slate-950">
