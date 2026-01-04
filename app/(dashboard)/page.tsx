@@ -126,8 +126,8 @@ function VerifierDashboard({ user }: { user: any }) {
                                 {/* Right: Status and Action */}
                                 <div className="flex items-center gap-4 w-full sm:w-auto mt-2 sm:mt-0 justify-between sm:justify-end">
                                     <div className={`px-2.5 py-1 rounded-full text-xs font-semibold uppercase tracking-wider ${task.status === 'completed' ? 'bg-green-100 text-green-700' :
-                                            task.status === 'overdue' ? 'bg-red-100 text-red-700' :
-                                                'bg-blue-100 text-blue-700'
+                                        task.status === 'overdue' ? 'bg-red-100 text-red-700' :
+                                            'bg-blue-100 text-blue-700'
                                         }`}>
                                         {task.status === 'completed' ? 'Completado' : task.status === 'overdue' ? 'Atrasado' : 'Pendiente'}
                                     </div>
@@ -148,9 +148,7 @@ function AdminDashboard() {
     const { theme } = useTheme()
     const isDark = theme === 'dark'
 
-    // MOCK DATA: Inventory Focus
-    // 1. Inventory Volume per Building
-    // 1. Inventory Volume per Building
+    // DATA
     const inventoryByBuilding = [
         { name: 'Casa Tortuga', items: 85, totalValue: 120000 },
         { name: 'Casa Bamba', items: 62, totalValue: 85000 },
@@ -159,16 +157,13 @@ function AdminDashboard() {
         { name: 'El Palmar', items: 92, totalValue: 45000 },
     ]
 
-    // 2. Condition Status
-    // 2. Condition Status
     const conditionData = [
-        { name: 'Nuevo', value: 45, color: '#00A699' },
-        { name: 'Bueno', value: 30, color: '#484848' },
-        { name: 'Regular', value: 15, color: '#FC642D' },
-        { name: 'Malo', value: 10, color: '#FF5A5F' },
+        { name: 'Nuevo', value: 45, color: '#3b82f6' }, // Blue-500
+        { name: 'Bueno', value: 30, color: '#10b981' }, // Emerald-500
+        { name: 'Regular', value: 15, color: '#f59e0b' }, // Amber-500
+        { name: 'Malo', value: 10, color: '#ef4444' }, // Red-500
     ]
 
-    // 3. Activity Trend (Inspections Monthly)
     const activityData = [
         { month: 'Ene', inspections: 12 },
         { month: 'Feb', inspections: 18 },
@@ -178,154 +173,98 @@ function AdminDashboard() {
         { month: 'Jun', inspections: 32 },
     ]
 
-    // 4. Radar Data: Wear & Tear by Zone (Incidents)
-    const zoneHealthData = [
-        { subject: 'Cocina', A: 65, fullMark: 100 },
-        { subject: 'Sala', A: 45, fullMark: 100 },
-        { subject: 'Baño', A: 30, fullMark: 100 },
-        { subject: 'Recámaras', A: 25, fullMark: 100 },
-        { subject: 'Terraza', A: 55, fullMark: 100 },
-        { subject: 'Comedor', A: 20, fullMark: 100 },
-    ]
-
     return (
-        <div className="space-y-8 animate-in fade-in duration-500">
-            {/* 1. TOP METRICS ROW - Inventory Focused */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
-                {/* Metric 1 */}
-                <div className="flex flex-col gap-1 md:gap-2 p-2 md:p-0 bg-slate-50 dark:bg-slate-900/50 md:bg-transparent rounded-lg md:rounded-none">
-                    <div className="flex items-center gap-2 md:justify-start">
-                        <Box className="h-4 w-4 text-slate-400" />
-                        <span className="text-[10px] md:text-sm font-medium text-slate-500 dark:text-slate-400 text-center md:text-left leading-tight">Total Items</span>
-                    </div>
-                    <div className="flex items-baseline justify-center md:justify-start gap-2">
-                        <h2 className="text-2xl md:text-4xl font-bold text-slate-900 dark:text-white tracking-tight">342</h2>
-                    </div>
-                    <div className="flex flex-col md:flex-row items-center md:justify-start gap-1 md:gap-2 text-[10px] md:text-sm mt-1">
-                        <span className="flex items-center text-emerald-600 dark:text-emerald-400 font-medium bg-emerald-50 dark:bg-emerald-900/30 px-1.5 py-0.5 rounded-md">
-                            <ArrowUpRight className="h-2 w-2 md:h-3 md:w-3 mr-0.5 md:mr-1" />
-                            +12
-                        </span>
-                        <span className="text-slate-400 hidden sm:inline">nuevos</span>
-                    </div>
-                </div>
+        <div className="animate-in fade-in duration-700 space-y-6">
 
-                {/* Metric 2 */}
-                <div className="flex flex-col gap-1 md:gap-2 p-2 md:p-0 bg-slate-50 dark:bg-slate-900/50 md:bg-transparent rounded-lg md:rounded-none">
-                    <div className="flex items-center gap-2 md:justify-start">
-                        <ClipboardList className="h-4 w-4 text-slate-400" />
-                        <span className="text-[10px] md:text-sm font-medium text-slate-500 dark:text-slate-400 text-center md:text-left leading-tight">Inspecciones</span>
-                    </div>
-                    <div className="flex items-baseline justify-center md:justify-start gap-2">
-                        <h2 className="text-2xl md:text-4xl font-bold text-slate-900 dark:text-white tracking-tight">14</h2>
-                    </div>
-                    <div className="flex flex-col md:flex-row items-center md:justify-start gap-1 md:gap-2 text-[10px] md:text-sm mt-1">
-                        <span className="flex items-center text-slate-500 dark:text-slate-400 font-medium text-center leading-none">
-                            Este mes
-                        </span>
-                    </div>
-                </div>
+            {/* SQUARED BENTO GRID LAYOUT */}
+            <div className="grid grid-cols-1 xl:grid-cols-12 gap-2">
 
-                {/* Metric 3 */}
-                <div className="flex flex-col gap-1 md:gap-2 p-2 md:p-0 bg-slate-50 dark:bg-slate-900/50 md:bg-transparent rounded-lg md:rounded-none">
-                    <div className="flex items-center gap-2 md:justify-start">
-                        <AlertTriangle className="h-4 w-4 text-amber-500" />
-                        <span className="text-[10px] md:text-sm font-medium text-slate-500 dark:text-slate-400 text-center md:text-left leading-tight">Atención</span>
-                    </div>
-                    <div className="flex items-baseline justify-center md:justify-start gap-2">
-                        <h2 className="text-2xl md:text-4xl font-bold text-slate-900 dark:text-white tracking-tight">4</h2>
-                    </div>
-                    <div className="flex flex-col md:flex-row items-center md:justify-start gap-1 md:gap-2 text-[10px] md:text-sm mt-1">
-                        <span className="flex items-center text-amber-600 dark:text-amber-400 font-medium bg-amber-50 dark:bg-amber-900/30 px-1.5 py-0.5 rounded-md">
-                            3 Dañados
-                        </span>
-                    </div>
-                </div>
+                {/* --- COLUMNA IZQUIERDA (HERO & RESUMEN) --- */}
+                <div className="xl:col-span-4 flex flex-col gap-2 order-last xl:order-none">
 
-                {/* Metric 4 - Properties */}
-                <div className="flex flex-col gap-1 md:gap-2 p-2 md:p-0 bg-slate-50 dark:bg-slate-900/50 md:bg-transparent rounded-lg md:rounded-none">
-                    <div className="flex items-center gap-2 md:justify-start">
-                        <BuildingIcon className="h-4 w-4 text-slate-400" />
-                        <span className="text-[10px] md:text-sm font-medium text-slate-500 dark:text-slate-400 text-center md:text-left leading-tight">Propiedades</span>
-                    </div>
-                    <div className="flex items-baseline justify-center md:justify-start gap-2">
-                        <h2 className="text-2xl md:text-4xl font-bold text-slate-900 dark:text-white tracking-tight">5</h2>
-                        <span className="text-sm text-slate-400 font-medium">Edificios</span>
-                    </div>
-                    <div className="flex flex-col md:flex-row items-center md:justify-start gap-1 md:gap-2 text-[10px] md:text-sm mt-1">
-                        <span className="flex items-center text-blue-600 dark:text-blue-400 font-medium bg-blue-50 dark:bg-blue-900/30 px-1.5 py-0.5 rounded-md">
-                            <Home className="h-3 w-3 mr-1" />
-                            24 Deptos
-                        </span>
-                    </div>
-                </div>
-            </div>
+                    {/* 1. HERO CARD (Blue Gradient) - SQUARED & CLEAN */}
+                    <div className="relative overflow-hidden bg-gradient-to-b from-blue-400 to-blue-50 rounded-lg p-6 text-white shadow-lg shadow-blue-100/50 min-h-[420px] hidden md:flex flex-col justify-between group">
 
-            {/* 2. MAIN CONTENT GRID */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        {/* Decoracion de fondo abstracta */}
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500 opacity-10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none group-hover:opacity-15 transition-opacity duration-700" />
+                        <div className="absolute bottom-0 left-0 w-40 h-40 bg-blue-600 opacity-5 rounded-full blur-2xl -ml-10 -mb-10 pointer-events-none" />
 
-                {/* LEFT COLUMN (2/3) - Main Charts */}
-                <div className="lg:col-span-2 space-y-8">
-
-                    {/* INVENTORY DISTRIBUTION CHART */}
-                    <div className="space-y-4">
-                        <div className="flex items-center justify-center pb-2">
-                            <h3 className="text-lg font-bold text-slate-900 dark:text-white">Items por Edificio</h3>
+                        <div className="relative z-10 text-center w-full mt-4">
+                            <h2 className="text-2xl lg:text-3xl font-bold tracking-tight mb-2 leading-tight">Audita tu inversión.<br />Cuida tu inmueble.</h2>
                         </div>
 
-                        <div className="h-[250px] w-full">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <BarChart data={inventoryByBuilding} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
-                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={isDark ? "#334155" : "#f1f5f9"} />
-                                    <XAxis
-                                        dataKey="name"
-                                        axisLine={false}
-                                        tickLine={false}
-                                        tick={{ fill: isDark ? '#94a3b8' : '#64748b', fontSize: 12 }}
-                                        dy={10}
-                                    />
-                                    <YAxis
-                                        axisLine={false}
-                                        tickLine={false}
-                                        tick={{ fill: isDark ? '#94a3b8' : '#64748b', fontSize: 12 }}
-                                    />
-                                    <Tooltip
-                                        cursor={{ fill: isDark ? '#1e293b' : '#f8fafc' }}
-                                        contentStyle={{
-                                            backgroundColor: isDark ? '#0f172a' : '#fff',
-                                            borderRadius: '8px',
-                                            border: isDark ? '1px solid #1e293b' : 'none',
-                                            boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
-                                            color: isDark ? '#fff' : '#000'
-                                        }}
-                                    />
-                                    <Bar
-                                        dataKey="items"
-                                        fill="#FF5A5F"
-                                        radius={[4, 4, 0, 0]}
-                                        barSize={40}
-                                    />
-                                </BarChart>
-                            </ResponsiveContainer>
+                        {/* Hero Image */}
+                        <div className="flex-1 flex items-center justify-center w-full relative z-10">
+                            <img src="/ImagenPortada.png" alt="Portada" className="w-full h-auto object-contain max-h-[400px] scale-125 animate-in zoom-in-75 fade-in duration-1000 delay-200 fill-mode-both" />
                         </div>
+
+
                     </div>
 
+                    {/* 2. Categorías Top (Lista Estilizada) - SQUARED */}
+                    <div className="bg-white dark:bg-slate-900 rounded-lg p-6 shadow-sm border border-slate-200/50 dark:border-slate-800 flex-1">
+                        <div className="flex items-center justify-between mb-6">
+                            <h3 className="text-lg font-bold text-slate-900 dark:text-white">Categorías Top</h3>
+                            <Button variant="ghost" size="icon" className="rounded-full h-8 w-8 text-slate-400 hover:text-slate-900 dark:hover:text-white">
+                                <MoreVertical className="h-4 w-4" />
+                            </Button>
+                        </div>
+                        <div className="space-y-6">
+                            {[
+                                { name: 'Mobiliario', items: 450, color: 'bg-blue-500', icon: Armchair },
+                                { name: 'Electrónicos', items: 210, color: 'bg-emerald-500', icon: Tv },
+                                { name: 'Cocina', items: 185, color: 'bg-orange-500', icon: Utensils },
+                            ].map((cat, i) => (
+                                <div key={i} className="group">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <div className="flex items-center gap-3">
+                                            <div className={`h-10 w-10 rounded-lg ${cat.color} bg-opacity-10 flex items-center justify-center text-${cat.color.split('-')[1]}-600 dark:text-${cat.color.split('-')[1]}-400 group-hover:scale-110 transition-transform duration-300`}>
+                                                <cat.icon className={`h-5 w-5 text-${cat.color.replace('bg-', '')}`} style={{ color: 'var(--tw-text-opacity)' }} />
+                                            </div>
+                                            <div>
+                                                <p className="font-bold text-slate-700 dark:text-slate-200 text-sm">{cat.name}</p>
+                                                <p className="text-xs text-slate-400 font-medium">Inventario activo</p>
+                                            </div>
+                                        </div>
+                                        <span className="text-sm font-bold text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 px-2 py-1 rounded-lg">{cat.items}</span>
+                                    </div>
+                                    <div className="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                                        <div className={`h-full ${cat.color} rounded-full`} style={{ width: `${(cat.items / 500) * 100}%` }} />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
 
-                    {/* BOTTOM ROW SPLIT */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
+                {/* --- COLUMNA DERECHA (GRAPHS & DATA) --- */}
+                <div className="xl:col-span-8 flex flex-col gap-2">
 
-                        {/* DONUT CHART: Condition */}
-                        <div className="space-y-4">
-                            <h4 className="text-base font-bold text-slate-900 dark:text-white text-center pb-2">Estado del Inventario</h4>
-                            <div className="flex items-center gap-4 h-[180px]">
-                                <div className="w-[180px] h-full flex-shrink-0">
+                    {/* FILA 1: KPIs Charts */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+
+                        {/* KPI 1: Estado Inventario (Donut Rediseñado) */}
+                        <div className="bg-white dark:bg-slate-900 rounded-lg p-4 shadow-sm border border-slate-200/50 dark:border-slate-800 relative overflow-hidden">
+                            <div className="flex justify-between items-start mb-2">
+                                <div>
+                                    <h3 className="text-base font-bold text-slate-900 dark:text-white">Estado Activos</h3>
+                                    <p className="text-xs text-slate-400">Salud global</p>
+                                </div>
+                                <div className="p-1.5 bg-slate-50 dark:bg-slate-800 rounded-full">
+                                    <ArrowUpRight className="h-3.5 w-3.5 text-emerald-500" />
+                                </div>
+                            </div>
+
+                            <div className="flex items-center justify-between gap-2 mt-1">
+                                <div className="relative h-[120px] w-[120px] mx-auto md:mx-0">
                                     <ResponsiveContainer width="100%" height="100%">
                                         <PieChart>
                                             <Pie
                                                 data={conditionData}
-                                                innerRadius={60}
-                                                outerRadius={80}
-                                                paddingAngle={5}
+                                                innerRadius={40}
+                                                outerRadius={55}
+                                                cornerRadius={6}
+                                                paddingAngle={6}
                                                 dataKey="value"
                                                 stroke="none"
                                             >
@@ -335,196 +274,150 @@ function AdminDashboard() {
                                             </Pie>
                                         </PieChart>
                                     </ResponsiveContainer>
-                                    <div className="relative -top-[105px] text-center pointer-events-none">
+                                    {/* Center Text */}
+                                    <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                                         <span className="text-2xl font-bold text-slate-900 dark:text-white">75%</span>
-                                        <p className="text-xs text-slate-400">Operativo</p>
+                                        <span className="text-[8px] uppercase font-bold text-slate-400">Operativo</span>
                                     </div>
                                 </div>
 
-                                {/* Custom Legend */}
-                                <div className="flex flex-col gap-2 text-sm flex-1">
-                                    {conditionData.map((item) => (
-                                        <div key={item.name} className="flex items-center gap-3">
-                                            <div className="flex items-center gap-2 min-w-[80px]">
-                                                <div className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }} />
-                                                <span className="text-slate-600 dark:text-slate-400 font-medium">{item.name}</span>
+                                {/* Legend Compacta a la derecha */}
+                                <div className="flex flex-col gap-2 flex-1 min-w-[90px]">
+                                    {conditionData.slice(0, 3).map((item, i) => (
+                                        <div key={i} className="flex items-center justify-between text-xs">
+                                            <div className="flex items-center gap-1.5">
+                                                <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }} />
+                                                <span className="text-slate-600 dark:text-slate-400 font-medium truncate max-w-[50px]">{item.name}</span>
                                             </div>
-                                            <span className="text-slate-900 dark:text-white font-bold text-xs">{item.value}%</span>
+                                            <span className="font-bold text-slate-900 dark:text-white">{item.value}%</span>
                                         </div>
                                     ))}
                                 </div>
                             </div>
                         </div>
 
-
-
-                        {/* AREA CHART: Verification Activity */}
-                        <div className="space-y-4">
-                            <div className="flex flex-col items-center justify-center pb-2">
-                                <h4 className="text-base font-bold text-slate-900 dark:text-white">Inspecciones</h4>
-                                <span className="text-xs text-slate-500 dark:text-slate-400">Historial Semestral</span>
+                        {/* KPI 2: Inspecciones (Area Chart Clean) */}
+                        <div className="bg-white dark:bg-slate-900 rounded-lg p-4 shadow-sm border border-slate-200/50 dark:border-slate-800 flex flex-col justify-between">
+                            <div className="flex justify-between items-start mb-2">
+                                <div>
+                                    <h3 className="text-base font-bold text-slate-900 dark:text-white">Inspecciones</h3>
+                                    <p className="text-xs text-slate-400">Rendimiento mensual</p>
+                                </div>
+                                <div className="text-right">
+                                    <p className="text-xl font-bold text-slate-900 dark:text-white">142</p>
+                                    <p className="text-[10px] text-emerald-500 font-bold bg-emerald-50 dark:bg-emerald-900/40 px-1.5 py-0.5 rounded-full inline-block">+18%</p>
+                                </div>
                             </div>
-                            <div className="h-[180px] w-full">
+
+                            <div className="h-[120px] w-full -ml-3">
                                 <ResponsiveContainer width="100%" height="100%">
-                                    <AreaChart data={activityData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                                    <AreaChart data={activityData}>
                                         <defs>
-                                            <linearGradient id="colorInspections" x1="0" y1="0" x2="0" y2="1">
-                                                <stop offset="5%" stopColor="#00A699" stopOpacity={0.1} />
-                                                <stop offset="95%" stopColor="#00A699" stopOpacity={0} />
+                                            <linearGradient id="colorInsp2" x1="0" y1="0" x2="0" y2="1">
+                                                <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.4} />
+                                                <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
                                             </linearGradient>
                                         </defs>
-                                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={isDark ? "#334155" : "#f1f5f9"} />
-                                        <XAxis
-                                            dataKey="month"
-                                            axisLine={false}
-                                            tickLine={false}
-                                            tick={{ fill: isDark ? '#94a3b8' : '#64748b', fontSize: 12 }}
-                                            dy={10}
-                                        />
-                                        <YAxis
-                                            axisLine={false}
-                                            tickLine={false}
-                                            tick={{ fill: isDark ? '#94a3b8' : '#64748b', fontSize: 12 }}
-                                        />
-                                        <Tooltip
-                                            formatter={(value) => [`${value}`, 'Inspecciones']}
-                                            contentStyle={{
-                                                backgroundColor: isDark ? '#0f172a' : '#fff',
-                                                borderRadius: '8px',
-                                                border: isDark ? '1px solid #1e293b' : 'none',
-                                                boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
-                                                color: isDark ? '#fff' : '#000'
-                                            }}
-                                        />
-                                        <Area
-                                            type="monotone"
-                                            dataKey="inspections"
-                                            stroke="#00A699"
-                                            strokeWidth={2}
-                                            fillOpacity={1}
-                                            fill="url(#colorInspections)"
-                                        />
+                                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={isDark ? "#1e293b" : "#f1f5f9"} />
+                                        <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94a3b8' }} dy={10} />
+                                        <Tooltip cursor={false} contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }} />
+                                        <Area type="monotone" dataKey="inspections" stroke="#3b82f6" strokeWidth={3} fillOpacity={1} fill="url(#colorInsp2)" />
                                     </AreaChart>
                                 </ResponsiveContainer>
                             </div>
                         </div>
+
                     </div>
 
-                </div>
-
-
-                {/* RIGHT COLUMN (1/3) - Categories & Actions */}
-                <div className="space-y-8">
-
-                    {/* Top Categories */}
-                    <div className="space-y-6">
-                        <div className="flex items-center justify-center pb-2">
-                            <h3 className="text-lg font-bold text-slate-900 dark:text-white">Categorías Top</h3>
-                        </div>
-
-                        <div className="space-y-5">
-                            {/* Category 1 */}
-                            <div className="group cursor-pointer">
-                                <div className="flex items-center justify-between mb-2">
-                                    <div className="flex items-center gap-3">
-                                        <div className="h-8 w-8 rounded-md bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
-                                            <Armchair className="h-4 w-4 text-slate-600 dark:text-slate-400" />
-                                        </div>
-                                        <span className="font-bold text-slate-600 dark:text-slate-400 text-sm">Mobiliario</span>
-                                    </div>
-                                    <span className="text-xs font-bold text-slate-900 dark:text-white">450 items</span>
-                                </div>
-                                <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                                    <div className="h-full bg-rose-500 w-[65%] rounded-full" />
-                                </div>
+                    {/* FILA 2: Wide Bar Chart */}
+                    <div className="bg-white dark:bg-slate-900 rounded-lg p-4 shadow-sm border border-slate-200/50 dark:border-slate-800">
+                        <div className="flex items-center justify-between mb-4">
+                            <div>
+                                <h3 className="text-base font-bold text-slate-900 dark:text-white">Distribución por Edificio</h3>
+                                <p className="text-xs text-slate-400">Total de items registrados</p>
                             </div>
-
-                            {/* Category 2 */}
-                            <div className="group cursor-pointer">
-                                <div className="flex items-center justify-between mb-2">
-                                    <div className="flex items-center gap-3">
-                                        <div className="h-8 w-8 rounded-md bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
-                                            <Tv className="h-4 w-4 text-slate-600 dark:text-slate-400" />
-                                        </div>
-                                        <span className="font-bold text-slate-600 dark:text-slate-400 text-sm">Electrónicos</span>
-                                    </div>
-                                    <span className="text-xs font-bold text-slate-900 dark:text-white">210 items</span>
-                                </div>
-                                <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                                    <div className="h-full bg-teal-500 w-[35%] rounded-full" />
-                                </div>
-                            </div>
-
-                            {/* Category 3 */}
-                            <div className="group cursor-pointer">
-                                <div className="flex items-center justify-between mb-2">
-                                    <div className="flex items-center gap-3">
-                                        <div className="h-8 w-8 rounded-md bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
-                                            <Utensils className="h-4 w-4 text-slate-600 dark:text-slate-400" />
-                                        </div>
-                                        <span className="font-bold text-slate-600 dark:text-slate-400 text-sm">Cocina</span>
-                                    </div>
-                                    <span className="text-xs font-bold text-slate-900 dark:text-white">185 items</span>
-                                </div>
-                                <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                                    <div className="h-full bg-orange-500 w-[25%] rounded-full" />
-                                </div>
-                            </div>
-                            {/* Category 4 */}
-                            <div className="group cursor-pointer">
-                                <div className="flex items-center justify-between mb-2">
-                                    <div className="flex items-center gap-3">
-                                        <div className="h-8 w-8 rounded-md bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
-                                            <Palette className="h-4 w-4 text-slate-600 dark:text-slate-400" />
-                                        </div>
-                                        <span className="font-bold text-slate-600 dark:text-slate-400 text-sm">Decoración</span>
-                                    </div>
-                                    <span className="text-xs font-bold text-slate-900 dark:text-white">120 items</span>
-                                </div>
-                                <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                                    <div className="h-full bg-slate-600 w-[15%] rounded-full" />
-                                </div>
+                            <div className="flex gap-2">
+                                <span className="flex items-center gap-1.5 text-[10px] font-medium px-2 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full cursor-pointer">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-blue-500" /> Res.
+                                </span>
+                                <span className="flex items-center gap-1.5 text-[10px] font-medium px-2 py-1 text-slate-400 rounded-full cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-orange-400" /> Com.
+                                </span>
                             </div>
                         </div>
-                    </div>
 
-                    {/* Incidents by Zone Card */}
-                    <div className="pt-2">
-                        <h3 className="font-bold text-lg mb-2 text-slate-900 dark:text-white text-center">Incidencias por Zona</h3>
-                        <div className="h-[180px] w-full">
+                        <div className="h-[230px] w-full">
                             <ResponsiveContainer width="100%" height="100%">
-                                <RadarChart cx="50%" cy="50%" outerRadius="70%" data={zoneHealthData}>
-                                    <PolarGrid stroke={isDark ? "#334155" : "#e2e8f0"} />
-                                    <PolarAngleAxis
-                                        dataKey="subject"
-                                        tick={{ fill: isDark ? '#94a3b8' : '#64748b', fontSize: 10, fontWeight: 'bold' }}
-                                    />
-                                    <Radar
-                                        name="Incidencias"
-                                        dataKey="A"
-                                        stroke="#FF5A5F"
-                                        strokeWidth={2}
-                                        fill="#FF5A5F"
-                                        fillOpacity={0.4}
-                                    />
+                                <BarChart data={inventoryByBuilding} barSize={40}>
+                                    <defs>
+                                        <linearGradient id="blueBarGradient" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="0%" stopColor="#3b82f6" stopOpacity={1} />
+                                            <stop offset="100%" stopColor="#3b82f6" stopOpacity={0.3} />
+                                        </linearGradient>
+                                        <linearGradient id="orangeBarGradient" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="0%" stopColor="#f97316" stopOpacity={1} />
+                                            <stop offset="100%" stopColor="#f97316" stopOpacity={0.3} />
+                                        </linearGradient>
+                                    </defs>
+                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={isDark ? "#1e293b" : "#f8fafc"} />
+                                    <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 11 }} dy={10} />
+                                    <YAxis axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 11 }} />
                                     <Tooltip
-                                        contentStyle={{
-                                            backgroundColor: isDark ? '#0f172a' : '#fff',
-                                            borderRadius: '8px',
-                                            border: isDark ? '1px solid #1e293b' : 'none',
-                                            boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
-                                            color: isDark ? '#fff' : '#000'
-                                        }}
+                                        cursor={{ fill: 'transparent' }}
+                                        contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)', padding: '12px 16px' }}
                                     />
-                                </RadarChart>
+                                    <Bar dataKey="items" radius={[6, 6, 0, 0]}>
+                                        {inventoryByBuilding.map((entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={index % 2 === 0 ? "url(#blueBarGradient)" : "url(#orangeBarGradient)"} />
+                                        ))}
+                                    </Bar>
+                                </BarChart>
                             </ResponsiveContainer>
                         </div>
                     </div>
 
+                    {/* FILA 3: Métricas Secundarias Estilo "Tarjetitas" */}
+                    {/* FILA 3: Métricas Secundarias Estilo "Tarjetitas" */}
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2 order-first md:order-none">
+                        {/* Card Mini 1 */}
+                        <div className="bg-white dark:bg-slate-900 rounded-lg p-5 shadow-sm border border-slate-200/50 dark:border-slate-800 flex flex-col justify-center items-center text-center hover:shadow-md transition-shadow cursor-pointer group">
+                            <div className="mb-2 p-3 bg-amber-50 dark:bg-amber-900/20 text-amber-500 rounded-lg group-hover:scale-110 transition-transform">
+                                <AlertTriangle className="h-6 w-6" />
+                            </div>
+                            <span className="text-2xl font-bold text-slate-900 dark:text-white">4</span>
+                            <span className="text-xs font-bold uppercase tracking-wide text-slate-400 mt-1">Dañados</span>
+                        </div>
+
+                        {/* Card Mini 2 */}
+                        <div className="bg-white dark:bg-slate-900 rounded-lg p-5 shadow-sm border border-slate-200/50 dark:border-slate-800 flex flex-col justify-center items-center text-center hover:shadow-md transition-shadow cursor-pointer group">
+                            <div className="mb-2 p-3 bg-purple-50 dark:bg-purple-900/20 text-purple-500 rounded-lg group-hover:scale-110 transition-transform">
+                                <BuildingIcon className="h-6 w-6" />
+                            </div>
+                            <span className="text-2xl font-bold text-slate-900 dark:text-white">5</span>
+                            <span className="text-xs font-bold uppercase tracking-wide text-slate-400 mt-1">Edificios</span>
+                        </div>
+
+                        {/* Card Mini 3 */}
+                        <div className="bg-white dark:bg-slate-900 rounded-lg p-5 shadow-sm border border-slate-200/50 dark:border-slate-800 flex flex-col justify-center items-center text-center hover:shadow-md transition-shadow cursor-pointer group">
+                            <div className="mb-2 p-3 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-500 rounded-lg group-hover:scale-110 transition-transform">
+                                <Home className="h-6 w-6" />
+                            </div>
+                            <span className="text-2xl font-bold text-slate-900 dark:text-white">24</span>
+                            <span className="text-xs font-bold uppercase tracking-wide text-slate-400 mt-1">Deptos</span>
+                        </div>
+
+                        {/* Card Mini 4 */}
+                        <div className="bg-white dark:bg-slate-900 rounded-lg p-5 shadow-sm border border-slate-200/50 dark:border-slate-800 flex flex-col justify-center items-center text-center hover:shadow-md transition-shadow cursor-pointer group">
+                            <div className="mb-2 p-3 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-500 rounded-lg group-hover:scale-110 transition-transform">
+                                <CheckCircle2 className="h-6 w-6" />
+                            </div>
+                            <span className="text-2xl font-bold text-slate-900 dark:text-white">98%</span>
+                            <span className="text-xs font-bold uppercase tracking-wide text-slate-400 mt-1">Salud</span>
+                        </div>
+                    </div>
+
                 </div>
-
             </div>
-
         </div>
     )
 }
