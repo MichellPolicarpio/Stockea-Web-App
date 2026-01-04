@@ -140,44 +140,24 @@ export default function ProfilePage() {
   const fullName = `${formData.firstName} ${formData.lastName}`.trim() || user.name
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6 animate-in fade-in duration-500 py-6">
+    <div className="space-y-8 animate-in fade-in duration-500 max-w-7xl mx-auto p-4 md:px-8 md:pb-8 md:pt-0 md:-mt-2">
 
       {/* TARJETA PRINCIPAL: DATOS PERSONALES */}
-      <Card className="border-slate-200 dark:border-slate-800 shadow-sm">
-        <CardHeader className="pb-4">
-          <div className="flex justify-between items-start">
-            <div>
-              <CardTitle className="text-xl font-bold">Información Personal</CardTitle>
-              <CardDescription>Gestiona tu información básica e identidad.</CardDescription>
-            </div>
+      <Card className="border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden relative">
 
-            {/* Botones de Acción Desktop */}
-            <div className="hidden sm:flex items-center gap-3">
-              <Button onClick={() => setIsPasswordOpen(true)} variant="ghost" size="sm" className="text-slate-600 dark:text-slate-400">
-                <KeyRound className="h-4 w-4 mr-2" />
-                Cambiar Contraseña
-              </Button>
-              <Button onClick={() => setIsEditOpen(true)} variant="outline" size="sm">
-                <Edit2 className="h-4 w-4 mr-2" />
-                Editar Datos
-              </Button>
-            </div>
-          </div>
-        </CardHeader>
+        <CardHeader className="pb-4 pt-8 px-8 relative z-10">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
 
-        <CardContent className="space-y-6">
-          <div className="flex flex-col md:flex-row gap-8 items-start">
-
-            {/* COLUMNA 1: AVATAR */}
-            <div className="flex flex-col items-center space-y-3">
+            <div className="flex flex-col md:flex-row gap-6 items-center md:items-end">
+              {/* AVATAR Clean */}
               <div className="relative group">
-                <Avatar className="h-32 w-32 border-2 border-slate-100 dark:border-slate-800 shadow-sm">
+                <Avatar className="h-24 w-24 border border-slate-200 dark:border-slate-700 shadow-md">
                   <AvatarImage src={avatarUrl} className="object-cover" />
                   <AvatarFallback className="text-3xl bg-slate-50 text-slate-400">{initials}</AvatarFallback>
                 </Avatar>
                 <button
                   onClick={handlePhotoClick}
-                  className="absolute bottom-0 right-0 p-2 bg-slate-900 dark:bg-slate-50 text-white dark:text-slate-900 rounded-full shadow-md hover:scale-105 transition-transform"
+                  className="absolute bottom-0 right-0 p-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-full shadow-md hover:scale-105 transition-transform"
                   title="Cambiar Foto"
                 >
                   <Camera className="h-4 w-4" />
@@ -190,68 +170,88 @@ export default function ProfilePage() {
                   onChange={handleFileChange}
                 />
               </div>
-              <div className="text-center">
-                <p className="text-xs text-muted-foreground">JPG o PNG. Max 5MB.</p>
-              </div>
-            </div>
 
-            {/* COLUMNA 2: DETALLES */}
-            <div className="flex-1 w-full grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
-              <div className="space-y-1">
-                <Label className="text-xs text-slate-500 uppercase tracking-widest font-semibold">Nombre Completo</Label>
-                <div className="flex items-center gap-2 text-slate-900 dark:text-slate-100 font-medium h-9">
-                  <User className="h-4 w-4 text-slate-400" />
-                  {fullName}
-                </div>
-              </div>
-
-              <div className="space-y-1">
-                <Label className="text-xs text-slate-500 uppercase tracking-widest font-semibold">Correo Electrónico</Label>
-                <div className="flex items-center gap-2 text-slate-900 dark:text-slate-100 font-medium h-9">
-                  <Mail className="h-4 w-4 text-slate-400" />
-                  {formData.email}
-                </div>
-              </div>
-
-              <div className="space-y-1">
-                <Label className="text-xs text-slate-500 uppercase tracking-widest font-semibold">Teléfono</Label>
-                <div className="flex items-center gap-2 text-slate-900 dark:text-slate-100 font-medium h-9">
-                  <Phone className="h-4 w-4 text-slate-400" />
-                  {formData.phone}
-                </div>
-              </div>
-
-              <div className="space-y-1">
-                <Label className="text-xs text-slate-500 uppercase tracking-widest font-semibold">Rol de Usuario</Label>
-                <div className="flex items-center gap-2 h-9">
-                  <Shield className="h-4 w-4 text-slate-400" />
-                  <span className="capitalize">{roleLabels[user.role] || user.role}</span>
-                </div>
-              </div>
-
-              <div className="space-y-1">
-                <Label className="text-xs text-slate-500 uppercase tracking-widest font-semibold">ID de Usuario</Label>
-                <div className="text-sm font-mono text-slate-500 bg-slate-50 dark:bg-slate-900 px-2 py-1.5 rounded w-fit">
-                  {user.id}
-                </div>
-              </div>
-
-              <div className="space-y-1">
-                <Label className="text-xs text-slate-500 uppercase tracking-widest font-semibold">Fecha de Registro</Label>
-                <div className="flex items-center gap-2 text-slate-900 dark:text-slate-100 font-medium h-9">
-                  <Calendar className="h-4 w-4 text-slate-400" />
-                  {registerDate}
+              <div className="mb-1 space-y-1 text-center md:text-left">
+                <h1 className="text-2xl font-bold text-slate-900 dark:text-white">{fullName}</h1>
+                <div className="flex items-center gap-2 justify-center md:justify-start text-slate-500 dark:text-slate-400">
+                  <span className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full text-xs font-medium border border-slate-200 dark:border-slate-700">
+                    <Shield className="h-3 w-3" /> {roleLabels[user.role] || user.role}
+                  </span>
+                  <span className="text-sm">• {user.email}</span>
                 </div>
               </div>
             </div>
+
+            {/* Botones de Acción Desktop */}
+            <div className="hidden sm:flex items-center gap-3 mb-2">
+              <Button onClick={() => setIsPasswordOpen(true)} variant="outline" size="sm" className="text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700">
+                <KeyRound className="h-4 w-4 mr-2" />
+                Cambiar Contraseña
+              </Button>
+              <Button onClick={() => setIsEditOpen(true)} className="btn-airbnb-effect shadow-md text-white border-0" size="sm">
+                <Edit2 className="h-4 w-4 mr-2" />
+                Editar Perfil
+              </Button>
+            </div>
+          </div>
+        </CardHeader>
+
+        <CardContent className="px-8 pb-8 pt-6 space-y-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+            {/* Bloque 1: Contacto */}
+            <div className="space-y-4">
+              <h3 className="text-sm font-semibold text-slate-900 dark:text-white flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
+                <Phone className="h-4 w-4 text-blue-500" /> Información de Contacto
+              </h3>
+              <div className="space-y-3">
+                <div className="space-y-1">
+                  <Label className="text-xs text-slate-400 font-normal">Correo Electrónico</Label>
+                  <p className="font-medium text-slate-700 dark:text-slate-200">{formData.email}</p>
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-xs text-slate-400 font-normal">Teléfono Móvil</Label>
+                  <p className="font-medium text-slate-700 dark:text-slate-200">{formData.phone}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Bloque 2: Sistema */}
+            <div className="space-y-4">
+              <h3 className="text-sm font-semibold text-slate-900 dark:text-white flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
+                <Shield className="h-4 w-4 text-indigo-500" /> Datos del Sistema
+              </h3>
+              <div className="space-y-3">
+                <div className="space-y-1">
+                  <Label className="text-xs text-slate-400 font-normal">ID de Usuario</Label>
+                  <p className="font-mono text-xs text-slate-500 bg-slate-50 dark:bg-slate-900 px-2 py-1 rounded w-fit select-all">{user.id}</p>
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-xs text-slate-400 font-normal">Miembro Desde</Label>
+                  <p className="font-medium text-slate-700 dark:text-slate-200">{registerDate}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Bloque 3: Estado (Visual) */}
+            <div className="bg-slate-50 dark:bg-slate-900/50 rounded-xl p-4 flex flex-col justify-center items-center text-center space-y-2 border border-slate-100 dark:border-slate-800">
+              <div className="h-10 w-10 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
+                <div className="h-3 w-3 rounded-full bg-emerald-500 animate-pulse"></div>
+              </div>
+              <div>
+                <p className="font-medium text-slate-900 dark:text-white">Cuenta Activa</p>
+                <p className="text-xs text-slate-500 max-w-[200px]">Tu cuenta tiene acceso completo a las funciones asignadas a tu rol.</p>
+              </div>
+            </div>
+
           </div>
 
           {/* Acciones Móviles */}
           <div className="flex flex-col gap-2 mt-6 sm:hidden">
-            <Button onClick={() => setIsEditOpen(true)} className="w-full" variant="outline">
+            <Button onClick={() => setIsEditOpen(true)} className="w-full btn-airbnb-effect shadow-md text-white border-0">
               Editar Datos
             </Button>
-            <Button onClick={() => setIsPasswordOpen(true)} className="w-full" variant="ghost">
+            <Button onClick={() => setIsPasswordOpen(true)} className="w-full" variant="outline">
               Cambiar Contraseña
             </Button>
           </div>
@@ -297,7 +297,7 @@ export default function ProfilePage() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsEditOpen(false)}>Cancelar</Button>
-            <Button onClick={handleProfileUpdate} disabled={isLoading}>
+            <Button onClick={handleProfileUpdate} disabled={isLoading} className="btn-airbnb-effect text-white border-0">
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Guardar
             </Button>
@@ -351,7 +351,7 @@ export default function ProfilePage() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsPasswordOpen(false)}>Cancelar</Button>
-            <Button onClick={handlePasswordUpdate} disabled={isLoading}>
+            <Button onClick={handlePasswordUpdate} disabled={isLoading} className="btn-airbnb-effect text-white border-0">
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Actualizar Contraseña
             </Button>
