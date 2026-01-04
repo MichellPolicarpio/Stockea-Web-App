@@ -99,7 +99,7 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500 max-w-7xl mx-auto p-4 pb-24 md:px-8 md:pb-8 md:pt-0 md:-mt-2">
+    <div className="space-y-8 max-w-7xl mx-auto p-4 pb-24 md:px-8 md:pb-8 md:pt-0 md:-mt-2">
 
 
 
