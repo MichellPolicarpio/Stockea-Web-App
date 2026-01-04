@@ -289,8 +289,84 @@ export default function UsersPage() {
         </Button>
       </div>
 
-      {/* Modern Clean Table */}
-      <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden shadow-sm">
+      {/* MOBILE CARD VIEW (Visible only on mobile) */}
+      <div className="md:hidden space-y-4">
+        {filteredUsers.map((user) => (
+          <div key={user.id} className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col gap-4">
+
+            {/* Header: Avatar & Name */}
+            <div className="flex items-center gap-3">
+              <div className="relative shrink-0">
+                <Avatar className="h-10 w-10 border border-slate-100 dark:border-slate-800">
+                  <AvatarImage src={user.avatar} alt={user.name} />
+                  <AvatarFallback className="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold text-xs">
+                    {user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                {user.status === 'active' && (
+                  <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white dark:border-slate-900 bg-emerald-500"></span>
+                )}
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="font-semibold text-slate-900 dark:text-white truncate">{user.name}</div>
+                <div className="text-xs text-slate-500 truncate">{user.email}</div>
+              </div>
+            </div>
+
+            {/* Info Badges Row */}
+            <div className="flex items-center gap-2 flex-wrap">
+              {getRoleBadge(user.role)}
+
+              <div className={cn(
+                "inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium border",
+                user.status === 'active'
+                  ? "bg-emerald-50 text-emerald-700 border-emerald-100 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-900/30"
+                  : "bg-slate-50 text-slate-600 border-slate-100 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700"
+              )}>
+                {user.status === 'active' ? 'Activo' : 'Inactivo'}
+              </div>
+            </div>
+
+            {/* Actions Footer - Full Width Buttons for Touch */}
+            <div className="grid grid-cols-2 gap-3 pt-2 border-t border-slate-100 dark:border-slate-800">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="w-full text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800"
+                onClick={() => handleEditClick(user)}
+              >
+                <Edit2 className="h-3.5 w-3.5 mr-2" />
+                Editar
+              </Button>
+
+              <Button
+                variant="ghost"
+                size="sm"
+                className={cn("w-full", user.status === 'active' ? "text-rose-600 hover:bg-rose-50" : "text-emerald-600 hover:bg-emerald-50")}
+                onClick={() => toggleStatus(user.id)}
+              >
+                {user.status === 'active' ? (
+                  <>
+                    <XCircle className="h-3.5 w-3.5 mr-2" /> Desactivar
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle2 className="h-3.5 w-3.5 mr-2" /> Activar
+                  </>
+                )}
+              </Button>
+            </div>
+
+          </div>
+        ))}
+
+        {filteredUsers.length === 0 && (
+          <p className="text-center text-slate-400 py-8 text-sm">No se encontraron usuarios</p>
+        )}
+      </div>
+
+      {/* DESKTOP TABLE VIEW (Visible only on md+) */}
+      <div className="hidden md:block rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left">
             <thead>
