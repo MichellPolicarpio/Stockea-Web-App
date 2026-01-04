@@ -42,6 +42,16 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -129,6 +139,7 @@ export default function UsersPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [isEditOpen, setIsEditOpen] = useState(false)
   const [editingUser, setEditingUser] = useState<User | null>(null)
+  const [userToToggle, setUserToToggle] = useState<User | null>(null)
   const [editFirstName, setEditFirstName] = useState('')
   const [editLastName, setEditLastName] = useState('')
   const fileInputRef = React.useRef<HTMLInputElement>(null)
@@ -282,8 +293,8 @@ export default function UsersPage() {
     <div className="space-y-8 animate-in fade-in duration-500 max-w-7xl mx-auto p-4 md:p-8">
 
       {/* Toolbar Section */}
-      <div className="flex flex-col md:flex-row md:items-center justify-end gap-4">
-        <Button className="shrink-0" onClick={handleCreateClick}>
+      <div className="flex flex-col items-end md:flex-row md:items-center justify-end gap-4">
+        <Button className="btn-airbnb-effect shadow-md text-white border-0" onClick={handleCreateClick}>
           <UserPlus className="h-4 w-4 mr-2" />
           Nuevo Usuario
         </Button>
@@ -343,7 +354,7 @@ export default function UsersPage() {
                 variant="ghost"
                 size="sm"
                 className={cn("w-full", user.status === 'active' ? "text-rose-600 hover:bg-rose-50" : "text-emerald-600 hover:bg-emerald-50")}
-                onClick={() => toggleStatus(user.id)}
+                onClick={() => setUserToToggle(user)}
               >
                 {user.status === 'active' ? (
                   <>
@@ -450,7 +461,7 @@ export default function UsersPage() {
                         variant="ghost"
                         size="icon"
                         className="h-8 w-8 rounded-full text-primary hover:bg-rose-50 hover:text-primary transition-colors"
-                        onClick={() => toggleStatus(user.id)}
+                        onClick={() => setUserToToggle(user)}
                         title={user.status === 'active' ? "Desactivar" : "Activar"}
                       >
                         {user.status === 'active' ? <XCircle className="h-4 w-4" /> : <CheckCircle2 className="h-4 w-4" />}
@@ -599,6 +610,32 @@ export default function UsersPage() {
           )}
         </DialogContent>
       </Dialog>
+
+      <AlertDialog open={!!userToToggle} onOpenChange={(open) => !open && setUserToToggle(null)}>
+        <AlertDialogContent className="bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-slate-900 dark:text-white">¿Estás seguro?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Estás a punto de <span className="font-bold">{userToToggle?.status === 'active' ? 'desactivar' : 'activar'}</span> la cuenta de <span className="font-bold">{userToToggle?.name}</span>.
+              {userToToggle?.status === 'active'
+                ? " El usuario perderá acceso al sistema inmediatamente."
+                : " El usuario recuperará el acceso al sistema."}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="bg-transparent border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800">Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                if (userToToggle) toggleStatus(userToToggle.id)
+                setUserToToggle(null)
+              }}
+              className={cn("text-white", userToToggle?.status === 'active' ? "bg-red-600 hover:bg-red-700" : "bg-emerald-600 hover:bg-emerald-700")}
+            >
+              {userToToggle?.status === 'active' ? 'Sí, Desactivar' : 'Sí, Activar'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
     </div>
   )
