@@ -1,6 +1,8 @@
 'use client'
 
-import React, { useState } from 'react'
+import { cn } from "@/lib/utils"
+import React, { useState, useEffect } from 'react'
+import { useTheme } from 'next-themes'
 import { useAuth } from '@/hooks/useAuth'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -26,6 +28,12 @@ import {
 export default function SettingsPage() {
   const { user } = useAuth()
   const { toast } = useToast()
+  const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   // Password Change State
   const [currentPassword, setCurrentPassword] = useState('')
@@ -208,10 +216,26 @@ export default function SettingsPage() {
                   </div>
                 </div>
                 <div className="flex items-center bg-slate-100 dark:bg-slate-800 p-1 rounded-lg">
-                  <Button variant="ghost" size="sm" className="h-7 px-3 bg-white shadow-sm dark:bg-transparent dark:text-slate-400 dark:shadow-none hover:bg-white/50 rounded-md transition-all">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setTheme('light')}
+                    className={cn(
+                      "h-7 px-3 rounded-md transition-all",
+                      theme === 'light' ? "bg-white shadow-sm text-slate-900" : "bg-transparent text-slate-500 hover:text-slate-900 hover:bg-white/50 dark:text-slate-400 dark:hover:text-white"
+                    )}
+                  >
                     Claro
                   </Button>
-                  <Button variant="ghost" size="sm" className="h-7 px-3 dark:bg-slate-700 dark:text-white dark:shadow-sm bg-transparent text-slate-500 hover:bg-slate-200/50 rounded-md transition-all">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setTheme('dark')}
+                    className={cn(
+                      "h-7 px-3 rounded-md transition-all",
+                      theme === 'dark' ? "bg-slate-700 text-white shadow-sm" : "bg-transparent text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 dark:text-slate-400 dark:hover:text-white"
+                    )}
+                  >
                     Oscuro
                   </Button>
                 </div>
