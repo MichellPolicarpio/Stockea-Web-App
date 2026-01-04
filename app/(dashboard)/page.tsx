@@ -195,7 +195,7 @@ function AdminDashboard() {
 
                         {/* Hero Image */}
                         <div className="flex-1 flex items-center justify-center w-full relative z-10">
-                            <img src="/ImagenPortada.png" alt="Portada" className="w-full h-auto object-contain max-h-[400px] scale-125 animate-in zoom-in-75 fade-in duration-1000 delay-200 fill-mode-both" />
+                            <img src="/ImagenPortada.png" alt="Portada" className="w-full h-auto object-contain max-h-[400px] scale-125 animate-in zoom-in-75 fade-in duration-1000 delay-200 fill-mode-both transition-transform duration-500 ease-out group-hover:scale-[1.3]" />
                         </div>
 
 
