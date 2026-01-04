@@ -49,7 +49,8 @@ export function Header({ sidebarCollapsed, onToggleSidebar }: DashboardHeaderPro
         if (pathname.startsWith('/users')) return (
             <div className="flex items-center gap-2">
                 <Users className="h-8 w-8 text-slate-700 dark:text-slate-300" />
-                <span>Usuarios</span>
+                <span className="md:hidden">Usuarios</span>
+                <span className="hidden md:inline">Gestión de Usuarios</span>
             </div>
         )
         if (pathname.startsWith('/reports')) return (
