@@ -20,6 +20,17 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import {
+    Drawer,
+    DrawerContent,
+    DrawerDescription,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerTitle,
+    DrawerTrigger,
+    DrawerClose
+} from "@/components/ui/drawer"
+import { useIsMobile } from "@/hooks/use-mobile"
+import {
     Select,
     SelectContent,
     SelectItem,
@@ -36,6 +47,7 @@ export default function BuildingsPage() {
     const { user } = useAuth()
     const { buildings, loading, refetch } = useBuildings()
     const router = useRouter()
+    const isMobile = useIsMobile()
 
     // Estado para forzar re-renderizado al detectar cambios
     const [tick, setTick] = useState(0)
@@ -152,144 +164,174 @@ export default function BuildingsPage() {
         return <div>Cargando edificios...</div>
     }
 
+    // COMPONENTE DE FORMULARIO REUTILIZABLE
+    const AddFormContent = (
+        <form onSubmit={handleSubmit} className="space-y-6 py-4 px-1">
+            {/* Upload de Imagen */}
+            <div className="space-y-2">
+                <Label>Fotografía del Edificio</Label>
+                <div
+                    className="border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl p-4 flex flex-col items-center justify-center min-h-[200px] cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors relative overflow-hidden group"
+                    onClick={() => fileInputRef.current?.click()}
+                >
+                    {formData.imageUrl ? (
+                        <>
+                            <img
+                                src={formData.imageUrl}
+                                alt="Preview"
+                                className="absolute inset-0 w-full h-full object-cover"
+                            />
+                            <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <p className="text-white font-medium flex items-center">
+                                    <Upload className="mr-2 h-4 w-4" /> Cambiar imagen
+                                </p>
+                            </div>
+                        </>
+                    ) : (
+                        <div className="text-center space-y-2">
+                            <div className="h-12 w-12 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto text-slate-400">
+                                <BuildingIcon className="h-6 w-6" />
+                            </div>
+                            <div className="space-y-1">
+                                <p className="text-sm font-medium text-slate-900 dark:text-white">Haz clic para subir una imagen</p>
+                                <p className="text-xs text-slate-500">PNG, JPG hasta 5MB</p>
+                            </div>
+                        </div>
+                    )}
+                    <input
+                        type="file"
+                        ref={fileInputRef}
+                        className="hidden"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                    />
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                    <Label htmlFor="name">Nombre del Edificio</Label>
+                    <div className="relative">
+                        <BuildingIcon className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                        <Input
+                            id="name"
+                            placeholder="Ej. Casa Tortuga"
+                            className="pl-9"
+                            value={formData.name}
+                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                            required
+                        />
+                    </div>
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="apartments">Nº de Departamentos</Label>
+                    <div className="relative">
+                        <Layers className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                        <Input
+                            id="apartments"
+                            type="number"
+                            placeholder="0"
+                            className="pl-9"
+                            value={formData.totalApartments}
+                            onChange={(e) => setFormData({ ...formData, totalApartments: e.target.value })}
+                            required
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <div className="space-y-2">
+                <Label htmlFor="address">Dirección Completa</Label>
+                <div className="relative">
+                    <MapPin className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                    <Input
+                        id="address"
+                        placeholder="Calle, Número, Colonia, Ciudad"
+                        className="pl-9"
+                        value={formData.address}
+                        onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                        required
+                    />
+                </div>
+            </div>
+
+            <div className="space-y-2">
+                <Label htmlFor="owner">Propietario Asignado (Opcional)</Label>
+                <Select
+                    value={formData.ownerId}
+                    onValueChange={(val) => setFormData({ ...formData, ownerId: val })}
+                >
+                    <SelectTrigger className="w-full pl-9 relative">
+                        <User className="absolute left-3 top-2.5 h-4 w-4 text-slate-400 z-10" />
+                        <SelectValue placeholder="Seleccionar un propietario" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {owners.map(owner => (
+                            <SelectItem key={owner.id} value={owner.id}>
+                                {owner.name} ({owner.email})
+                            </SelectItem>
+                        ))}
+                        {owners.length === 0 && <SelectItem value="none" disabled>No hay propietarios registrados</SelectItem>}
+                    </SelectContent>
+                </Select>
+            </div>
+
+            <div className="flex gap-4 pt-4">
+                {isMobile ? (
+                    <DrawerClose asChild>
+                        <Button type="button" variant="outline" className="w-full">Cancelar</Button>
+                    </DrawerClose>
+                ) : (
+                    <Button type="button" variant="outline" className="w-full" onClick={() => setIsAddOpen(false)}>Cancelar</Button>
+                )}
+                <Button type="submit" disabled={isSubmitting} className="w-full btn-airbnb-effect text-white border-0">
+                    {isSubmitting ? 'Guardando...' : 'Guardar Edificio'}
+                </Button>
+            </div>
+        </form>
+    )
+
     return (
         <div className="space-y-6 animate-in fade-in duration-500">
             <div className="flex items-center justify-end">
 
-                <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
-                    <DialogTrigger asChild>
-                        <Button className="shadow-lg hover:shadow-xl transition-all">
-                            <Plus className="mr-2 h-4 w-4" /> Agregar Edificio
-                        </Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[600px] overflow-y-auto max-h-[90vh]">
-                        <DialogHeader>
-                            <DialogTitle>Agregar Nuevo Edificio</DialogTitle>
-                            <DialogDescription>
-                                Ingrese los detalles de la propiedad para registrarla en el sistema.
-                            </DialogDescription>
-                        </DialogHeader>
-
-                        <form onSubmit={handleSubmit} className="space-y-6 py-4">
-
-                            {/* Upload de Imagen */}
-                            <div className="space-y-2">
-                                <Label>Fotografía del Edificio</Label>
-                                <div
-                                    className="border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl p-4 flex flex-col items-center justify-center min-h-[200px] cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors relative overflow-hidden group"
-                                    onClick={() => fileInputRef.current?.click()}
-                                >
-                                    {formData.imageUrl ? (
-                                        <>
-                                            <img
-                                                src={formData.imageUrl}
-                                                alt="Preview"
-                                                className="absolute inset-0 w-full h-full object-cover"
-                                            />
-                                            <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <p className="text-white font-medium flex items-center">
-                                                    <Upload className="mr-2 h-4 w-4" /> Cambiar imagen
-                                                </p>
-                                            </div>
-                                        </>
-                                    ) : (
-                                        <div className="text-center space-y-2">
-                                            <div className="h-12 w-12 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto text-slate-400">
-                                                <BuildingIcon className="h-6 w-6" />
-                                            </div>
-                                            <div className="space-y-1">
-                                                <p className="text-sm font-medium text-slate-900 dark:text-white">Haz clic para subir una imagen</p>
-                                                <p className="text-xs text-slate-500">PNG, JPG hasta 5MB</p>
-                                            </div>
-                                        </div>
-                                    )}
-                                    <input
-                                        type="file"
-                                        ref={fileInputRef}
-                                        className="hidden"
-                                        accept="image/*"
-                                        onChange={handleFileChange}
-                                    />
-                                </div>
+                {isMobile ? (
+                    <Drawer open={isAddOpen} onOpenChange={setIsAddOpen}>
+                        <DrawerTrigger asChild>
+                            <Button className="shadow-lg hover:shadow-xl transition-all btn-airbnb-effect text-white border-0">
+                                <Plus className="mr-2 h-4 w-4" /> Agregar Edificio
+                            </Button>
+                        </DrawerTrigger>
+                        <DrawerContent>
+                            <DrawerHeader>
+                                <DrawerTitle>Agregar Nuevo Edificio</DrawerTitle>
+                                <DrawerDescription>
+                                    Ingrese los detalles de la propiedad.
+                                </DrawerDescription>
+                            </DrawerHeader>
+                            <div className="px-4 pb-8 overflow-y-auto max-h-[80vh]">
+                                {AddFormContent}
                             </div>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="space-y-2">
-                                    <Label htmlFor="name">Nombre del Edificio</Label>
-                                    <div className="relative">
-                                        <BuildingIcon className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
-                                        <Input
-                                            id="name"
-                                            placeholder="Ej. Casa Tortuga"
-                                            className="pl-9"
-                                            value={formData.name}
-                                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                            required
-                                        />
-                                    </div>
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="apartments">Nº de Departamentos</Label>
-                                    <div className="relative">
-                                        <Layers className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
-                                        <Input
-                                            id="apartments"
-                                            type="number"
-                                            placeholder="0"
-                                            className="pl-9"
-                                            value={formData.totalApartments}
-                                            onChange={(e) => setFormData({ ...formData, totalApartments: e.target.value })}
-                                            required
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label htmlFor="address">Dirección Completa</Label>
-                                <div className="relative">
-                                    <MapPin className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
-                                    <Input
-                                        id="address"
-                                        placeholder="Calle, Número, Colonia, Ciudad"
-                                        className="pl-9"
-                                        value={formData.address}
-                                        onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                                        required
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label htmlFor="owner">Propietario Asignado (Opcional)</Label>
-                                <Select
-                                    value={formData.ownerId}
-                                    onValueChange={(val) => setFormData({ ...formData, ownerId: val })}
-                                >
-                                    <SelectTrigger className="w-full pl-9 relative">
-                                        <User className="absolute left-3 top-2.5 h-4 w-4 text-slate-400 z-10" />
-                                        <SelectValue placeholder="Seleccionar un propietario" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {owners.map(owner => (
-                                            <SelectItem key={owner.id} value={owner.id}>
-                                                {owner.name} ({owner.email})
-                                            </SelectItem>
-                                        ))}
-                                        {owners.length === 0 && <SelectItem value="none" disabled>No hay propietarios registrados</SelectItem>}
-                                    </SelectContent>
-                                </Select>
-                            </div>
-
-                            <DialogFooter>
-                                <Button type="button" variant="outline" onClick={() => setIsAddOpen(false)}>Cancelar</Button>
-                                <Button type="submit" disabled={isSubmitting}>
-                                    {isSubmitting ? 'Guardando...' : 'Guardar Edificio'}
-                                </Button>
-                            </DialogFooter>
-                        </form>
-                    </DialogContent>
-                </Dialog>
+                        </DrawerContent>
+                    </Drawer>
+                ) : (
+                    <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
+                        <DialogTrigger asChild>
+                            <Button className="shadow-lg hover:shadow-xl transition-all btn-airbnb-effect text-white border-0">
+                                <Plus className="mr-2 h-4 w-4" /> Agregar Edificio
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[600px] overflow-y-auto max-h-[90vh]">
+                            <DialogHeader>
+                                <DialogTitle>Agregar Nuevo Edificio</DialogTitle>
+                                <DialogDescription>
+                                    Ingrese los detalles de la propiedad para registrarla en el sistema.
+                                </DialogDescription>
+                            </DialogHeader>
+                            {AddFormContent}
+                        </DialogContent>
+                    </Dialog>
+                )}
             </div>
 
             {buildings.length === 0 ? (

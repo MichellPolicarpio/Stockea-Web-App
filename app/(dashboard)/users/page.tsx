@@ -42,6 +42,16 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+  DrawerFooter,
+  DrawerDescription,
+  DrawerClose
+} from '@/components/ui/drawer'
+import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -61,6 +71,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { useToast } from "@/hooks/use-toast"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 // --- TYPES ---
 type UserRole = 'admin' | 'verifier' | 'owner'
@@ -77,7 +88,6 @@ interface User {
   department?: string
 }
 
-// --- MOCK DATA ---
 // --- MOCK DATA ---
 const MOCK_USERS: User[] = [
   {
@@ -143,6 +153,7 @@ export default function UsersPage() {
   const [editFirstName, setEditFirstName] = useState('')
   const [editLastName, setEditLastName] = useState('')
   const fileInputRef = React.useRef<HTMLInputElement>(null)
+  const isMobile = useIsMobile()
 
   // Filter Logic
   const filteredUsers = users.filter(u =>
@@ -286,6 +297,125 @@ export default function UsersPage() {
       </div>
     )
   }
+
+  // --- FORM CONTENT ---
+  const UserFormContent = editingUser && (
+    <form onSubmit={handleSaveUser} className="grid gap-6 py-4 px-1">
+      {/* Avatar Section */}
+      <div className="flex flex-col items-center gap-4">
+        <div className="relative group">
+          <Avatar className="h-24 w-24 border-4 border-slate-100 dark:border-slate-800 shadow-md cursor-pointer transition-opacity group-hover:opacity-90" onClick={handleTriggerUpload}>
+            <AvatarImage src={editingUser.avatar} className="object-cover" />
+            <AvatarFallback className="text-2xl bg-slate-200 dark:bg-slate-700 font-bold text-slate-500">
+              {editFirstName && editFirstName[0]}{editLastName && editLastName[0]}
+            </AvatarFallback>
+          </Avatar>
+          <div className="absolute bottom-0 right-0 bg-primary text-white p-1.5 rounded-full shadow-sm cursor-pointer hover:bg-primary/90 transition-colors" onClick={(e) => { e.stopPropagation(); handleTriggerUpload(); }}>
+            <Camera className="h-4 w-4" />
+          </div>
+        </div>
+
+        <input
+          type="file"
+          ref={fileInputRef}
+          className="hidden"
+          accept="image/*"
+          onChange={handleAvatarUpload}
+        />
+
+        <div className="flex gap-2">
+          <Button type="button" variant="outline" size="sm" onClick={handleTriggerUpload}>
+            <Upload className="h-3.5 w-3.5 mr-2" />
+            Subir Foto
+          </Button>
+          {editingUser.avatar && (
+            <Button type="button" variant="ghost" size="sm" className="text-rose-600 hover:text-rose-700 hover:bg-rose-50" onClick={handleRemoveAvatar}>
+              <Trash2 className="h-3.5 w-3.5 mr-2" />
+              Eliminar
+            </Button>
+          )}
+        </div>
+      </div>
+
+      {/* Name Fields */}
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label htmlFor="firstName">Nombres</Label>
+          <Input
+            id="firstName"
+            value={editFirstName}
+            onChange={(e) => setEditFirstName(e.target.value)}
+            placeholder="Ej. Juan Carlos"
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="lastName">Apellidos</Label>
+          <Input
+            id="lastName"
+            value={editLastName}
+            onChange={(e) => setEditLastName(e.target.value)}
+            placeholder="Ej. Pérez González"
+          />
+        </div>
+      </div>
+
+      {/* Other Fields */}
+      <div className="space-y-2">
+        <Label htmlFor="email">Correo Electrónico</Label>
+        <Input
+          id="email"
+          value={editingUser.email}
+          onChange={(e) => setEditingUser({ ...editingUser, email: e.target.value })}
+        />
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label htmlFor="role">Rol</Label>
+          <Select
+            value={editingUser.role}
+            onValueChange={(val: UserRole) => setEditingUser({ ...editingUser, role: val })}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Rol" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="admin">Administrador</SelectItem>
+              <SelectItem value="verifier">Verificador</SelectItem>
+              <SelectItem value="owner">Propietario</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="status">Estado</Label>
+          <Select
+            value={editingUser.status}
+            onValueChange={(val: UserStatus) => setEditingUser({ ...editingUser, status: val })}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Estado" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="active">Activo</SelectItem>
+              <SelectItem value="inactive">Inactivo</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      <div className="mt-4 flex gap-4">
+        {isMobile ? (
+          <DrawerClose asChild>
+            <Button type="button" variant="outline" className="w-full">Cancelar</Button>
+          </DrawerClose>
+        ) : null}
+        <Button type="submit" className="w-full sm:w-auto flex-1">
+          <Save className="mr-2 h-4 w-4" />
+          {editingUser.id ? 'Guardar Cambios' : 'Registrar Usuario'}
+        </Button>
+      </div>
+    </form>
+  )
 
   // --- MAIN RENDER ---
 
@@ -485,131 +615,33 @@ export default function UsersPage() {
       </div>
 
 
-      {/* EDIT USER DIALOG */}
-      <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
-        <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
-            <DialogTitle>{editingUser?.id ? 'Editar Usuario' : 'Registrar Nuevo Usuario'}</DialogTitle>
-            <DialogDescription>
-              Modifica los detalles del usuario, incluyendo foto de perfil.
-            </DialogDescription>
-          </DialogHeader>
+      {/* EDIT USER RESPONSIVE DIALOG/DRAWER */}
+      {isMobile ? (
+        <Drawer open={isEditOpen} onOpenChange={setIsEditOpen}>
+          <DrawerContent>
+            <DrawerHeader>
+              <DrawerTitle>{editingUser?.id ? 'Editar Usuario' : 'Registrar Nuevo Usuario'}</DrawerTitle>
+              <DrawerDescription>Modifica los detalles del usuario.</DrawerDescription>
+            </DrawerHeader>
+            <div className="px-4 pb-8 overflow-y-auto max-h-[80vh]">
+              {UserFormContent}
+            </div>
+          </DrawerContent>
+        </Drawer>
 
-          {editingUser && (
-            <form onSubmit={handleSaveUser} className="grid gap-6 py-4">
-
-              {/* Avatar Section */}
-              <div className="flex flex-col items-center gap-4">
-                <div className="relative group">
-                  <Avatar className="h-24 w-24 border-4 border-slate-100 dark:border-slate-800 shadow-md cursor-pointer transition-opacity group-hover:opacity-90" onClick={handleTriggerUpload}>
-                    <AvatarImage src={editingUser.avatar} className="object-cover" />
-                    <AvatarFallback className="text-2xl bg-slate-200 dark:bg-slate-700 font-bold text-slate-500">
-                      {editFirstName && editFirstName[0]}{editLastName && editLastName[0]}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="absolute bottom-0 right-0 bg-primary text-white p-1.5 rounded-full shadow-sm cursor-pointer hover:bg-primary/90 transition-colors" onClick={(e) => { e.stopPropagation(); handleTriggerUpload(); }}>
-                    <Camera className="h-4 w-4" />
-                  </div>
-                </div>
-
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  className="hidden"
-                  accept="image/*"
-                  onChange={handleAvatarUpload}
-                />
-
-                <div className="flex gap-2">
-                  <Button type="button" variant="outline" size="sm" onClick={handleTriggerUpload}>
-                    <Upload className="h-3.5 w-3.5 mr-2" />
-                    Subir Foto
-                  </Button>
-                  {editingUser.avatar && (
-                    <Button type="button" variant="ghost" size="sm" className="text-rose-600 hover:text-rose-700 hover:bg-rose-50" onClick={handleRemoveAvatar}>
-                      <Trash2 className="h-3.5 w-3.5 mr-2" />
-                      Eliminar
-                    </Button>
-                  )}
-                </div>
-              </div>
-
-              {/* Name Fields */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="firstName">Nombres</Label>
-                  <Input
-                    id="firstName"
-                    value={editFirstName}
-                    onChange={(e) => setEditFirstName(e.target.value)}
-                    placeholder="Ej. Juan Carlos"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="lastName">Apellidos</Label>
-                  <Input
-                    id="lastName"
-                    value={editLastName}
-                    onChange={(e) => setEditLastName(e.target.value)}
-                    placeholder="Ej. Pérez González"
-                  />
-                </div>
-              </div>
-
-              {/* Other Fields */}
-              <div className="space-y-2">
-                <Label htmlFor="email">Correo Electrónico</Label>
-                <Input
-                  id="email"
-                  value={editingUser.email}
-                  onChange={(e) => setEditingUser({ ...editingUser, email: e.target.value })}
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="role">Rol</Label>
-                  <Select
-                    value={editingUser.role}
-                    onValueChange={(val: UserRole) => setEditingUser({ ...editingUser, role: val })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Rol" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="admin">Administrador</SelectItem>
-                      <SelectItem value="verifier">Verificador</SelectItem>
-                      <SelectItem value="owner">Propietario</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="status">Estado</Label>
-                  <Select
-                    value={editingUser.status}
-                    onValueChange={(val: UserStatus) => setEditingUser({ ...editingUser, status: val })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Estado" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="active">Activo</SelectItem>
-                      <SelectItem value="inactive">Inactivo</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <DialogFooter className="mt-4">
-                <Button type="submit" className="w-full sm:w-auto">
-                  <Save className="mr-2 h-4 w-4" />
-                  {editingUser.id ? 'Guardar Cambios' : 'Registrar Usuario'}
-                </Button>
-              </DialogFooter>
-            </form>
-          )}
-        </DialogContent>
-      </Dialog>
+      ) : (
+        <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
+          <DialogContent className="sm:max-w-[500px]">
+            <DialogHeader>
+              <DialogTitle>{editingUser?.id ? 'Editar Usuario' : 'Registrar Nuevo Usuario'}</DialogTitle>
+              <DialogDescription>
+                Modifica los detalles del usuario, incluyendo foto de perfil.
+              </DialogDescription>
+            </DialogHeader>
+            {UserFormContent}
+          </DialogContent>
+        </Dialog>
+      )}
 
       <AlertDialog open={!!userToToggle} onOpenChange={(open) => !open && setUserToToggle(null)}>
         <AlertDialogContent className="bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800">

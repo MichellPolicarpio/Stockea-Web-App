@@ -18,6 +18,17 @@ import {
   DialogFooter,
   DialogDescription
 } from '@/components/ui/dialog'
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+  DrawerFooter,
+  DrawerDescription,
+  DrawerClose
+} from '@/components/ui/drawer'
+import { useIsMobile } from "@/hooks/use-mobile"
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -45,6 +56,7 @@ export default function BuildingDetailPage() {
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
   const { toast } = useToast()
+  const isMobile = useIsMobile()
 
   // Ref para editar foto
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -221,6 +233,173 @@ export default function BuildingDetailPage() {
     )
   }
 
+  // --- CONTENIDO DE LOS FORMULARIOS EXTRAÍDO ---
+
+  const EditBuildingFormContent = (
+    <div className="grid gap-6 py-4 px-1">
+      {/* SECCIÓN DE FOTO MEJORADA */}
+      <div className="space-y-3">
+        <Label className="text-base font-medium flex justify-between items-center">
+          Fotografía de Portada
+        </Label>
+
+        <div className="relative group">
+          {/* Preview Box */}
+          <div
+            className={cn(
+              "relative w-full h-64 bg-slate-100 dark:bg-slate-800 rounded-xl overflow-hidden border-2 border-dashed border-slate-300 dark:border-slate-700 transition-all duration-300",
+              buildingForm.imageUrl ? "border-solid border-slate-200 dark:border-slate-700 shadow-sm" : "hover:border-blue-400 hover:bg-blue-50/50 cursor-pointer"
+            )}
+            onClick={() => !buildingForm.imageUrl && fileInputRef.current?.click()}
+          >
+            {buildingForm.imageUrl ? (
+              <img
+                src={buildingForm.imageUrl}
+                alt="Edificio"
+                className="w-full h-full object-cover transition-all duration-300"
+                style={{ objectPosition: `center ${buildingForm.imagePosition}%` }}
+              />
+            ) : (
+              <div className="w-full h-full flex flex-col items-center justify-center text-slate-400">
+                <div className="p-4 bg-white dark:bg-slate-900 rounded-full shadow-sm mb-3 group-hover:scale-110 transition-transform duration-300">
+                  <Upload className="h-6 w-6 text-slate-600 dark:text-slate-300" />
+                </div>
+                <span className="text-sm font-medium text-slate-600 dark:text-slate-300 group-hover:text-blue-600 transition-colors">
+                  Haz clic para subir foto
+                </span>
+              </div>
+            )}
+
+            {/* Overlay de acciones */}
+            {buildingForm.imageUrl && (
+              <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  className="h-8 text-xs gap-2 bg-white/90 hover:bg-white text-slate-900"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  <Upload className="h-3 w-3" /> Cambiar
+                </Button>
+
+                <div className="flex flex-col items-end gap-2">
+                  {/* Controles de Posición de 5 niveles */}
+                  <div className="bg-black/60 rounded-lg p-1 flex flex-col gap-1 backdrop-blur-sm border border-white/10">
+                    <p className="text-[10px] text-white/70 text-center font-medium px-1">Ajuste</p>
+
+                    {[0, 25, 50, 75, 100].map((pos) => (
+                      <button
+                        key={pos}
+                        type="button"
+                        onClick={(e) => { e.stopPropagation(); setBuildingForm(prev => ({ ...prev, imagePosition: pos })) }}
+                        className={cn(
+                          "w-6 h-4 rounded-sm transition-all border border-transparent",
+                          buildingForm.imagePosition === pos
+                            ? "bg-blue-500 border-blue-400 shadow-sm scale-110"
+                            : "bg-white/20 hover:bg-white/40"
+                        )}
+                        title={`Posición ${pos}%`}
+                      />
+                    ))}
+                  </div>
+
+                  <Button
+                    variant="destructive"
+                    size="icon"
+                    className="h-8 w-8 mt-2"
+                    onClick={handleRemoveImage}
+                    title="Eliminar Foto"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
+          <input
+            type="file"
+            ref={fileInputRef}
+            className="hidden"
+            accept="image/*"
+            onChange={handleFileChange}
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div className="grid gap-2">
+          <Label htmlFor="name">Nombre</Label>
+          <Input id="name" value={buildingForm.name} onChange={e => setBuildingForm({ ...buildingForm, name: e.target.value })} />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="owner">Propietario</Label>
+          <Select value={buildingForm.owner} onValueChange={val => setBuildingForm({ ...buildingForm, owner: val })}>
+            <SelectTrigger>
+              <SelectValue placeholder="Seleccionar" />
+            </SelectTrigger>
+            <SelectContent>
+              {MOCK_OWNERS.map(owner => (
+                <SelectItem key={owner} value={owner}>{owner}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+      <div className="grid gap-2">
+        <Label htmlFor="address">Dirección Completa</Label>
+        <Input id="address" value={buildingForm.address} onChange={e => setBuildingForm({ ...buildingForm, address: e.target.value })} />
+      </div>
+
+      <div className="flex gap-4 pt-4">
+        {isMobile ? (
+          <DrawerClose asChild>
+            <Button variant="ghost" className="flex-1">Cancelar</Button>
+          </DrawerClose>
+        ) : (
+          <Button variant="ghost" onClick={() => setIsEditBuildingOpen(false)} className="flex-1">Cancelar</Button>
+        )}
+        <Button onClick={handleUpdateBuilding} className="flex-1">Guardar Cambios</Button>
+      </div>
+    </div>
+  )
+
+  const AddApartmentFormContent = (
+    <div className="grid gap-4 py-4 px-1">
+      <div className="grid grid-cols-4 items-center gap-4">
+        <Label className="text-right">Número</Label>
+        <Input placeholder="Ej. 101" className="col-span-3" value={newApartment.number} onChange={e => setNewApartment({ ...newApartment, number: e.target.value })} />
+      </div>
+      <div className="grid grid-cols-4 items-center gap-4">
+        <Label className="text-right">Piso</Label>
+        <Input type="number" placeholder="0" className="col-span-3" value={newApartment.floor} onChange={e => setNewApartment({ ...newApartment, floor: e.target.value })} />
+      </div>
+      <div className="grid grid-cols-4 items-center gap-4">
+        <Label className="text-right">Estado</Label>
+        <Select value={newApartment.status} onValueChange={val => setNewApartment({ ...newApartment, status: val })}>
+          <SelectTrigger className="col-span-3">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="vacant">Vacante</SelectItem>
+            <SelectItem value="occupied">Ocupado</SelectItem>
+            <SelectItem value="maintenance">Mantenimiento</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+      <div className="pt-4 flex gap-4">
+        {isMobile ? (
+          <DrawerClose asChild>
+            <Button variant="ghost" className="flex-1">Cancelar</Button>
+          </DrawerClose>
+        ) : (
+          <Button variant="ghost" onClick={() => setIsAddApartmentOpen(false)} className="flex-1">Cancelar</Button>
+        )}
+        <Button onClick={handleAddApartment} className="flex-1">Registrar</Button>
+      </div>
+    </div>
+  )
+
+
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       {/* HEADER CON EDICIÓN */}
@@ -248,140 +427,42 @@ export default function BuildingDetailPage() {
           </div>
         </div>
 
-        <Dialog open={isEditBuildingOpen} onOpenChange={setIsEditBuildingOpen}>
-          <DialogTrigger asChild>
-            <Button className="gap-2">
-              <Edit className="h-4 w-4" />
-              Editar Edificio
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[600px] overflow-visible">
-            <DialogHeader>
-              <DialogTitle>Editar Edificio</DialogTitle>
-              <DialogDescription>Actualiza la foto y detalles del edificio.</DialogDescription>
-            </DialogHeader>
-            <div className="grid gap-6 py-4">
-
-              {/* SECCIÓN DE FOTO MEJORADA */}
-              <div className="space-y-3">
-                <Label className="text-base font-medium flex justify-between items-center">
-                  Fotografía de Portada
-                </Label>
-
-                <div className="relative group">
-                  {/* Preview Box */}
-                  <div
-                    className={cn(
-                      "relative w-full h-64 bg-slate-100 dark:bg-slate-800 rounded-xl overflow-hidden border-2 border-dashed border-slate-300 dark:border-slate-700 transition-all duration-300",
-                      buildingForm.imageUrl ? "border-solid border-slate-200 dark:border-slate-700 shadow-sm" : "hover:border-blue-400 hover:bg-blue-50/50 cursor-pointer"
-                    )}
-                    onClick={() => !buildingForm.imageUrl && fileInputRef.current?.click()}
-                  >
-                    {buildingForm.imageUrl ? (
-                      <img
-                        src={buildingForm.imageUrl}
-                        alt="Edificio"
-                        className="w-full h-full object-cover transition-all duration-300"
-                        style={{ objectPosition: `center ${buildingForm.imagePosition}%` }}
-                      />
-                    ) : (
-                      <div className="w-full h-full flex flex-col items-center justify-center text-slate-400">
-                        <div className="p-4 bg-white dark:bg-slate-900 rounded-full shadow-sm mb-3 group-hover:scale-110 transition-transform duration-300">
-                          <Upload className="h-6 w-6 text-slate-600 dark:text-slate-300" />
-                        </div>
-                        <span className="text-sm font-medium text-slate-600 dark:text-slate-300 group-hover:text-blue-600 transition-colors">
-                          Haz clic para subir foto
-                        </span>
-                      </div>
-                    )}
-
-                    {/* Overlay de acciones */}
-                    {buildingForm.imageUrl && (
-                      <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <Button
-                          variant="secondary"
-                          size="sm"
-                          className="h-8 text-xs gap-2 bg-white/90 hover:bg-white text-slate-900"
-                          onClick={() => fileInputRef.current?.click()}
-                        >
-                          <Upload className="h-3 w-3" /> Cambiar
-                        </Button>
-
-                        <div className="flex flex-col items-end gap-2">
-                          {/* Controles de Posición de 5 niveles */}
-                          <div className="bg-black/60 rounded-lg p-1 flex flex-col gap-1 backdrop-blur-sm border border-white/10">
-                            <p className="text-[10px] text-white/70 text-center font-medium px-1">Ajuste</p>
-
-                            {[0, 25, 50, 75, 100].map((pos) => (
-                              <button
-                                key={pos}
-                                type="button"
-                                onClick={(e) => { e.stopPropagation(); setBuildingForm(prev => ({ ...prev, imagePosition: pos })) }}
-                                className={cn(
-                                  "w-6 h-4 rounded-sm transition-all border border-transparent",
-                                  buildingForm.imagePosition === pos
-                                    ? "bg-blue-500 border-blue-400 shadow-sm scale-110"
-                                    : "bg-white/20 hover:bg-white/40"
-                                )}
-                                title={`Posición ${pos}%`}
-                              />
-                            ))}
-                          </div>
-
-                          <Button
-                            variant="destructive"
-                            size="icon"
-                            className="h-8 w-8 mt-2"
-                            onClick={handleRemoveImage}
-                            title="Eliminar Foto"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  <input
-                    type="file"
-                    ref={fileInputRef}
-                    className="hidden"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                  />
-                </div>
+        {isMobile ? (
+          <Drawer open={isEditBuildingOpen} onOpenChange={setIsEditBuildingOpen}>
+            <DrawerTrigger asChild>
+              <Button className="gap-2">
+                <Edit className="h-4 w-4" />
+                Editar Edificio
+              </Button>
+            </DrawerTrigger>
+            <DrawerContent>
+              <DrawerHeader>
+                <DrawerTitle>Editar Edificio</DrawerTitle>
+                <DrawerDescription>Actualiza la foto y detalles.</DrawerDescription>
+              </DrawerHeader>
+              <div className="px-4 pb-8 overflow-y-auto max-h-[80vh]">
+                {EditBuildingFormContent}
               </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="name">Nombre</Label>
-                  <Input id="name" value={buildingForm.name} onChange={e => setBuildingForm({ ...buildingForm, name: e.target.value })} />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="owner">Propietario</Label>
-                  <Select value={buildingForm.owner} onValueChange={val => setBuildingForm({ ...buildingForm, owner: val })}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Seleccionar" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {MOCK_OWNERS.map(owner => (
-                        <SelectItem key={owner} value={owner}>{owner}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="address">Dirección Completa</Label>
-                <Input id="address" value={buildingForm.address} onChange={e => setBuildingForm({ ...buildingForm, address: e.target.value })} />
-              </div>
-
-            </div>
-            <DialogFooter className="gap-2 sm:gap-0">
-              <Button variant="ghost" onClick={() => setIsEditBuildingOpen(false)}>Cancelar</Button>
-              <Button onClick={handleUpdateBuilding}>Guardar Cambios</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+            </DrawerContent>
+          </Drawer>
+        ) : (
+          <Dialog open={isEditBuildingOpen} onOpenChange={setIsEditBuildingOpen}>
+            <DialogTrigger asChild>
+              <Button className="gap-2">
+                <Edit className="h-4 w-4" />
+                Editar Edificio
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[600px] overflow-visible">
+              <DialogHeader>
+                <DialogTitle>Editar Edificio</DialogTitle>
+                <DialogDescription>Actualiza la foto y detalles del edificio.</DialogDescription>
+              </DialogHeader>
+              {EditBuildingFormContent}
+              {/* Footer ya incluido en form content */}
+            </DialogContent>
+          </Dialog>
+        )}
       </div>
 
       <Card>
@@ -393,45 +474,39 @@ export default function BuildingDetailPage() {
             </CardDescription>
           </div>
 
-          <Dialog open={isAddApartmentOpen} onOpenChange={setIsAddApartmentOpen}>
-            <DialogTrigger asChild>
-              <Button size="sm" className="gap-2">
-                <Plus className="h-4 w-4" />
-                Agregar Depto
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Registrar Nuevo Departamento</DialogTitle>
-              </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label className="text-right">Número</Label>
-                  <Input placeholder="Ej. 101" className="col-span-3" value={newApartment.number} onChange={e => setNewApartment({ ...newApartment, number: e.target.value })} />
+          {isMobile ? (
+            <Drawer open={isAddApartmentOpen} onOpenChange={setIsAddApartmentOpen}>
+              <DrawerTrigger asChild>
+                <Button size="sm" className="gap-2">
+                  <Plus className="h-4 w-4" />
+                  Agregar Depto
+                </Button>
+              </DrawerTrigger>
+              <DrawerContent>
+                <DrawerHeader>
+                  <DialogTitle>Registrar Nuevo Departamento</DialogTitle>
+                </DrawerHeader>
+                <div className="px-4 pb-8">
+                  {AddApartmentFormContent}
                 </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label className="text-right">Piso</Label>
-                  <Input type="number" placeholder="0" className="col-span-3" value={newApartment.floor} onChange={e => setNewApartment({ ...newApartment, floor: e.target.value })} />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label className="text-right">Estado</Label>
-                  <Select value={newApartment.status} onValueChange={val => setNewApartment({ ...newApartment, status: val })}>
-                    <SelectTrigger className="col-span-3">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="vacant">Vacante</SelectItem>
-                      <SelectItem value="occupied">Ocupado</SelectItem>
-                      <SelectItem value="maintenance">Mantenimiento</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              <DialogFooter>
-                <Button onClick={handleAddApartment}>Registrar</Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+              </DrawerContent>
+            </Drawer>
+          ) : (
+            <Dialog open={isAddApartmentOpen} onOpenChange={setIsAddApartmentOpen}>
+              <DialogTrigger asChild>
+                <Button size="sm" className="gap-2">
+                  <Plus className="h-4 w-4" />
+                  Agregar Depto
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Registrar Nuevo Departamento</DialogTitle>
+                </DialogHeader>
+                {AddApartmentFormContent}
+              </DialogContent>
+            </Dialog>
+          )}
         </CardHeader>
         <CardContent>
           {apartments.length === 0 ? (
