@@ -99,6 +99,7 @@ export function LoginForm() {
                             autoPlay
                             muted
                             playsInline
+                            preload="auto"
                             className="h-full w-auto object-contain"
                         >
                             <source src="/videos/StockeaLetrasAnimadas.mov" type="video/quicktime" />
@@ -278,6 +279,14 @@ export function LoginForm() {
                         </form>
                     </div>
                 </div>
+            </div>
+
+            {/* Video Preloader: Force browser to download video in background */}
+            <div className="sr-only" aria-hidden="true">
+                <video preload="auto" muted>
+                    <source src="/videos/StockeaLetrasAnimadas.mov" type="video/quicktime" />
+                    <source src="/videos/StockeaLetrasAnimadas.mov" type="video/mp4" />
+                </video>
             </div>
         </div>
     )
