@@ -1,231 +1,217 @@
 'use client'
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { HelpCircle, User, Building2, Package, ClipboardCheck, Users, BarChart3, Settings } from 'lucide-react'
-import { usePathname } from 'next/navigation'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
+import { HelpCircle, User, Building2, Package, ClipboardCheck, Users, BarChart3, Settings, Shield, Key, Search, Mail, ArrowRight } from 'lucide-react'
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 
 export default function HelpPage() {
-  const pathname = usePathname()
 
-  const helpSections = [
+  const faqs = [
     {
-      title: 'Dashboard',
+      question: "¿Cómo agrego un nuevo item al inventario?",
+      answer: "Solo los administradores y propietarios pueden agregar items. Navega al departamento correspondiente, ve a la pestaña 'Inventario' y haz clic en el botón 'Agregar Item'. Completa el formulario con los detalles del artículo y guarda."
+    },
+    {
+      question: "¿Cómo funciona el proceso de inspección?",
+      answer: "Los verificadores asignados acceden al departamento y crean una 'Nueva Inspección'. Deben evaluar cada ítem del inventario marcándolo como 'Nuevo', 'Bueno', 'Regular', 'Malo' o 'Faltante'. Al finalizar, se genera un reporte con fecha y firma digital."
+    },
+    {
+      question: "¿Puedo acceder desde mi celular?",
+      answer: "Sí, la aplicación es totalmente responsiva. Puedes acceder desde el navegador de tu smartphone o tablet para realizar inspecciones en terreno, tomar fotos y gestionar el inventario cómodamente."
+    },
+    {
+      question: "¿Quién puede ver los reportes financieros?",
+      answer: "El acceso a reportes financieros y sensibles está restringido estrictamente a los usuarios con rol de 'Administrador'. Los propietarios solo ven datos relacionados con sus propiedades."
+    },
+    {
+      question: "¿Cómo recupero mi contraseña?",
+      answer: "Si olvidaste tu contraseña, contacta a un administrador para que resetee tus credenciales. Por seguridad, el sistema no envía contraseñas por correo automáticamente en esta versión."
+    }
+  ]
+
+  const modules = [
+    {
+      title: 'Dashboard General',
       icon: BarChart3,
-      content: (
-        <div className="space-y-3">
-          <p className="text-sm">
-            El dashboard principal muestra un resumen general del sistema según tu rol.
-          </p>
-          <ul className="text-sm space-y-1 list-disc list-inside text-muted-foreground">
-            <li>Acceso rápido a funciones principales</li>
-            <li>Estadísticas y métricas importantes</li>
-            <li>Navegación rápida a secciones</li>
-          </ul>
-        </div>
-      ),
+      color: 'text-blue-500',
+      bg: 'bg-blue-50 dark:bg-blue-900/20',
+      description: 'Vista general con métricas clave, ocupación y estados recientes.'
     },
     {
-      title: 'Edificios',
+      title: 'Gestión de Edificios',
       icon: Building2,
-      content: (
-        <div className="space-y-3">
-          <p className="text-sm">
-            Gestiona los edificios y sus departamentos. Solo disponible para administradores.
-          </p>
-          <ul className="text-sm space-y-1 list-disc list-inside text-muted-foreground">
-            <li>Ver lista de todos los edificios</li>
-            <li>Acceder a detalles de cada edificio</li>
-            <li>Ver departamentos por edificio</li>
-            <li>Gestionar información de edificios</li>
-          </ul>
-        </div>
-      ),
+      color: 'text-emerald-500',
+      bg: 'bg-emerald-50 dark:bg-emerald-900/20',
+      description: 'Administración de estructuras, direcciones y departamentos asociados.'
     },
     {
-      title: 'Departamentos',
+      title: 'Control de Inventario',
       icon: Package,
-      content: (
-        <div className="space-y-3">
-          <p className="text-sm">
-            Accede a los departamentos asignados según tu rol.
-          </p>
-          <ul className="text-sm space-y-1 list-disc list-inside text-muted-foreground">
-            <li><strong>Administrador:</strong> Acceso a todos los departamentos</li>
-            <li><strong>Propietario:</strong> Solo tus departamentos asignados</li>
-            <li><strong>Verificador:</strong> Departamentos asignados para verificar</li>
-          </ul>
-        </div>
-      ),
+      color: 'text-violet-500',
+      bg: 'bg-violet-50 dark:bg-violet-900/20',
+      description: 'Registro detallado de bienes, estados de conservación y valores.'
     },
     {
-      title: 'Inventario',
-      icon: Package,
-      content: (
-        <div className="space-y-3">
-          <p className="text-sm">
-            Gestiona los items del inventario de cada departamento.
-          </p>
-          <ul className="text-sm space-y-1 list-disc list-inside text-muted-foreground">
-            <li>Ver lista de items por departamento</li>
-            <li>Agregar nuevos items (Admin y Propietario)</li>
-            <li>Ver estado de cada item</li>
-            <li>Consultar detalles y notas</li>
-          </ul>
-        </div>
-      ),
+      title: 'Usuarios y Roles',
+      icon: Users,
+      color: 'text-rose-500',
+      bg: 'bg-rose-50 dark:bg-rose-900/20',
+      description: 'Control de acceso, creación de cuentas y asignación de permisos.'
     },
     {
       title: 'Inspecciones',
       icon: ClipboardCheck,
-      content: (
-        <div className="space-y-3">
-          <p className="text-sm">
-            Realiza y consulta inspecciones de inventario.
-          </p>
-          <ul className="text-sm space-y-1 list-disc list-inside text-muted-foreground">
-            <li><strong>Verificador:</strong> Crear nuevas inspecciones</li>
-            <li>Evaluar estado de cada item (OK, Problema, Faltante)</li>
-            <li>Agregar notas y observaciones</li>
-            <li>Ver historial de inspecciones</li>
-          </ul>
-        </div>
-      ),
+      color: 'text-amber-500',
+      bg: 'bg-amber-50 dark:bg-amber-900/20',
+      description: 'Auditorías de estado, reportes de daños y verificación de inventario.'
     },
     {
-      title: 'Usuarios',
-      icon: Users,
-      content: (
-        <div className="space-y-3">
-          <p className="text-sm">
-            Gestiona usuarios y asignaciones. Solo disponible para administradores.
-          </p>
-          <ul className="text-sm space-y-1 list-disc list-inside text-muted-foreground">
-            <li>Ver lista de usuarios</li>
-            <li>Gestionar propietarios y verificadores</li>
-            <li>Asignar departamentos a usuarios</li>
-            <li>Administrar permisos</li>
-          </ul>
-        </div>
-      ),
-    },
-    {
-      title: 'Perfil',
-      icon: User,
-      content: (
-        <div className="space-y-3">
-          <p className="text-sm">
-            Consulta y gestiona tu información personal.
-          </p>
-          <ul className="text-sm space-y-1 list-disc list-inside text-muted-foreground">
-            <li>Ver información de tu cuenta</li>
-            <li>Consultar tu rol y permisos</li>
-            <li>Ver fecha de registro</li>
-          </ul>
-        </div>
-      ),
-    },
+      title: 'Configuración',
+      icon: Settings,
+      color: 'text-slate-500',
+      bg: 'bg-slate-50 dark:bg-slate-800',
+      description: 'Ajustes del sistema, preferencias y personalización de cuenta.'
+    }
   ]
 
   return (
-    <div className="space-y-6">
+    <div className="max-w-7xl mx-auto p-4 md:px-8 md:pb-12 space-y-10 animate-in fade-in duration-500">
 
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Roles del Sistema</CardTitle>
-          <CardDescription>
-            Diferentes niveles de acceso según tu rol
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-3">
-            <div className="p-4 border rounded-lg">
-              <h3 className="font-semibold mb-2 text-red-600">Administrador</h3>
-              <ul className="text-sm space-y-1 text-muted-foreground">
-                <li>• Acceso completo</li>
-                <li>• Gestión de edificios</li>
-                <li>• Gestión de usuarios</li>
-                <li>• Todos los reportes</li>
+
+      {/* Roles Section */}
+      <section>
+        <div className="flex items-center gap-2 mb-6">
+          <Shield className="h-6 w-6 text-primary" />
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Roles y Permisos</h2>
+        </div>
+        <div className="grid md:grid-cols-3 gap-6">
+          <Card className="border-t-4 border-t-rose-500 shadow-sm hover:shadow-md transition-shadow">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-rose-600">
+                <Key className="h-5 w-5" /> Administrador
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                Tiene control total sobre el sistema. Puede gestionar usuarios, crear edificios y ver todos los reportes.
+              </p>
+              <ul className="text-xs space-y-2 text-slate-500 font-medium">
+                <li className="flex items-center"><span className="w-1.5 h-1.5 rounded-full bg-rose-400 mr-2"></span>Gestión total de usuarios</li>
+                <li className="flex items-center"><span className="w-1.5 h-1.5 rounded-full bg-rose-400 mr-2"></span>Configuración del sistema</li>
+                <li className="flex items-center"><span className="w-1.5 h-1.5 rounded-full bg-rose-400 mr-2"></span>Auditoría completa</li>
               </ul>
-            </div>
-            <div className="p-4 border rounded-lg">
-              <h3 className="font-semibold mb-2 text-blue-600">Propietario</h3>
-              <ul className="text-sm space-y-1 text-muted-foreground">
-                <li>• Sus departamentos</li>
-                <li>• Gestión de inventario</li>
-                <li>• Ver inspecciones</li>
-                <li>• Reportes propios</li>
+            </CardContent>
+          </Card>
+
+          <Card className="border-t-4 border-t-blue-500 shadow-sm hover:shadow-md transition-shadow">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-blue-600">
+                <User className="h-5 w-5" /> Propietario
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                Gestiona sus propiedades asignadas. Puede ver el estado de sus inventarios y reportes financieros.
+              </p>
+              <ul className="text-xs space-y-2 text-slate-500 font-medium">
+                <li className="flex items-center"><span className="w-1.5 h-1.5 rounded-full bg-blue-400 mr-2"></span>Vista de departamentos propios</li>
+                <li className="flex items-center"><span className="w-1.5 h-1.5 rounded-full bg-blue-400 mr-2"></span>Reportes de sus unidades</li>
+                <li className="flex items-center"><span className="w-1.5 h-1.5 rounded-full bg-blue-400 mr-2"></span>Gestión básica de items</li>
               </ul>
-            </div>
-            <div className="p-4 border rounded-lg">
-              <h3 className="font-semibold mb-2 text-green-600">Verificador</h3>
-              <ul className="text-sm space-y-1 text-muted-foreground">
-                <li>• Crear inspecciones</li>
-                <li>• Ver inventario (solo lectura)</li>
-                <li>• Historial de inspecciones</li>
-                <li>• Sin permisos de edición</li>
+            </CardContent>
+          </Card>
+
+          <Card className="border-t-4 border-t-emerald-500 shadow-sm hover:shadow-md transition-shadow">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-emerald-600">
+                <ClipboardCheck className="h-5 w-5" /> Verificador
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                Encargado de realizar las inspecciones en terreno. Valida el estado físico del inventario.
+              </p>
+              <ul className="text-xs space-y-2 text-slate-500 font-medium">
+                <li className="flex items-center"><span className="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-2"></span>Realizar Check-in/Check-out</li>
+                <li className="flex items-center"><span className="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-2"></span>Reportar daños con fotos</li>
+                <li className="flex items-center"><span className="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-2"></span>Sin acceso a datos sensibles</li>
               </ul>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* Modules Grid */}
+      <section>
+        <div className="flex items-center gap-2 mb-6">
+          <Package className="h-6 w-6 text-primary" />
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Módulos del Sistema</h2>
+        </div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {modules.map((module) => {
+            const Icon = module.icon
+            return (
+              <div key={module.title} className="group p-6 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-primary/50 hover:shadow-lg transition-all duration-300 cursor-default">
+                <div className={`w-12 h-12 rounded-lg ${module.bg} ${module.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                  <Icon className="h-6 w-6" />
+                </div>
+                <h3 className="font-semibold text-lg text-slate-900 dark:text-white mb-2">{module.title}</h3>
+                <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                  {module.description}
+                </p>
+              </div>
+            )
+          })}
+        </div>
+      </section>
+
+      {/* FAQ Accordion */}
+      <section className="bg-slate-50 dark:bg-slate-900/50 rounded-3xl p-6 md:p-10 border border-slate-200 dark:border-slate-800">
+        <div className="flex flex-col md:flex-row gap-8">
+          <div className="md:w-1/3 space-y-4">
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Preguntas Frecuentes</h2>
+            <p className="text-slate-500 dark:text-slate-400">
+              Resolvemos tus dudas más comunes sobre la plataforma. Si no encuentras lo que buscas, contáctanos.
+            </p>
+            <div className="hidden md:block">
+              <Mail className="h-24 w-24 text-slate-200 dark:text-slate-800 mb-4" />
+              <p className="text-sm font-medium text-slate-900">¿Dudas técnicas?</p>
+              <a href="mailto:soporte@inventario.com" className="text-sm text-primary hover:underline">soporte@inventario.com</a>
             </div>
           </div>
-        </CardContent>
-      </Card>
 
-      <div className="grid gap-6 md:grid-cols-2">
-        {helpSections.map((section) => {
-          const Icon = section.icon
-          return (
-            <Card key={section.title}>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Icon className="h-5 w-5 text-[#0D94B1]" />
-                  {section.title}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {section.content}
-              </CardContent>
-            </Card>
-          )
-        })}
+          <div className="md:w-2/3">
+            <Accordion type="single" collapsible className="w-full">
+              {faqs.map((faq, index) => (
+                <AccordionItem key={index} value={`item-${index}`} className="border-b-slate-200 dark:border-b-slate-800">
+                  <AccordionTrigger className="text-left font-medium text-slate-700 dark:text-slate-200 hover:text-primary transition-colors">
+                    {faq.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-slate-500 dark:text-slate-400 leading-relaxed">
+                    {faq.answer}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer support */}
+      <div className="text-center pt-8 border-t border-slate-100 dark:border-slate-800">
+        <p className="text-slate-500 text-sm">
+          Sistema de Gestión de Inventarios v1.0.0 &copy; 2025
+        </p>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Preguntas Frecuentes</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div>
-            <h3 className="font-semibold mb-2">¿Cómo agrego un nuevo item al inventario?</h3>
-            <p className="text-sm text-muted-foreground">
-              Solo los administradores y propietarios pueden agregar items. Ve al departamento correspondiente,
-              luego a la sección de Inventario y haz clic en "Agregar Item".
-            </p>
-          </div>
-          <div>
-            <h3 className="font-semibold mb-2">¿Cómo creo una nueva inspección?</h3>
-            <p className="text-sm text-muted-foreground">
-              Los verificadores pueden crear inspecciones. Ve al departamento asignado, luego a Inspecciones
-              y haz clic en "Nueva Inspección". Evalúa cada item y guarda los resultados.
-            </p>
-          </div>
-          <div>
-            <h3 className="font-semibold mb-2">¿Puedo cambiar mi rol?</h3>
-            <p className="text-sm text-muted-foreground">
-              No, los roles son asignados por el administrador del sistema. Contacta con un administrador
-              si necesitas cambiar tu rol o permisos.
-            </p>
-          </div>
-          <div>
-            <h3 className="font-semibold mb-2">¿Los datos se guardan permanentemente?</h3>
-            <p className="text-sm text-muted-foreground">
-              Actualmente el sistema funciona con datos simulados. Los datos se guardan en el navegador
-              pero se perderán al limpiar el almacenamiento local.
-            </p>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   )
 }
-
-

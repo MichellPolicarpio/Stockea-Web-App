@@ -69,7 +69,8 @@ export function Header({ sidebarCollapsed, onToggleSidebar }: DashboardHeaderPro
         if (pathname.startsWith('/help')) return (
             <div className="flex items-center gap-2">
                 <HelpCircle className="h-8 w-8 text-[#0D94B1]" />
-                <span>Ayuda</span>
+                <span className="md:hidden">Ayuda</span>
+                <span className="hidden md:inline">Centro de Ayuda</span>
             </div>
         )
         if (pathname.startsWith('/apartments')) return (
