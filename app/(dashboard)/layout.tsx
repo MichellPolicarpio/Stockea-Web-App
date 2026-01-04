@@ -47,7 +47,7 @@ export default function DashboardLayout({
       logout()
       router.push('/login')
       router.refresh()
-    }, 2000)
+    }, 3000)
   }, [logout, router])
 
   if (isLoggingOut) {

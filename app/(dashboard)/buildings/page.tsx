@@ -358,7 +358,7 @@ export default function BuildingsPage() {
                         const displayPos = cachedPos ? `center ${cachedPos}%` : 'center'
 
                         return (
-                            <Card key={building.id} className="cursor-pointer hover:shadow-xl transition-all duration-300 overflow-hidden group border-slate-200 dark:border-slate-800">
+                            <Card key={building.id} className="p-0 gap-0 cursor-pointer hover:shadow-xl transition-all duration-300 overflow-hidden group border-slate-200 dark:border-slate-800">
                                 {/* Imagen de Preview */}
                                 <div className="h-48 w-full overflow-hidden bg-slate-100 relative">
                                     {displayImage ? (

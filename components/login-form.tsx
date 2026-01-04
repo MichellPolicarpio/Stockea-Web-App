@@ -51,7 +51,7 @@ export function LoginForm() {
             setTimeout(() => {
                 router.push("/")
                 router.refresh()
-            }, 5000)
+            }, 6000)
         } catch (err) {
             setError("Credenciales incorrectas. Pruebe con 'admin' / 'admin123'")
             setLoading(false)
