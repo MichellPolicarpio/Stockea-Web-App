@@ -298,9 +298,9 @@ export default function UsersPage() {
     )
   }
 
-  // --- FORM CONTENT ---
-  const UserFormContent = editingUser && (
-    <form onSubmit={handleSaveUser} className="grid gap-6 py-4 px-1">
+  // --- FORM FIELDS ---
+  const UserFormFields = editingUser && (
+    <div className="grid gap-6 py-4 px-1">
       {/* Avatar Section */}
       <div className="flex flex-col items-center gap-4">
         <div className="relative group">
@@ -402,19 +402,7 @@ export default function UsersPage() {
           </Select>
         </div>
       </div>
-
-      <div className="mt-4 flex gap-4">
-        {isMobile ? (
-          <DrawerClose asChild>
-            <Button type="button" variant="outline" className="w-full">Cancelar</Button>
-          </DrawerClose>
-        ) : null}
-        <Button type="submit" className="w-full sm:w-auto flex-1">
-          <Save className="mr-2 h-4 w-4" />
-          {editingUser.id ? 'Guardar Cambios' : 'Registrar Usuario'}
-        </Button>
-      </div>
-    </form>
+    </div>
   )
 
   // --- MAIN RENDER ---
@@ -623,9 +611,22 @@ export default function UsersPage() {
               <DrawerTitle>{editingUser?.id ? 'Editar Usuario' : 'Registrar Nuevo Usuario'}</DrawerTitle>
               <DrawerDescription>Modifica los detalles del usuario.</DrawerDescription>
             </DrawerHeader>
-            <div className="px-4 pb-8 overflow-y-auto max-h-[80vh]">
-              {UserFormContent}
+            <div className="px-4 overflow-y-auto max-h-[75vh]">
+              <form id="user-form-mobile" onSubmit={handleSaveUser}>
+                {UserFormFields}
+              </form>
             </div>
+            <DrawerFooter className="pt-4 border-t border-slate-100 dark:border-slate-800">
+              <div className="grid grid-cols-2 gap-4">
+                <DrawerClose asChild>
+                  <Button variant="outline" className="w-full">Cancelar</Button>
+                </DrawerClose>
+                <Button type="submit" form="user-form-mobile" className="w-full">
+                  <Save className="mr-2 h-4 w-4" />
+                  {editingUser?.id ? 'Guardar' : 'Registrar'}
+                </Button>
+              </div>
+            </DrawerFooter>
           </DrawerContent>
         </Drawer>
 
@@ -638,7 +639,16 @@ export default function UsersPage() {
                 Modifica los detalles del usuario, incluyendo foto de perfil.
               </DialogDescription>
             </DialogHeader>
-            {UserFormContent}
+
+            <form onSubmit={handleSaveUser}>
+              {UserFormFields}
+              <DialogFooter className="mt-4">
+                <Button type="submit" className="w-full sm:w-auto">
+                  <Save className="mr-2 h-4 w-4" />
+                  {editingUser?.id ? 'Guardar Cambios' : 'Registrar Usuario'}
+                </Button>
+              </DialogFooter>
+            </form>
           </DialogContent>
         </Dialog>
       )}
