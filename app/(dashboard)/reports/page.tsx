@@ -206,59 +206,41 @@ export default function ReportsPage() {
 
 
       {/* KPI STATS */}
-      <div className="grid gap-4 md:grid-cols-3">
-        {/* Totales */}
-        <Card className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden group">
-          <div className="absolute right-0 top-0 h-full w-24 bg-gradient-to-l from-slate-50 to-transparent dark:from-slate-900 opacity-50" />
-          <CardHeader className="flex flex-row items-center justify-between pb-1 space-y-0 z-10 relative">
-            <CardTitle className="text-sm font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider">
-              Total
-            </CardTitle>
-            <ClipboardCheck className="h-4 w-4 text-slate-400 group-hover:text-blue-600 transition-colors" />
-          </CardHeader>
-          <CardContent className="z-10 relative pt-0 pb-3">
-            <div className="text-2xl font-bold text-slate-900 dark:text-white">{total}</div>
-            <p className="text-xs text-slate-500">Asignaciones globales</p>
-          </CardContent>
-        </Card>
+      <div className="grid grid-cols-3 gap-4 md:gap-8 mb-4">
+        {/* Metric 1: Total */}
+        <div className="flex flex-col items-center justify-center gap-1 md:gap-2 p-2 md:p-0 bg-slate-50 dark:bg-slate-900/50 md:bg-transparent rounded-lg md:rounded-none border border-slate-100 dark:border-slate-800 md:border-none">
+          <div className="flex items-center gap-1.5 opacity-80">
+            <ClipboardCheck className="h-3.5 w-3.5 text-slate-400" />
+            <span className="text-[10px] md:text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total</span>
+          </div>
+          <span className="text-xl md:text-3xl font-bold text-slate-900 dark:text-white">{total}</span>
+        </div>
 
-        {/* Pendientes */}
-        <Card className="bg-white dark:bg-slate-950 border-amber-100 dark:border-amber-900/30 shadow-sm relative overflow-hidden group">
-          <div className="absolute right-0 top-0 h-full w-24 bg-gradient-to-l from-amber-50 to-transparent dark:from-amber-900/20 opacity-50" />
-          <CardHeader className="flex flex-row items-center justify-between pb-1 space-y-0 z-10 relative">
-            <CardTitle className="text-sm font-semibold text-amber-600 dark:text-amber-500 uppercase tracking-wider">
-              Pendientes
-            </CardTitle>
-            <CircleDashed className="h-4 w-4 text-amber-400 group-hover:text-amber-600 transition-colors" />
-          </CardHeader>
-          <CardContent className="z-10 relative pt-0 pb-3">
-            <div className="text-2xl font-bold text-amber-600 dark:text-amber-500">{pending}</div>
-            <p className="text-xs text-amber-500/80">Por verificar</p>
-          </CardContent>
-        </Card>
+        {/* Metric 2: Pendientes */}
+        <div className="flex flex-col items-center justify-center gap-1 md:gap-2 p-2 md:p-0 bg-slate-50 dark:bg-slate-900/50 md:bg-transparent rounded-lg md:rounded-none border border-slate-100 dark:border-slate-800 md:border-none">
+          <div className="flex items-center gap-1.5 opacity-80">
+            <CircleDashed className="h-3.5 w-3.5 text-amber-500" />
+            <span className="text-[10px] md:text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Pendientes</span>
+          </div>
+          <span className="text-xl md:text-3xl font-bold text-slate-900 dark:text-white">{pending}</span>
+        </div>
 
-        {/* Completadas */}
-        <Card className="bg-white dark:bg-slate-950 border-green-100 dark:border-green-900/30 shadow-sm relative overflow-hidden group">
-          <div className="absolute right-0 top-0 h-full w-24 bg-gradient-to-l from-green-50 to-transparent dark:from-green-900/20 opacity-50" />
-          <CardHeader className="flex flex-row items-center justify-between pb-1 space-y-0 z-10 relative">
-            <CardTitle className="text-sm font-semibold text-green-600 dark:text-green-500 uppercase tracking-wider">
-              Completas
-            </CardTitle>
-            <CheckCircle2 className="h-4 w-4 text-green-400 group-hover:text-green-600 transition-colors" />
-          </CardHeader>
-          <CardContent className="z-10 relative pt-0 pb-3">
-            <div className="text-2xl font-bold text-green-600 dark:text-green-500">{completed}</div>
-            <p className="text-xs text-green-500/80">Finalizadas</p>
-          </CardContent>
-        </Card>
+        {/* Metric 3: Completas */}
+        <div className="flex flex-col items-center justify-center gap-1 md:gap-2 p-2 md:p-0 bg-slate-50 dark:bg-slate-900/50 md:bg-transparent rounded-lg md:rounded-none border border-slate-100 dark:border-slate-800 md:border-none">
+          <div className="flex items-center gap-1.5 opacity-80">
+            <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
+            <span className="text-[10px] md:text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Completas</span>
+          </div>
+          <span className="text-xl md:text-3xl font-bold text-slate-900 dark:text-white">{completed}</span>
+        </div>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
         {/* Formulario de Asignación */}
-        <Card className="md:col-span-1 border-blue-100 dark:border-blue-900 shadow-md h-fit">
-          <CardHeader className="bg-blue-50/50 dark:bg-blue-900/10 pb-4">
-            <CardTitle className="flex items-center gap-2 text-blue-700 dark:text-blue-400">
-              <ClipboardCheck className="h-5 w-5" />
+        <Card className="md:col-span-1 border-slate-200 dark:border-slate-800 shadow-md h-fit">
+          <CardHeader className="pb-4 border-b border-slate-100 dark:border-slate-800">
+            <CardTitle className="flex items-center gap-2 text-slate-900 dark:text-white">
+              <ClipboardCheck className="h-5 w-5 text-primary" />
               Programar Verificación
             </CardTitle>
             <CardDescription>
@@ -323,8 +305,8 @@ export default function ReportsPage() {
                         head_cell: "text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]",
                         row: "flex w-full mt-2",
                         cell: "h-9 w-9 text-center text-sm p-0 relative [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
-                        day: "h-9 w-9 p-0 font-normal aria-selected:opacity-100 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors",
-                        day_selected: "bg-blue-600 text-white hover:bg-blue-700 hover:text-white focus:bg-blue-700 focus:text-white font-semibold",
+                        day: "h-9 w-9 p-0 font-normal aria-selected:opacity-100 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors",
+                        day_selected: "bg-primary text-white hover:bg-primary/90 hover:text-white focus:bg-primary focus:text-white font-semibold",
                         day_today: "bg-slate-100 text-accent-foreground",
                         day_outside: "text-muted-foreground opacity-50",
                         day_disabled: "text-muted-foreground opacity-50",
@@ -371,7 +353,7 @@ export default function ReportsPage() {
               </div>
             </div>
 
-            <Button className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white h-10" onClick={handlePreCreate}>
+            <Button className="w-full mt-4 h-10 rounded-full" onClick={handlePreCreate}>
               Continuar
             </Button>
           </CardContent>
@@ -423,10 +405,10 @@ export default function ReportsPage() {
                         </div>
                       </div>
                       <div className="flex gap-1 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Button variant="ghost" size="icon" className="h-7 w-7 text-slate-400 hover:text-blue-600" onClick={() => handleEditStart(assign)}>
+                        <Button variant="ghost" size="icon" className="h-7 w-7 text-slate-400 hover:text-primary hover:bg-rose-50 rounded-full" onClick={() => handleEditStart(assign)}>
                           <Edit className="h-3.5 w-3.5" />
                         </Button>
-                        <Button variant="ghost" size="icon" className="h-7 w-7 text-slate-400 hover:text-red-600" onClick={() => setDeleteId(assign.id)}>
+                        <Button variant="ghost" size="icon" className="h-7 w-7 text-slate-400 hover:text-primary hover:bg-rose-50 rounded-full" onClick={() => setDeleteId(assign.id)}>
                           <Trash2 className="h-3.5 w-3.5" />
                         </Button>
                       </div>
