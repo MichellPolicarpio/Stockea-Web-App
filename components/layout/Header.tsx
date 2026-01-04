@@ -136,7 +136,7 @@ export function Header({ sidebarCollapsed, onToggleSidebar, onLogout }: Dashboar
                                         <span className="absolute top-2 right-2.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white dark:border-slate-950 pointer-events-none" />
                                     </Button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end" className="w-80 p-0 rounded-xl shadow-lg border border-slate-100 dark:border-slate-800 mt-2 bg-white dark:bg-slate-950">
+                                <DropdownMenuContent align="end" className="w-[92vw] sm:w-80 p-0 rounded-xl shadow-lg border border-slate-100 dark:border-slate-800 mt-2 bg-white dark:bg-slate-950">
                                     <div className="flex items-center justify-between px-4 py-3 border-b border-slate-50 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 rounded-t-xl">
                                         <span className="text-sm font-semibold text-slate-900 dark:text-white">Notificaciones</span>
                                         <span className="text-xs text-blue-600 dark:text-blue-400 font-medium cursor-pointer hover:underline">Marcar leídas</span>
