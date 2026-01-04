@@ -95,6 +95,7 @@ export default function DashboardLayout({
         <Sidebar
           collapsed={sidebarCollapsed}
           onToggle={handleToggleSidebar}
+          onLogout={handleLogout}
         />
         <Header
           sidebarCollapsed={sidebarCollapsed}

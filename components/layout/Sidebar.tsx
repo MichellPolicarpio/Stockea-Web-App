@@ -21,23 +21,13 @@ import { useTheme } from 'next-themes'
 interface DashboardSidebarProps {
     collapsed: boolean
     onToggle: () => void
+    onLogout: () => void
 }
 
-export function Sidebar({ collapsed, onToggle }: DashboardSidebarProps) {
-    const { user, logout } = useAuth()
+export function Sidebar({ collapsed, onToggle, onLogout }: DashboardSidebarProps) {
+    const { user } = useAuth()
     const pathname = usePathname()
     const { theme, setTheme } = useTheme()
-
-    // Logout Splash Screen State
-    const [isLoggingOut, setIsLoggingOut] = useState(false)
-
-    const handleLogout = () => {
-        setIsLoggingOut(true)
-        // Wait for animation to play before actual logout
-        setTimeout(() => {
-            logout()
-        }, 1500)
-    }
 
     // Mount safety to avoid hydration mismatch
     const [mounted, setMounted] = useState(false)
@@ -49,22 +39,6 @@ export function Sidebar({ collapsed, onToggle }: DashboardSidebarProps) {
 
     return (
         <>
-            {/* LOGOUT SPLASH SCREEN */}
-            {isLoggingOut && (
-                <div className="fixed inset-0 z-[100] bg-white dark:bg-slate-950 flex flex-col items-center justify-center animate-in fade-in duration-300">
-                    <div className="flex flex-col items-center animate-pulse">
-                        <div className="bg-slate-900 dark:bg-white p-4 rounded-2xl mb-6 shadow-2xl">
-                            <svg className="w-12 h-12 text-white dark:text-slate-900" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                                <path d="M4 4h16v16H4z" />
-                                <path d="M10 10l4 4" strokeWidth="2" strokeLinecap="round" />
-                            </svg>
-                        </div>
-                        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white mb-2">Stockea<span className="text-blue-600">.</span></h2>
-                        <p className="text-slate-500 dark:text-slate-400 font-medium">Cerrando sesión...</p>
-                    </div>
-                </div>
-            )}
-
             {/* Overlay Móvil */}
             {!collapsed && (
                 <div
@@ -197,7 +171,7 @@ export function Sidebar({ collapsed, onToggle }: DashboardSidebarProps) {
 
                     {/* Logout Button */}
                     <button
-                        onClick={handleLogout}
+                        onClick={onLogout}
                         className={cn(
                             "flex items-center justify-center text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors min-h-[40px]",
                             collapsed ? "w-10 h-10" : "w-full gap-2 px-2 py-2 text-xs font-medium mb-4"
