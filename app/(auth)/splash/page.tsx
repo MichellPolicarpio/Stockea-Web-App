@@ -57,7 +57,7 @@ export default function SplashPage() {
       <div className="relative z-10 flex flex-col items-center">
 
         {/* LOGO ANIMATION CONTAINER */}
-        <div className="flex items-center gap-4 mb-20">
+        <div className="flex items-center gap-4 mb-12">
           {/* Isotipo: Cuadrado negro que gira y se transforma */}
           <div className={`w-12 h-12 bg-black flex items-center justify-center transition-all duration-1000 ease-out ${showLogo ? 'rotate-0 opacity-100 scale-100' : 'rotate-45 opacity-0 scale-50'}`}>
             <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
@@ -66,17 +66,11 @@ export default function SplashPage() {
             </svg>
           </div>
 
-          {/* Logotipo Animado (Video) */}
-          <div className={`h-16 flex items-center transition-opacity duration-1000 ${showLogo ? 'opacity-100' : 'opacity-0'}`}>
-            <video
-              autoPlay
-              muted
-              playsInline
-              className="h-full w-auto object-contain"
-            >
-              <source src="/videos/StockeaLetrasAnimadas.mov" type="video/quicktime" />
-              <source src="/videos/StockeaLetrasAnimadas.mov" type="video/mp4" />
-            </video>
+          {/* Logotipo Tipográfico: Stockea */}
+          <div className="overflow-hidden h-14 flex items-center">
+            <h1 className={`text-5xl font-extrabold tracking-tighter text-slate-900 transition-transform duration-1000 ease-out ${showLogo ? 'translate-y-0' : 'translate-y-20'}`}>
+              Stockea<span className="text-blue-600">.</span>
+            </h1>
           </div>
         </div>
 
