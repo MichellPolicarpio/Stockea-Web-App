@@ -20,14 +20,14 @@ import type { LucideIcon } from 'lucide-react'
 interface DashboardHeaderProps {
     sidebarCollapsed: boolean
     onToggleSidebar?: () => void
+    onLogout: () => void
 }
 
-export function Header({ sidebarCollapsed, onToggleSidebar }: DashboardHeaderProps) {
-    const { user, logout } = useAuth()
+export function Header({ sidebarCollapsed, onToggleSidebar, onLogout }: DashboardHeaderProps) {
+    const { user } = useAuth()
     const router = useRouter()
     const pathname = usePathname()
     const [isMenuOpen, setIsMenuOpen] = React.useState(false)
-    const [isLoggingOut, setIsLoggingOut] = React.useState(false)
 
     if (!user) return null
 
@@ -88,13 +88,7 @@ export function Header({ sidebarCollapsed, onToggleSidebar }: DashboardHeaderPro
     const title = getPageTitle()
 
     const handleLogout = () => {
-        setIsLoggingOut(true)
-        setTimeout(() => {
-            logout()
-            // Router push is handled by auth context usually, but we keep it safe
-            router.push('/login')
-            router.refresh()
-        }, 1500)
+        onLogout()
     }
 
     // Iniciales para el avatar
@@ -102,32 +96,6 @@ export function Header({ sidebarCollapsed, onToggleSidebar }: DashboardHeaderPro
 
     return (
         <>
-            {/* LOGOUT SPLASH SCREEN */}
-            {isLoggingOut && (
-                <div className="fixed inset-0 z-[100] bg-white dark:bg-slate-950 flex flex-col items-center justify-center animate-in fade-in duration-300">
-                    <div className="flex flex-col items-center animate-pulse scale-100 lg:scale-125 transition-transform duration-500">
-                        <div className="bg-slate-900 dark:bg-white p-4 lg:p-6 rounded-2xl mb-14 lg:mb-16 shadow-2xl">
-                            <svg className="w-12 h-12 lg:w-16 lg:h-16 text-white dark:text-slate-900" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                                <path d="M4 4h16v16H4z" />
-                                <path d="M10 10l4 4" strokeWidth="2" strokeLinecap="round" />
-                            </svg>
-                        </div>
-                        <div className="h-20 lg:h-32 mb-4 lg:mb-8 flex items-center justify-center">
-                            <video
-                                autoPlay
-                                muted
-                                playsInline
-                                className="h-full w-auto object-contain"
-                            >
-                                <source src="/videos/StockeaLetrasAnimadas.mov" type="video/quicktime" />
-                                <source src="/videos/StockeaLetrasAnimadas.mov" type="video/mp4" />
-                            </video>
-                        </div>
-                        <p className="text-slate-500 dark:text-slate-400 font-medium lg:text-lg">Cerrando sesión...</p>
-                    </div>
-                </div>
-            )}
-
             <header
                 className={`fixed top-0 right-0 h-[100px] z-40 transition-all duration-300 left-0 ${sidebarCollapsed ? "md:left-20" : "md:left-64"} flex items-center bg-white/80 dark:bg-slate-950/80 backdrop-blur-md support-[backdrop-filter]:bg-white/60`}
             >

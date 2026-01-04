@@ -12,15 +12,16 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode
 }) {
-  const { user, loading } = useAuth()
+  const { user, loading, logout } = useAuth()
   const router = useRouter()
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
 
   useEffect(() => {
-    if (!loading && !user) {
+    if (!loading && !user && !isLoggingOut) {
       router.push('/login')
     }
-  }, [user, loading, router])
+  }, [user, loading, router, isLoggingOut])
 
   // Resize handler
   useEffect(() => {
@@ -39,6 +40,42 @@ export default function DashboardLayout({
   const handleToggleSidebar = useCallback(() => {
     setSidebarCollapsed(prev => !prev)
   }, [])
+
+  const handleLogout = useCallback(() => {
+    setIsLoggingOut(true)
+    setTimeout(() => {
+      logout()
+      router.push('/login')
+      router.refresh()
+    }, 2000)
+  }, [logout, router])
+
+  if (isLoggingOut) {
+    return (
+      <div className="fixed inset-0 z-[100] bg-white dark:bg-slate-950 flex flex-col items-center justify-center animate-in fade-in duration-300">
+        <div className="flex flex-col items-center animate-pulse scale-100 lg:scale-125 transition-transform duration-500">
+          <div className="bg-slate-900 dark:bg-white p-4 lg:p-6 rounded-2xl mb-14 lg:mb-16 shadow-2xl">
+            <svg className="w-12 h-12 lg:w-16 lg:h-16 text-white dark:text-slate-900" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+              <path d="M4 4h16v16H4z" />
+              <path d="M10 10l4 4" strokeWidth="2" strokeLinecap="round" />
+            </svg>
+          </div>
+          <div className="h-20 lg:h-32 mb-4 lg:mb-8 flex items-center justify-center">
+            <video
+              autoPlay
+              muted
+              playsInline
+              className="h-full w-auto object-contain"
+            >
+              <source src="/videos/StockeaLetrasAnimadas.mov" type="video/quicktime" />
+              <source src="/videos/StockeaLetrasAnimadas.mov" type="video/mp4" />
+            </video>
+          </div>
+          <p className="text-slate-500 dark:text-slate-400 font-medium lg:text-lg">Cerrando sesión...</p>
+        </div>
+      </div>
+    )
+  }
 
   if (loading) {
     return (
@@ -62,6 +99,7 @@ export default function DashboardLayout({
         <Header
           sidebarCollapsed={sidebarCollapsed}
           onToggleSidebar={handleToggleSidebar}
+          onLogout={handleLogout}
         />
       </div>
       <main
