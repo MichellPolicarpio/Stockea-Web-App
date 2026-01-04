@@ -107,7 +107,7 @@ export default function DashboardLayout({
         className={`pt-[100px] md:pt-[110px] transition-all duration-300 min-h-screen flex flex-col print:m-0 print:p-0 print:pt-0 ${sidebarCollapsed ? "ml-0 md:ml-20" : "ml-0 md:ml-64"
           }`}
       >
-        <div className="flex-1 px-4 md:px-8 pb-8 pt-6 md:pt-0 print:p-0">
+        <div className="flex-1 px-4 md:px-8 pb-8 pt-3 md:pt-0 print:p-0">
           {children}
         </div>
       </main>
