@@ -1,12 +1,29 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { LoginForm } from "@/components/login-form"
+import Image from "next/image"
 import {
   Menu, X, Check, ArrowRight, LayoutDashboard, ShieldCheck,
-  Smartphone, Zap, BarChart3, Users, Building, Home, FileText,
-  AlertTriangle, Lock, Globe
+  Smartphone, Zap, BarChart3, Building, FileText,
+  Lock, Globe, Users
 } from "lucide-react"
+
+// Assets Imports
+import heroImg from "@/assets/GerenteSonrienteTablet.png"
+import beforeAfterImg from "@/assets/AntesyDespues.png"
+import dashboardImg from "@/assets/DashboardConGraficas.png"
+import treeStructureImg from "@/assets/EstructuraDeArbol.png"
+import verifierImg from "@/assets/VerificadorConTablet.png"
+import reportImg from "@/assets/ReportePDFGigante.png"
+import rolesImg from "@/assets/TresPersonajesInteractuando.png"
+import buildingTypesImg from "@/assets/HotelCasaEdicioApartamentos.png"
+import rocketImg from "@/assets/CoheteStockea.png"
+import vaultImg from "@/assets/BancoBoveda.PNG"
+import celebrationImg from "@/assets/GrupoDiversoFestejando.png"
+import macbookImg from "@/assets/Macbook_Dashboard.PNG"
+import ipadImg from "@/assets/iPadAcostada_Dashboard.png"
+import iphoneImg from "@/assets/iPhone_Dashboard.png"
 
 export default function LoginPage() {
   const [showLogin, setShowLogin] = useState(false)
@@ -21,7 +38,7 @@ export default function LoginPage() {
     }
   }
 
-  // Si el usuario quiere hacer login, mostramos la pantalla original (RESTORED ORIGINAL STYLE)
+  // Si el usuario quiere hacer login, mostramos la pantalla original
   if (showLogin) {
     return (
       <div className="min-h-screen w-full flex bg-white animate-in fade-in duration-500">
@@ -34,7 +51,7 @@ export default function LoginPage() {
           ← Volver al inicio
         </button>
 
-        {/* Columna Izquierda: Visual Corporativo (Solo Desktop) - RESTORED SLATE-900 STYLE */}
+        {/* Columna Izquierda: Visual Corporativo (Solo Desktop) */}
         <div className="hidden lg:block relative w-[60%] bg-slate-900 overflow-hidden">
           {/* Fondo base */}
           <div className="absolute inset-0 bg-black" />
@@ -59,6 +76,7 @@ export default function LoginPage() {
 
               {/* Logo Principal Grandes */}
               <div className="inline-flex items-center justify-center w-32 h-32 rounded-3xl bg-white/5 backdrop-blur-md border border-white/10 shadow-2xl mb-2 p-4">
+                {/* Logo sigue en public, usamos img normal */}
                 <img src="/Logo_Stockea.png" alt="Stockea Logo" className="w-full h-full object-contain brightness-0 invert" />
               </div>
 
@@ -209,14 +227,15 @@ export default function LoginPage() {
               </div>
             </div>
 
-            {/* Imagen Hero */}
+            {/* Imagen Hero - OPTIMIZED */}
             <div className="relative animate-in slide-in-from-right-5 fade-in duration-1000 delay-200 flex justify-center">
               <div className="relative w-full max-w-lg lg:max-w-xl">
-                {/* (Removed pulse background) */}
-                <img
-                  src="/GerenteSonrienteTablet.png"
+                <Image
+                  src={heroImg}
                   alt="Gerente gestionando inventario"
                   className="w-full h-auto object-contain drop-shadow-2xl"
+                  priority
+                  placeholder="blur"
                 />
               </div>
             </div>
@@ -235,10 +254,10 @@ export default function LoginPage() {
             </div>
 
             <div className="grid lg:grid-cols-2 gap-16 items-center">
-              {/* Imagen Antes/Después */}
+              {/* Imagen Antes/Después - OPTIMIZED */}
               <div className="order-2 lg:order-1 relative flex items-center justify-center overflow-hidden">
-                <img
-                  src="/AntesyDespues.png"
+                <Image
+                  src={beforeAfterImg}
                   alt="Antes vs Después de usar Stockea"
                   className="w-full h-auto object-contain max-h-[400px]"
                 />
@@ -291,8 +310,8 @@ export default function LoginPage() {
                 </p>
               </div>
               <div className="flex flex-col items-center justify-center">
-                <img
-                  src="/DashboardConGraficas.png"
+                <Image
+                  src={dashboardImg}
                   alt="Dashboard Inteligente con Gráficas"
                   className="w-full h-auto object-contain max-h-[350px]"
                 />
@@ -311,8 +330,8 @@ export default function LoginPage() {
                 </p>
               </div>
               <div className="lg:order-1 flex flex-col items-center justify-center">
-                <img
-                  src="/EstructuraDeArbol.png"
+                <Image
+                  src={treeStructureImg}
                   alt="Estructura de Árbol Multinivel"
                   className="w-full h-auto object-contain max-h-[350px]"
                 />
@@ -331,8 +350,8 @@ export default function LoginPage() {
                 </p>
               </div>
               <div className="flex flex-col items-center justify-center">
-                <img
-                  src="/VerificadorConTablet.png"
+                <Image
+                  src={verifierImg}
                   alt="Verificador realizando inspección"
                   className="w-full h-auto object-contain max-h-[350px]"
                 />
@@ -351,8 +370,8 @@ export default function LoginPage() {
                 </p>
               </div>
               <div className="lg:order-1 flex flex-col items-center justify-center">
-                <img
-                  src="/ReportePDFGigante.png"
+                <Image
+                  src={reportImg}
                   alt="Reporte PDF Automatizado"
                   className="w-full h-auto object-contain max-h-[350px]"
                 />
@@ -415,8 +434,8 @@ export default function LoginPage() {
             </div>
 
             <div className="max-w-4xl mx-auto flex flex-col items-center justify-center">
-              <img
-                src="/TresPersonajesInteractuando.png"
+              <Image
+                src={rolesImg}
                 alt="Roles del sistema interactuando"
                 className="w-full h-auto object-contain max-h-[350px]"
               />
@@ -450,8 +469,8 @@ export default function LoginPage() {
             </div>
 
             <div className="flex flex-col items-center justify-center">
-              <img
-                src="/HotelCasaEdicioApartamentos.png"
+              <Image
+                src={buildingTypesImg}
                 alt="Tipos de Propiedades: Hotel, Airbnb, Departamentos"
                 className="w-full h-auto object-contain max-h-[350px]"
               />
@@ -492,8 +511,8 @@ export default function LoginPage() {
             </div>
 
             <div className="flex flex-col items-center justify-center">
-              <img
-                src="/CoheteStockea.png"
+              <Image
+                src={rocketImg}
                 alt="Crecimiento exponencial con Stockea"
                 className="w-full h-auto object-contain max-h-[400px] scale-[1.2]"
               />
@@ -505,31 +524,31 @@ export default function LoginPage() {
         <section className="py-24 bg-white">
           <div className="max-w-7xl mx-auto px-4 space-y-24">
 
-            {/* Accesibilidad */}
+            {/* Accesibilidad - OPTIMIZED COMPOSITION */}
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div className="relative min-h-[400px] w-full flex items-center justify-center p-8 group">
                 {/* Background Blob decoration */}
                 <div className="absolute inset-0 bg-blue-50/50 rounded-full blur-3xl opacity-50 z-0 scale-75"></div>
 
                 {/* MacBook (Base) */}
-                <img
-                  src="/Macbook_Dashboard.PNG"
+                <Image
+                  src={macbookImg}
                   alt="Desktop Dashboard"
-                  className="relative w-[90%] md:w-[80%] z-10 drop-shadow-2xl transition-transform group-hover:scale-[1.02] duration-500"
+                  className="relative w-[90%] md:w-[80%] h-auto z-10 drop-shadow-2xl transition-transform group-hover:scale-[1.02] duration-500"
                 />
 
                 {/* iPad (Left Overlay) */}
-                <img
-                  src="/iPadAcostada_Dashboard.png"
+                <Image
+                  src={ipadImg}
                   alt="Tablet Dashboard"
-                  className="absolute bottom-8 left-0 md:-left-4 w-[40%] z-20 drop-shadow-xl rounded-xl border border-slate-200 bg-white transition-transform group-hover:-translate-x-2 duration-500"
+                  className="absolute bottom-8 left-0 md:-left-4 w-[40%] h-auto z-20 drop-shadow-xl rounded-xl border border-slate-200 bg-white transition-transform group-hover:-translate-x-2 duration-500"
                 />
 
                 {/* iPhone (Right Overlay) */}
-                <img
-                  src="/iPhone_Dashboard.png"
+                <Image
+                  src={iphoneImg}
                   alt="Mobile Dashboard"
-                  className="absolute bottom-4 right-2 md:right-12 w-[18%] z-30 drop-shadow-2xl transition-transform group-hover:translate-x-2 group-hover:-translate-y-2 duration-500"
+                  className="absolute bottom-4 right-2 md:right-12 w-[18%] h-auto z-30 drop-shadow-2xl transition-transform group-hover:translate-x-2 group-hover:-translate-y-2 duration-500"
                 />
               </div>
               <div className="space-y-6">
@@ -541,8 +560,8 @@ export default function LoginPage() {
             {/* Seguridad */}
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div className="lg:order-2 flex flex-col items-center justify-center">
-                <img
-                  src="/BancoBoveda.PNG"
+                <Image
+                  src={vaultImg}
                   alt="Seguridad de alto nivel"
                   className="w-full h-auto object-contain max-h-[350px]"
                 />
@@ -556,8 +575,6 @@ export default function LoginPage() {
                 </ul>
               </div>
             </div>
-
-            {/* Planes Placeholders - REMOVED */}
 
           </div>
         </section>
@@ -587,8 +604,8 @@ export default function LoginPage() {
             </div>
 
             <div className="flex flex-col items-center justify-center max-w-2xl mx-auto">
-              <img
-                src="/GrupoDiversoFestejando.png"
+              <Image
+                src={celebrationImg}
                 alt="Equipo celebrando con éxito gestionando su inventario"
                 className="w-full h-auto object-contain max-h-[350px]"
               />
