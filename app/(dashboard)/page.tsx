@@ -158,10 +158,10 @@ function AdminDashboard() {
     ]
 
     const conditionData = [
-        { name: 'Nuevo', value: 45, color: '#3b82f6' }, // Blue-500
-        { name: 'Bueno', value: 30, color: '#10b981' }, // Emerald-500
-        { name: 'Regular', value: 15, color: '#f59e0b' }, // Amber-500
-        { name: 'Malo', value: 10, color: '#ef4444' }, // Red-500
+        { name: 'Buen estado', value: 75, color: '#3b82f6' }, // Blue-500
+        { name: 'Inactivo', value: 10, color: '#10b981' }, // Emerald-500
+        { name: 'Faltante', value: 10, color: '#ef4444' }, // Red-500
+        { name: 'Dañado', value: 5, color: '#f59e0b' }, // Amber-500
     ]
 
     const activityData = [
@@ -229,7 +229,13 @@ function AdminDashboard() {
                                         <span className="text-sm font-bold text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 px-2 py-1 rounded-lg">{cat.items}</span>
                                     </div>
                                     <div className="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                                        <div className={`h-full ${cat.color} rounded-full`} style={{ width: `${(cat.items / 500) * 100}%` }} />
+                                        <div
+                                            className="h-full rounded-full"
+                                            style={{
+                                                width: `${(cat.items / 500) * 100}%`,
+                                                background: `linear-gradient(to right, ${cat.color === 'bg-blue-500' ? '#3b82f6' : cat.color === 'bg-emerald-500' ? '#10b981' : '#f97316'}, ${cat.color === 'bg-blue-500' ? '#93c5fd' : cat.color === 'bg-emerald-500' ? '#6ee7b7' : '#fdba74'})`
+                                            }}
+                                        />
                                     </div>
                                 </div>
                             ))}
@@ -259,6 +265,24 @@ function AdminDashboard() {
                                 <div className="relative h-[120px] w-[120px] mx-auto md:mx-0">
                                     <ResponsiveContainer width="100%" height="100%">
                                         <PieChart>
+                                            <defs>
+                                                <linearGradient id="gradientBlue" x1="0" y1="0" x2="0" y2="1">
+                                                    <stop offset="0%" stopColor="#3b82f6" stopOpacity={1} />
+                                                    <stop offset="100%" stopColor="#3b82f6" stopOpacity={0.2} />
+                                                </linearGradient>
+                                                <linearGradient id="gradientEmerald" x1="0" y1="0" x2="0" y2="1">
+                                                    <stop offset="0%" stopColor="#10b981" stopOpacity={1} />
+                                                    <stop offset="100%" stopColor="#10b981" stopOpacity={0.2} />
+                                                </linearGradient>
+                                                <linearGradient id="gradientAmber" x1="0" y1="0" x2="0" y2="1">
+                                                    <stop offset="0%" stopColor="#f59e0b" stopOpacity={1} />
+                                                    <stop offset="100%" stopColor="#f59e0b" stopOpacity={0.2} />
+                                                </linearGradient>
+                                                <linearGradient id="gradientRed" x1="0" y1="0" x2="0" y2="1">
+                                                    <stop offset="0%" stopColor="#ef4444" stopOpacity={1} />
+                                                    <stop offset="100%" stopColor="#ef4444" stopOpacity={0.2} />
+                                                </linearGradient>
+                                            </defs>
                                             <Pie
                                                 data={conditionData}
                                                 innerRadius={40}
@@ -268,26 +292,33 @@ function AdminDashboard() {
                                                 dataKey="value"
                                                 stroke="none"
                                             >
-                                                {conditionData.map((entry, index) => (
-                                                    <Cell key={`cell-${index}`} fill={entry.color} />
-                                                ))}
+                                                {conditionData.map((entry, index) => {
+                                                    let fillUrl = `url(#gradientBlue)`; // Default to Blue
+                                                    if (entry.color === '#10b981') fillUrl = `url(#gradientEmerald)`;
+                                                    if (entry.color === '#f59e0b') fillUrl = `url(#gradientAmber)`;
+                                                    if (entry.color === '#ef4444') fillUrl = `url(#gradientRed)`;
+                                                    // Explicitly map Blue if needed, though default handles it
+                                                    if (entry.color === '#3b82f6') fillUrl = `url(#gradientBlue)`;
+
+                                                    return <Cell key={`cell-${index}`} fill={fillUrl} />;
+                                                })}
                                             </Pie>
                                         </PieChart>
                                     </ResponsiveContainer>
                                     {/* Center Text */}
                                     <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                                         <span className="text-2xl font-bold text-slate-900 dark:text-white">75%</span>
-                                        <span className="text-[8px] uppercase font-bold text-slate-400">Operativo</span>
+                                        <span className="text-[8px] uppercase font-bold text-slate-400">Buen Estado</span>
                                     </div>
                                 </div>
 
                                 {/* Legend Compacta a la derecha */}
                                 <div className="flex flex-col gap-2 flex-1 min-w-[90px]">
-                                    {conditionData.slice(0, 3).map((item, i) => (
+                                    {conditionData.slice(0, 4).map((item, i) => (
                                         <div key={i} className="flex items-center justify-between text-xs">
                                             <div className="flex items-center gap-1.5">
                                                 <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }} />
-                                                <span className="text-slate-600 dark:text-slate-400 font-medium truncate max-w-[50px]">{item.name}</span>
+                                                <span className="text-slate-600 dark:text-slate-400 font-medium">{item.name}</span>
                                             </div>
                                             <span className="font-bold text-slate-900 dark:text-white">{item.value}%</span>
                                         </div>
