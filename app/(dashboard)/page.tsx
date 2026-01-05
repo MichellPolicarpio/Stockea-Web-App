@@ -183,7 +183,7 @@ function AdminDashboard() {
                 <div className="xl:col-span-4 flex flex-col gap-2 order-last xl:order-none">
 
                     {/* 1. HERO CARD (Blue Gradient) - SQUARED & CLEAN */}
-                    <div className="relative overflow-hidden bg-gradient-to-b from-blue-400 to-blue-50 rounded-lg p-6 text-white shadow-lg shadow-blue-100/50 min-h-[420px] hidden md:flex flex-col justify-between group">
+                    <div className="relative overflow-hidden bg-gradient-to-b from-blue-400 to-blue-50 dark:from-blue-950 dark:to-slate-900 rounded-lg p-6 text-white shadow-lg shadow-blue-100/50 dark:shadow-none min-h-[540px] hidden md:flex flex-col justify-between group">
 
                         {/* Decoracion de fondo abstracta */}
                         <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500 opacity-10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none group-hover:opacity-15 transition-opacity duration-700" />
@@ -195,7 +195,8 @@ function AdminDashboard() {
 
                         {/* Hero Image */}
                         <div className="flex-1 flex items-center justify-center w-full relative z-10">
-                            <img src="/ImagenPortada.png" alt="Portada" className="w-full h-auto object-contain max-h-[400px] scale-125 animate-in zoom-in-75 fade-in duration-1000 delay-200 fill-mode-both transition-transform duration-500 ease-out group-hover:scale-[1.3]" />
+                            <img src="/ImagenPortada.png" alt="Portada" className="w-full h-auto object-contain max-h-[400px] scale-125 animate-in zoom-in-75 fade-in duration-1000 delay-200 fill-mode-both transition-transform duration-500 ease-out group-hover:scale-[1.3] dark:hidden" />
+                            <img src="/ImagenPortadaOscuro.png" alt="Portada" className="w-full h-auto object-contain max-h-[400px] scale-125 animate-in zoom-in-75 fade-in duration-1000 delay-200 fill-mode-both transition-transform duration-500 ease-out group-hover:scale-[1.3] hidden dark:block" />
                         </div>
 
 
@@ -233,7 +234,7 @@ function AdminDashboard() {
                                             className="h-full rounded-full"
                                             style={{
                                                 width: `${(cat.items / 500) * 100}%`,
-                                                background: `linear-gradient(to right, ${cat.color === 'bg-blue-500' ? '#3b82f6' : cat.color === 'bg-emerald-500' ? '#10b981' : '#f97316'}, ${cat.color === 'bg-blue-500' ? '#93c5fd' : cat.color === 'bg-emerald-500' ? '#6ee7b7' : '#fdba74'})`
+                                                background: `linear-gradient(to right, ${cat.color === 'bg-blue-500' ? '#2563eb' : cat.color === 'bg-emerald-500' ? '#059669' : '#ea580c'}, ${cat.color === 'bg-blue-500' ? '#bfdbfe' : cat.color === 'bg-emerald-500' ? '#a7f3d0' : '#fed7aa'})`
                                             }}
                                         />
                                     </div>
