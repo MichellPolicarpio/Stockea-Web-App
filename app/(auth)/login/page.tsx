@@ -27,24 +27,24 @@ export default function LoginPage() {
         <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-slate-800/10 rounded-full blur-[120px]" />
 
         <div className="absolute inset-0 flex flex-col items-center justify-center p-20 z-10">
-          <div className="max-w-xl space-y-10 text-center">
+          <div className="max-w-xl space-y-6 text-center">
 
             {/* Logo Principal Grandes */}
-            <div className="inline-flex items-center justify-center w-24 h-24 rounded-3xl bg-white/5 backdrop-blur-md border border-white/10 shadow-2xl mb-6 p-4">
+            <div className="inline-flex items-center justify-center w-32 h-32 rounded-3xl bg-white/5 backdrop-blur-md border border-white/10 shadow-2xl mb-2 p-4">
               <img src="/Logo_Stockea.png" alt="Stockea Logo" className="w-full h-full object-contain brightness-0 invert" />
             </div>
 
-            <div className="space-y-4">
-              <h1 className="text-5xl font-bold tracking-tighter text-white">
-                Stockea<span className="text-blue-600">.</span>
-              </h1>
+            <div className="space-y-2">
+              <div className="flex justify-center h-16">
+                <img src="/Stockea_Font.png" alt="Stockea Text" className="h-full w-auto object-contain brightness-0 invert" />
+              </div>
               <p className="text-xl text-slate-400 font-light tracking-wide">
-                Sistema Operativo de Inventarios
+                Audita tu mueble. Cuida tu inversión.
               </p>
             </div>
 
             <blockquote className="text-2xl font-medium text-white/90 leading-relaxed border-t border-white/10 pt-10">
-              "Control total, sin fricción. Diseñado para la nueva generación de gestión inmobiliaria."
+              "Audita tu mueble, cuida tu inversión."
             </blockquote>
 
             {/* Card de Credenciales para Demo */}
@@ -80,9 +80,9 @@ export default function LoginPage() {
             <div className="h-14 w-14 flex items-center justify-center mb-4">
               <img src="/Logo_Stockea.png" alt="Stockea Logo" className="w-full h-full object-contain" />
             </div>
-            <h1 className="text-4xl font-bold tracking-tighter text-slate-900">
-              Stockea<span className="text-blue-600 text-5xl leading-none">.</span>
-            </h1>
+            <div className="flex justify-center h-12 mb-2">
+              <img src="/Stockea_Font.png" alt="Stockea Text" className="h-full w-auto object-contain" />
+            </div>
             <p className="text-slate-500 font-medium text-sm mt-1 tracking-wide">
               Tu inventario, bajo control.
             </p>
