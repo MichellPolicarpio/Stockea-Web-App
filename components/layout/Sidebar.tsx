@@ -67,7 +67,7 @@ export function Sidebar({ collapsed, onToggle, onLogout }: DashboardSidebarProps
                 <div className={cn("flex flex-col justify-between w-full h-24", collapsed ? "items-center" : "px-6")}>
                     {/* Logo Content - Centered Vertically */}
                     <div className="flex-1 flex items-center w-full">
-                        <div className={cn("flex items-center gap-2 w-full overflow-hidden", collapsed ? "justify-center" : "pl-2")}>
+                        <div className={cn("flex items-center gap-0 w-full overflow-hidden", collapsed ? "justify-center" : "pl-2")}>
                             {/* Logo Image */}
                             <div className={cn(
                                 "flex-shrink-0 flex items-center justify-center transition-all",
@@ -81,9 +81,14 @@ export function Sidebar({ collapsed, onToggle, onLogout }: DashboardSidebarProps
                             </div>
 
                             {/* Brand Name */}
+                            {/* Brand Name Image */}
                             {!collapsed && (
-                                <div className="flex-1 font-bold text-3xl tracking-tighter text-slate-900 dark:text-white flex items-baseline opacity-100 transition-opacity">
-                                    Stockea<span className="text-blue-600 dark:text-blue-400 text-4xl leading-none">.</span>
+                                <div className="flex-1 flex items-center h-10 opacity-100 transition-opacity mt-2 -ml-2">
+                                    <img
+                                        src="/Stockea_Font.png"
+                                        alt="Stockea Font"
+                                        className="h-12 w-auto object-contain dark:brightness-0 dark:invert"
+                                    />
                                 </div>
                             )}
                         </div>
