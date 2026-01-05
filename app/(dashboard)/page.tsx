@@ -38,7 +38,8 @@ import {
     Radar,
     PolarGrid,
     PolarAngleAxis,
-    PolarRadiusAxis
+    PolarRadiusAxis,
+    LabelList
 } from 'recharts'
 import { useTheme } from 'next-themes'
 import { useRouter } from 'next/navigation'
@@ -150,11 +151,11 @@ function AdminDashboard() {
 
     // DATA
     const inventoryByBuilding = [
-        { name: 'Casa Tortuga', items: 85, totalValue: 120000 },
-        { name: 'Casa Bamba', items: 62, totalValue: 85000 },
-        { name: 'Villa Sol', items: 58, totalValue: 72000 },
-        { name: 'Vista Mar', items: 45, totalValue: 95000 },
-        { name: 'El Palmar', items: 92, totalValue: 45000 },
+        { name: 'Casa Tortuga', items: 85, totalValue: 120000, growth: '+12.5%' },
+        { name: 'Casa Bamba', items: 62, totalValue: 85000, growth: '+8.2%' },
+        { name: 'Villa Sol', items: 58, totalValue: 72000, growth: '+5.1%' },
+        { name: 'Vista Mar', items: 45, totalValue: 95000, growth: '+3.7%' },
+        { name: 'El Palmar', items: 92, totalValue: 45000, growth: '+15.3%' },
     ]
 
     const conditionData = [
@@ -380,25 +381,61 @@ function AdminDashboard() {
 
                         <div className="h-[230px] w-full">
                             <ResponsiveContainer width="100%" height="100%">
-                                <BarChart data={inventoryByBuilding} barSize={40}>
+                                <BarChart data={inventoryByBuilding} barCategoryGap={0} margin={{ top: 40, right: 0, left: 0, bottom: 0 }}>
                                     <defs>
                                         <linearGradient id="blueBarGradient" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="0%" stopColor="#3b82f6" stopOpacity={1} />
-                                            <stop offset="100%" stopColor="#3b82f6" stopOpacity={0.3} />
+                                            <stop offset="0%" stopColor="#3b82f6" stopOpacity={0.5} />
+                                            <stop offset="100%" stopColor="#3b82f6" stopOpacity={0.1} />
                                         </linearGradient>
                                         <linearGradient id="orangeBarGradient" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="0%" stopColor="#f97316" stopOpacity={1} />
-                                            <stop offset="100%" stopColor="#f97316" stopOpacity={0.3} />
+                                            <stop offset="0%" stopColor="#f97316" stopOpacity={0.5} />
+                                            <stop offset="100%" stopColor="#f97316" stopOpacity={0.1} />
                                         </linearGradient>
                                     </defs>
-                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={isDark ? "#1e293b" : "#f8fafc"} />
-                                    <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 11 }} dy={10} />
-                                    <YAxis axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 11 }} />
+                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={isDark ? "#1e293b" : "#f1f5f9"} />
+                                    <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 11, fontWeight: 600 }} dy={10} />
+                                    <YAxis axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 11 }} width={30} />
                                     <Tooltip
                                         cursor={{ fill: 'transparent' }}
-                                        contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)', padding: '12px 16px' }}
+                                        contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)', padding: '12px 16px', backgroundColor: isDark ? '#1e293b' : '#fff' }}
                                     />
-                                    <Bar dataKey="items" radius={[6, 6, 0, 0]}>
+                                    <Bar dataKey="items"
+                                        shape={(props: any) => {
+                                            const { fill, x, y, width, height, index } = props; // Destructure index
+                                            const isBlue = index % 2 === 0; // Use index for consistent coloring with Cells
+                                            const strokeColor = isBlue ? '#3b82f6' : '#f97316';
+                                            return (
+                                                <g>
+                                                    <rect x={x} y={y} width={width} height={height} fill={fill} rx={0} ry={0} />
+                                                    <rect x={x} y={y} width={width} height={5} fill={strokeColor} /> {/* Increased height to 6 */}
+                                                </g>
+                                            );
+                                        }}
+                                    >
+                                        <LabelList
+                                            dataKey="items"
+                                            position="top"
+                                            style={{ fontSize: '24px', fontWeight: 400, fill: isDark ? '#fff' : '#0f172a' }}
+                                            dy={-5}
+                                        />
+                                        <LabelList
+                                            dataKey="items"
+                                            position="insideBottom"
+                                            content={(props: any) => {
+                                                const { x, y, width, height, index } = props;
+                                                const isBlue = index % 2 === 0;
+                                                const bgColor = isBlue ? '#3b82f6' : '#f97316';
+
+                                                return (
+                                                    <g>
+                                                        <rect x={x + width / 2 - 22} y={y + height - 26} width={44} height={18} rx={9} fill={bgColor} />
+                                                        <text x={x + width / 2} y={y + height - 14} textAnchor="middle" fontSize={10} fill="white" fontWeight="bold">
+                                                            {inventoryByBuilding[index].growth}
+                                                        </text>
+                                                    </g>
+                                                );
+                                            }}
+                                        />
                                         {inventoryByBuilding.map((entry, index) => (
                                             <Cell key={`cell-${index}`} fill={index % 2 === 0 ? "url(#blueBarGradient)" : "url(#orangeBarGradient)"} />
                                         ))}
