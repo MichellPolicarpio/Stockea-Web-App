@@ -54,22 +54,15 @@ export default function DashboardLayout({
     return (
       <div className="fixed inset-0 z-[100] bg-white dark:bg-slate-950 flex flex-col items-center justify-center animate-in fade-in duration-300">
         <div className="flex flex-col items-center animate-pulse scale-100 lg:scale-125 transition-transform duration-500">
-          <div className="bg-slate-900 dark:bg-white p-4 lg:p-6 rounded-2xl mb-14 lg:mb-16 shadow-2xl">
-            <svg className="w-12 h-12 lg:w-16 lg:h-16 text-white dark:text-slate-900" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-              <path d="M4 4h16v16H4z" />
-              <path d="M10 10l4 4" strokeWidth="2" strokeLinecap="round" />
-            </svg>
+          <div className="bg-slate-900 dark:bg-white p-4 lg:p-6 rounded-2xl mb-6 lg:mb-8 shadow-2xl w-28 h-28 lg:w-40 lg:h-40 flex items-center justify-center">
+            <img src="/Logo_Stockea.png" alt="Stockea Logo" className="w-full h-full object-contain brightness-0 invert dark:brightness-100 dark:invert-0" />
           </div>
-          <div className="h-20 lg:h-32 mb-4 lg:mb-8 flex items-center justify-center">
-            <video
-              autoPlay
-              muted
-              playsInline
-              className="h-full w-auto object-contain"
-            >
-              <source src="/videos/StockeaLetrasAnimadas.mov" type="video/quicktime" />
-              <source src="/videos/StockeaLetrasAnimadas.mov" type="video/mp4" />
-            </video>
+          <div className="h-14 lg:h-20 mb-4 lg:mb-8 flex items-center justify-center">
+            <img
+              src="/Stockea_Font.png"
+              alt="Stockea Font"
+              className="h-full w-auto object-contain dark:brightness-0 dark:invert"
+            />
           </div>
           <p className="text-slate-500 dark:text-slate-400 font-medium lg:text-lg">Cerrando sesión...</p>
         </div>
