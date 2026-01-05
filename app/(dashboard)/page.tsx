@@ -449,39 +449,39 @@ function AdminDashboard() {
                     {/* FILA 3: Métricas Secundarias Estilo "Tarjetitas" */}
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-2 order-first md:order-none">
                         {/* Card Mini 1 */}
-                        <div className="bg-white dark:bg-slate-900 rounded-lg p-5 shadow-sm border border-slate-200/50 dark:border-slate-800 flex flex-col justify-center items-center text-center hover:shadow-md transition-shadow cursor-pointer group">
-                            <div className="mb-2 p-3 bg-amber-50 dark:bg-amber-900/20 text-amber-500 rounded-lg group-hover:scale-110 transition-transform">
-                                <AlertTriangle className="h-6 w-6" />
+                        <div className="bg-white dark:bg-slate-900 rounded-xl p-3 md:p-5 shadow-sm border border-slate-200/50 dark:border-slate-800 flex flex-col justify-center items-center text-center hover:shadow-md transition-shadow cursor-pointer group">
+                            <div className="mb-1.5 md:mb-2 p-2 md:p-3 bg-amber-50 dark:bg-amber-900/20 text-amber-500 rounded-lg group-hover:scale-110 transition-transform">
+                                <AlertTriangle className="h-5 w-5 md:h-6 md:w-6" />
                             </div>
-                            <span className="text-2xl font-bold text-slate-900 dark:text-white">4</span>
-                            <span className="text-xs font-bold uppercase tracking-wide text-slate-400 mt-1">Dañados</span>
+                            <span className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">4</span>
+                            <span className="text-[10px] md:text-xs font-bold uppercase tracking-wide text-slate-400 mt-0.5 md:mt-1">Dañados</span>
                         </div>
 
                         {/* Card Mini 2 */}
-                        <div className="bg-white dark:bg-slate-900 rounded-lg p-5 shadow-sm border border-slate-200/50 dark:border-slate-800 flex flex-col justify-center items-center text-center hover:shadow-md transition-shadow cursor-pointer group">
-                            <div className="mb-2 p-3 bg-purple-50 dark:bg-purple-900/20 text-purple-500 rounded-lg group-hover:scale-110 transition-transform">
-                                <BuildingIcon className="h-6 w-6" />
+                        <div className="bg-white dark:bg-slate-900 rounded-xl p-3 md:p-5 shadow-sm border border-slate-200/50 dark:border-slate-800 flex flex-col justify-center items-center text-center hover:shadow-md transition-shadow cursor-pointer group">
+                            <div className="mb-1.5 md:mb-2 p-2 md:p-3 bg-purple-50 dark:bg-purple-900/20 text-purple-500 rounded-lg group-hover:scale-110 transition-transform">
+                                <BuildingIcon className="h-5 w-5 md:h-6 md:w-6" />
                             </div>
-                            <span className="text-2xl font-bold text-slate-900 dark:text-white">5</span>
-                            <span className="text-xs font-bold uppercase tracking-wide text-slate-400 mt-1">Edificios</span>
+                            <span className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">5</span>
+                            <span className="text-[10px] md:text-xs font-bold uppercase tracking-wide text-slate-400 mt-0.5 md:mt-1">Edificios</span>
                         </div>
 
                         {/* Card Mini 3 */}
-                        <div className="bg-white dark:bg-slate-900 rounded-lg p-5 shadow-sm border border-slate-200/50 dark:border-slate-800 flex flex-col justify-center items-center text-center hover:shadow-md transition-shadow cursor-pointer group">
-                            <div className="mb-2 p-3 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-500 rounded-lg group-hover:scale-110 transition-transform">
-                                <Home className="h-6 w-6" />
+                        <div className="bg-white dark:bg-slate-900 rounded-xl p-3 md:p-5 shadow-sm border border-slate-200/50 dark:border-slate-800 flex flex-col justify-center items-center text-center hover:shadow-md transition-shadow cursor-pointer group">
+                            <div className="mb-1.5 md:mb-2 p-2 md:p-3 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-500 rounded-lg group-hover:scale-110 transition-transform">
+                                <Home className="h-5 w-5 md:h-6 md:w-6" />
                             </div>
-                            <span className="text-2xl font-bold text-slate-900 dark:text-white">24</span>
-                            <span className="text-xs font-bold uppercase tracking-wide text-slate-400 mt-1">Deptos</span>
+                            <span className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">24</span>
+                            <span className="text-[10px] md:text-xs font-bold uppercase tracking-wide text-slate-400 mt-0.5 md:mt-1">Deptos</span>
                         </div>
 
                         {/* Card Mini 4 */}
-                        <div className="bg-white dark:bg-slate-900 rounded-lg p-5 shadow-sm border border-slate-200/50 dark:border-slate-800 flex flex-col justify-center items-center text-center hover:shadow-md transition-shadow cursor-pointer group">
-                            <div className="mb-2 p-3 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-500 rounded-lg group-hover:scale-110 transition-transform">
-                                <CheckCircle2 className="h-6 w-6" />
+                        <div className="bg-white dark:bg-slate-900 rounded-xl p-3 md:p-5 shadow-sm border border-slate-200/50 dark:border-slate-800 flex flex-col justify-center items-center text-center hover:shadow-md transition-shadow cursor-pointer group">
+                            <div className="mb-1.5 md:mb-2 p-2 md:p-3 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-500 rounded-lg group-hover:scale-110 transition-transform">
+                                <CheckCircle2 className="h-5 w-5 md:h-6 md:w-6" />
                             </div>
-                            <span className="text-2xl font-bold text-slate-900 dark:text-white">98%</span>
-                            <span className="text-xs font-bold uppercase tracking-wide text-slate-400 mt-1">Salud</span>
+                            <span className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">98%</span>
+                            <span className="text-[10px] md:text-xs font-bold uppercase tracking-wide text-slate-400 mt-0.5 md:mt-1">Salud</span>
                         </div>
                     </div>
 
