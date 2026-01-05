@@ -156,14 +156,20 @@ export function Sidebar({ collapsed, onToggle, onLogout }: DashboardSidebarProps
                     <Link
                         href="/help"
                         className={cn(
-                            "group flex items-center rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-900 transition-all min-h-[44px]",
-                            collapsed ? "justify-center px-0 w-12 h-12 mx-auto" : "gap-3 px-3 py-2.5 w-full text-sm font-medium"
+                            "group flex items-center rounded-lg transition-all duration-200 min-h-[44px]",
+                            collapsed ? "justify-center px-0 w-12 h-12 mx-auto" : "gap-3 px-3 py-2.5 w-full text-sm font-medium",
+                            pathname === '/help'
+                                ? "text-slate-900 dark:text-white bg-slate-100 dark:bg-slate-900 font-semibold shadow-sm ring-1 ring-slate-900/5 dark:ring-slate-700"
+                                : "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-900"
                         )}
                         title="Ayuda y Soporte"
                     >
                         <HelpCircle className={cn(
-                            "text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300 flex-shrink-0",
-                            collapsed ? "h-6 w-6" : "h-5 w-5"
+                            "flex-shrink-0 transition-colors",
+                            collapsed ? "h-6 w-6" : "h-5 w-5",
+                            pathname === '/help'
+                                ? "text-slate-900 dark:text-white"
+                                : "text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300"
                         )} strokeWidth={2} />
                         {!collapsed && <span>Ayuda y Soporte</span>}
                     </Link>
