@@ -186,7 +186,7 @@ export default function LoginPage() {
 
             {/* Texto Hero */}
             <div className="space-y-6 lg:space-y-8 animate-in slide-in-from-bottom-5 fade-in duration-700">
-              <div className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-[#041442] text-xs lg:text-sm font-semibold tracking-wide mb-2 lg:mb-4 border border-blue-100">
+              <div className="hidden lg:inline-block px-4 py-1.5 rounded-full bg-blue-50 text-[#041442] text-xs lg:text-sm font-semibold tracking-wide mb-2 lg:mb-4 border border-blue-100">
                 🚀 La nueva era de la gestión inmobiliaria
               </div>
               <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold tracking-tight text-[#041442] leading-[1.1]">
@@ -210,13 +210,13 @@ export default function LoginPage() {
             </div>
 
             {/* Imagen Hero */}
-            <div className="relative animate-in slide-in-from-right-5 fade-in duration-1000 delay-200">
-              <div className="absolute -inset-4 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-3xl opacity-20 blur-2xl animate-pulse"></div>
-              <div className="relative rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 min-h-[300px] lg:min-h-[400px] flex flex-col items-center justify-center overflow-hidden group hover:border-[#041442]/50 transition-colors">
+            <div className="relative animate-in slide-in-from-right-5 fade-in duration-1000 delay-200 flex justify-center">
+              <div className="relative w-full max-w-lg lg:max-w-xl">
+                {/* (Removed pulse background) */}
                 <img
                   src="/GerenteSonrienteTablet.png"
                   alt="Gerente gestionando inventario"
-                  className="w-full h-full object-cover"
+                  className="w-full h-auto object-contain drop-shadow-2xl"
                 />
               </div>
             </div>
@@ -236,11 +236,11 @@ export default function LoginPage() {
 
             <div className="grid lg:grid-cols-2 gap-16 items-center">
               {/* Imagen Antes/Después */}
-              <div className="order-2 lg:order-1 relative rounded-2xl border-2 border-dashed border-red-200 bg-red-50/50 min-h-[350px] flex flex-col items-center justify-center overflow-hidden">
+              <div className="order-2 lg:order-1 relative flex items-center justify-center overflow-hidden">
                 <img
                   src="/AntesyDespues.png"
                   alt="Antes vs Después de usar Stockea"
-                  className="w-full h-full object-cover"
+                  className="w-full h-auto object-contain max-h-[400px]"
                 />
               </div>
 
@@ -290,11 +290,11 @@ export default function LoginPage() {
                   Visualiza en tiempo real la salud de tu inventario. Identifica artículos dañados, porcentajes de ocupación y métricas clave de un vistazo, sin tener que bucear en datos.
                 </p>
               </div>
-              <div className="rounded-2xl border-2 border-dashed border-slate-700 bg-slate-800/50 min-h-[300px] flex flex-col items-center justify-center overflow-hidden">
+              <div className="flex flex-col items-center justify-center">
                 <img
                   src="/DashboardConGraficas.png"
                   alt="Dashboard Inteligente con Gráficas"
-                  className="w-full h-full object-contain p-4"
+                  className="w-full h-auto object-contain max-h-[350px]"
                 />
               </div>
             </div>
@@ -310,11 +310,11 @@ export default function LoginPage() {
                   Organiza desde edificios completos hasta habitaciones individuales. Crea jerarquías lógicas: Edificio → Piso → Departamento → Áreas → Objetos.
                 </p>
               </div>
-              <div className="lg:order-1 rounded-2xl border-2 border-dashed border-slate-700 bg-slate-800/50 min-h-[300px] flex flex-col items-center justify-center overflow-hidden">
+              <div className="lg:order-1 flex flex-col items-center justify-center">
                 <img
                   src="/EstructuraDeArbol.png"
                   alt="Estructura de Árbol Multinivel"
-                  className="w-full h-full object-contain p-4"
+                  className="w-full h-auto object-contain max-h-[350px]"
                 />
               </div>
             </div>
@@ -330,11 +330,11 @@ export default function LoginPage() {
                   Tu equipo de campo realiza inspecciones con checklist inteligentes. Entrada y salida de huéspedes, mantenimiento preventivo, todo documentado profesionalmente desde una tablet o móvil.
                 </p>
               </div>
-              <div className="rounded-2xl border-2 border-dashed border-slate-700 bg-slate-800/50 min-h-[300px] flex flex-col items-center justify-center overflow-hidden">
+              <div className="flex flex-col items-center justify-center">
                 <img
                   src="/VerificadorConTablet.png"
                   alt="Verificador realizando inspección"
-                  className="w-full h-full object-contain p-4"
+                  className="w-full h-auto object-contain max-h-[350px]"
                 />
               </div>
             </div>
@@ -350,11 +350,11 @@ export default function LoginPage() {
                   Genera reportes PDF detallados en segundos. Ideales para seguros, auditorías o históricos. Olvida el "copy-paste" manual.
                 </p>
               </div>
-              <div className="lg:order-1 rounded-2xl border-2 border-dashed border-slate-700 bg-slate-800/50 min-h-[300px] flex flex-col items-center justify-center overflow-hidden">
+              <div className="lg:order-1 flex flex-col items-center justify-center">
                 <img
                   src="/ReportePDFGigante.png"
                   alt="Reporte PDF Automatizado"
-                  className="w-full h-full object-contain p-4"
+                  className="w-full h-auto object-contain max-h-[350px]"
                 />
               </div>
             </div>
@@ -414,11 +414,11 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <div className="max-w-4xl mx-auto rounded-2xl border-2 border-dashed border-slate-300 bg-white min-h-[300px] flex flex-col items-center justify-center overflow-hidden text-center text-slate-400">
+            <div className="max-w-4xl mx-auto flex flex-col items-center justify-center">
               <img
                 src="/TresPersonajesInteractuando.png"
                 alt="Roles del sistema interactuando"
-                className="w-full h-full object-contain max-h-[400px]"
+                className="w-full h-auto object-contain max-h-[350px]"
               />
             </div>
           </div>
@@ -449,11 +449,11 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <div className="rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 min-h-[250px] flex flex-col items-center justify-center overflow-hidden">
+            <div className="flex flex-col items-center justify-center">
               <img
                 src="/HotelCasaEdicioApartamentos.png"
                 alt="Tipos de Propiedades: Hotel, Airbnb, Departamentos"
-                className="w-full h-full object-contain max-h-[400px]"
+                className="w-full h-auto object-contain max-h-[350px]"
               />
             </div>
           </div>
@@ -491,9 +491,12 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <div className="rounded-2xl border-2 border-dashed border-white/20 bg-white/5 min-h-[400px] flex flex-col items-center justify-center p-8 text-center text-white/50">
-              <span className="font-bold text-white mb-2">IMAGEN: Cohete Stockea</span>
-              <p>Cohete despegando con estela de iconos de éxito.</p>
+            <div className="flex flex-col items-center justify-center">
+              <img
+                src="/CoheteStockea.png"
+                alt="Crecimiento exponencial con Stockea"
+                className="w-full h-auto object-contain max-h-[400px] scale-[1.2]"
+              />
             </div>
           </div>
         </section>
@@ -537,9 +540,12 @@ export default function LoginPage() {
 
             {/* Seguridad */}
             <div className="grid lg:grid-cols-2 gap-12 items-center">
-              <div className="lg:order-2 rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 min-h-[300px] flex flex-col items-center justify-center p-8 text-center text-slate-400">
-                <span className="font-bold">IMAGEN: Bóveda de Banco</span>
-                <p>Seguridad nivel empresarial. Datos encriptados.</p>
+              <div className="lg:order-2 flex flex-col items-center justify-center">
+                <img
+                  src="/BancoBoveda.PNG"
+                  alt="Seguridad de alto nivel"
+                  className="w-full h-auto object-contain max-h-[350px]"
+                />
               </div>
               <div className="lg:order-1 space-y-6">
                 <h3 className="text-3xl font-bold text-[#041442]">Tu información, siempre protegida</h3>
@@ -551,14 +557,7 @@ export default function LoginPage() {
               </div>
             </div>
 
-            {/* Planes Placeholders */}
-            <div className="text-center max-w-4xl mx-auto mt-20">
-              <h3 className="text-3xl font-bold text-[#041442] mb-8">Elige el plan perfecto</h3>
-              <div className="rounded-2xl border-2 border-dashed border-indigo-200 bg-indigo-50 min-h-[200px] flex flex-col items-center justify-center p-8 text-center text-indigo-400">
-                <span className="font-bold">IMAGEN: 3 Cajas de Regalo</span>
-                <p>Tamaños: Starter, Pro, Enterprise.</p>
-              </div>
-            </div>
+            {/* Planes Placeholders - REMOVED */}
 
           </div>
         </section>
@@ -587,11 +586,11 @@ export default function LoginPage() {
               <span className="flex items-center gap-2"><Check className="h-4 w-4 text-emerald-500" /> Configuración asistida</span>
             </div>
 
-            <div className="rounded-2xl border-2 border-dashed border-slate-300 bg-white min-h-[250px] flex flex-col items-center justify-center overflow-hidden max-w-2xl mx-auto">
+            <div className="flex flex-col items-center justify-center max-w-2xl mx-auto">
               <img
                 src="/GrupoDiversoFestejando.png"
                 alt="Equipo celebrando con éxito gestionando su inventario"
-                className="w-full h-full object-contain"
+                className="w-full h-auto object-contain max-h-[350px]"
               />
             </div>
           </div>
