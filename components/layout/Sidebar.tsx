@@ -76,7 +76,7 @@ export function Sidebar({ collapsed, onToggle, onLogout }: DashboardSidebarProps
                                 <img
                                     src="/Logo_Stockea.png"
                                     alt="Stockea Logo"
-                                    className="w-full h-full object-contain"
+                                    className="w-full h-full object-contain dark:brightness-0 dark:invert"
                                 />
                             </div>
 
