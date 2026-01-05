@@ -67,11 +67,11 @@ export function Sidebar({ collapsed, onToggle, onLogout }: DashboardSidebarProps
                 <div className={cn("flex flex-col justify-between w-full h-24", collapsed ? "items-center" : "px-6")}>
                     {/* Logo Content - Centered Vertically */}
                     <div className="flex-1 flex items-center w-full">
-                        <div className={cn("flex items-center gap-0 w-full overflow-hidden", collapsed ? "justify-center" : "pl-2")}>
+                        <div className={cn("flex items-center gap-1 md:gap-0 w-full overflow-hidden", collapsed ? "justify-center" : "pl-2")}>
                             {/* Logo Image */}
                             <div className={cn(
                                 "flex-shrink-0 flex items-center justify-center transition-all",
-                                collapsed ? "w-10 h-10" : "w-10 h-10"
+                                collapsed ? "w-10 h-10" : "w-8 h-8 md:w-10 md:h-10"
                             )}>
                                 <img
                                     src="/Logo_Stockea.png"
@@ -83,11 +83,11 @@ export function Sidebar({ collapsed, onToggle, onLogout }: DashboardSidebarProps
                             {/* Brand Name */}
                             {/* Brand Name Image */}
                             {!collapsed && (
-                                <div className="flex-1 flex items-center h-10 opacity-100 transition-opacity mt-2 -ml-2">
+                                <div className="flex-1 flex items-center h-10 opacity-100 transition-opacity mt-2 ml-0 md:-ml-2">
                                     <img
                                         src="/Stockea_Font.png"
                                         alt="Stockea Font"
-                                        className="h-12 w-auto object-contain dark:brightness-0 dark:invert"
+                                        className="h-9 md:h-12 w-auto object-contain dark:brightness-0 dark:invert"
                                     />
                                 </div>
                             )}
