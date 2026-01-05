@@ -30,11 +30,8 @@ export default function LoginPage() {
           <div className="max-w-xl space-y-10 text-center">
 
             {/* Logo Principal Grandes */}
-            <div className="inline-flex items-center justify-center w-24 h-24 rounded-3xl bg-white/5 backdrop-blur-md border border-white/10 shadow-2xl mb-6">
-              <svg className="w-12 h-12 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M4 4h16v16H4z" />
-                <path d="M9 9h6M9 13h6M9 17h4" strokeLinecap="round" />
-              </svg>
+            <div className="inline-flex items-center justify-center w-24 h-24 rounded-3xl bg-white/5 backdrop-blur-md border border-white/10 shadow-2xl mb-6 p-4">
+              <img src="/Logo_Stockea.png" alt="Stockea Logo" className="w-full h-full object-contain brightness-0 invert" />
             </div>
 
             <div className="space-y-4">
@@ -80,11 +77,8 @@ export default function LoginPage() {
         <div className="w-full max-w-[420px] mx-auto mt-24 sm:mt-32">
           {/* Header Móvil */}
           <div className="lg:hidden mb-10 flex flex-col items-center animate-in fade-in slide-in-from-top-4 duration-700">
-            <div className="h-14 w-14 bg-gradient-to-tr from-slate-900 to-slate-800 rounded-2xl flex items-center justify-center shadow-xl mb-4 transform -rotate-6 border border-slate-700">
-              <svg className="w-7 h-7 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <path d="M4 4h16v16H4z" />
-                <path d="M9 9h6M9 13h6M9 17h4" strokeLinecap="round" />
-              </svg>
+            <div className="h-14 w-14 flex items-center justify-center mb-4">
+              <img src="/Logo_Stockea.png" alt="Stockea Logo" className="w-full h-full object-contain" />
             </div>
             <h1 className="text-4xl font-bold tracking-tighter text-slate-900">
               Stockea<span className="text-blue-600 text-5xl leading-none">.</span>

@@ -67,22 +67,23 @@ export function Sidebar({ collapsed, onToggle, onLogout }: DashboardSidebarProps
                 <div className={cn("flex flex-col justify-between w-full h-24", collapsed ? "items-center" : "px-6")}>
                     {/* Logo Content - Centered Vertically */}
                     <div className="flex-1 flex items-center w-full">
-                        <div className={cn("flex items-center gap-3 w-full overflow-hidden", collapsed ? "justify-center" : "")}>
-                            {/* Logo Icon */}
+                        <div className={cn("flex items-center gap-2 w-full overflow-hidden", collapsed ? "justify-center" : "pl-2")}>
+                            {/* Logo Image */}
                             <div className={cn(
-                                "flex-shrink-0 bg-slate-900 dark:bg-slate-200 rounded-lg flex items-center justify-center transition-all",
-                                collapsed ? "w-10 h-10" : "w-8 h-8"
+                                "flex-shrink-0 flex items-center justify-center transition-all",
+                                collapsed ? "w-10 h-10" : "w-10 h-10"
                             )}>
-                                <svg className={cn("text-white dark:text-slate-950", collapsed ? "w-5 h-5" : "w-4 h-4")} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                                    <path d="M4 4h16v16H4z" />
-                                    <path d="M10 10l4 4" strokeWidth="2" strokeLinecap="round" />
-                                </svg>
+                                <img
+                                    src="/Logo_Stockea.png"
+                                    alt="Stockea Logo"
+                                    className="w-full h-full object-contain"
+                                />
                             </div>
 
                             {/* Brand Name */}
                             {!collapsed && (
-                                <div className="flex-1 font-bold text-2xl tracking-tighter text-slate-900 dark:text-white flex items-baseline opacity-100 transition-opacity">
-                                    Stockea<span className="text-blue-600 dark:text-blue-400 text-3xl leading-none">.</span>
+                                <div className="flex-1 font-bold text-3xl tracking-tighter text-slate-900 dark:text-white flex items-baseline opacity-100 transition-opacity">
+                                    Stockea<span className="text-blue-600 dark:text-blue-400 text-4xl leading-none">.</span>
                                 </div>
                             )}
                         </div>
