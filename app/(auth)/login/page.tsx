@@ -44,7 +44,7 @@ export default function LoginPage() {
             </div>
 
             <blockquote className="text-2xl font-medium text-white/90 leading-relaxed border-t border-white/10 pt-10">
-              "Audita tu mueble, cuida tu inversión."
+              "Gestión inteligente de activos y gastos de mantenimiento"
             </blockquote>
 
             {/* Card de Credenciales para Demo */}

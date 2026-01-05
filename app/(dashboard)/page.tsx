@@ -190,7 +190,7 @@ function AdminDashboard() {
                         <div className="absolute bottom-0 left-0 w-40 h-40 bg-blue-600 opacity-5 rounded-full blur-2xl -ml-10 -mb-10 pointer-events-none" />
 
                         <div className="relative z-10 text-center w-full mt-4">
-                            <h2 className="text-2xl lg:text-3xl font-bold tracking-tight mb-2 leading-tight">Audita tu inversión.<br />Cuida tu inmueble.</h2>
+                            <h2 className="text-2xl lg:text-3xl font-bold tracking-tight mb-2 leading-tight">Audita tu inmueble.<br />Cuida tu inversión.</h2>
                         </div>
 
                         {/* Hero Image */}
