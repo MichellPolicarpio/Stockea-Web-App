@@ -298,7 +298,7 @@ function OwnerDashboard({ user }: { user: any }) {
                                     <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#94a3b8' }} />
                                     <Tooltip
                                         contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
-                                        formatter={(value: number) => [`$${value.toLocaleString()}`, '']}
+                                        formatter={(value: any) => [`$${Number(value).toLocaleString()}`, '']}
                                     />
                                     <Area type="monotone" dataKey="ingreso" stroke="#3b82f6" strokeWidth={3} fillOpacity={1} fill="url(#colorIngresoOwner)" name="Ingresos" />
                                     <Area type="monotone" dataKey="costo" stroke="#f97316" strokeWidth={3} fillOpacity={1} fill="url(#colorGastoOwner)" name="Gastos" />
