@@ -124,7 +124,7 @@ export function Header({ sidebarCollapsed, onToggleSidebar, onLogout }: Dashboar
                         </div>
 
                         {/* CENTER: Mobile Dropdown Toggle (< XL) - ALIGNED RIGHT ON MOBILE */}
-                        <div className="absolute right-20 top-1/2 -translate-y-1/2 xl:hidden flex items-center z-50">
+                        <div className="absolute right-[88px] top-1/2 -translate-y-1/2 xl:hidden flex items-center z-50">
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                     <Button variant="ghost" className="rounded-full h-10 w-10 p-0 border border-slate-200 dark:border-slate-700 flex items-center justify-center">
@@ -181,7 +181,7 @@ export function Header({ sidebarCollapsed, onToggleSidebar, onLogout }: Dashboar
                         </div>
 
                         {/* RIGHT: Search, Notifications, Profile */}
-                        <div className="flex items-center gap-0">
+                        <div className="flex items-center gap-1">
 
                             {/* Search Input (Minimalist) */}
                             <div className="hidden md:flex items-center relative mr-2">
