@@ -13,7 +13,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { History as HistoryIcon, LogOut, User as UserIcon, Menu, Bell, Search, Settings, HelpCircle, Users, LayoutDashboard, FileText, Building2, Calendar, ClipboardList } from 'lucide-react'
+import { History as HistoryIcon, LogOut, User as UserIcon, Menu, Bell, Search, Settings, HelpCircle, Users, LayoutDashboard, FileText, Building2, Calendar, ClipboardList, Wrench, DollarSign, ChevronDown } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import type { LucideIcon } from 'lucide-react'
 
@@ -28,6 +28,13 @@ export function Header({ sidebarCollapsed, onToggleSidebar, onLogout }: Dashboar
     const router = useRouter()
     const pathname = usePathname()
     const [isMenuOpen, setIsMenuOpen] = React.useState(false)
+
+    // Estado para tabs visuales solamente (Animación sin navegación real)
+    const [activeTab, setActiveTab] = React.useState<'inventory' | 'accounting' | 'maintenance'>(() => {
+        if (pathname.includes('/accounting')) return 'accounting'
+        if (pathname.includes('/inspections')) return 'maintenance'
+        return 'inventory'
+    })
 
     if (!user) return null
 
@@ -99,10 +106,10 @@ export function Header({ sidebarCollapsed, onToggleSidebar, onLogout }: Dashboar
             <header
                 className={`fixed top-0 right-0 h-[100px] z-40 transition-all duration-300 left-0 ${sidebarCollapsed ? "md:left-20" : "md:left-64"} flex items-center bg-white/80 dark:bg-slate-950/80 backdrop-blur-md support-[backdrop-filter]:bg-white/60`}
             >
-                <div className="w-full flex flex-col justify-end px-8 h-full gap-6 pb-1">
+                <div className="w-full flex flex-col justify-end px-4 h-full gap-6 pb-1">
 
                     {/* ROW 1: Title and Controls */}
-                    <div className="flex items-center justify-between w-full">
+                    <div className="flex items-center justify-between w-full relative">
 
                         {/* LEFT: Title */}
                         <div className="flex items-center gap-4">
@@ -116,11 +123,68 @@ export function Header({ sidebarCollapsed, onToggleSidebar, onLogout }: Dashboar
                             </h1>
                         </div>
 
+                        {/* CENTER: Mobile Dropdown Toggle (< XL) - ALIGNED RIGHT ON MOBILE */}
+                        <div className="absolute right-20 top-1/2 -translate-y-1/2 xl:hidden flex items-center z-50">
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" className="rounded-full h-10 w-10 p-0 border border-slate-200 dark:border-slate-700 flex items-center justify-center">
+                                        {activeTab === 'inventory' && <LayoutDashboard className="h-5 w-5 text-blue-600 dark:text-blue-400" />}
+                                        {activeTab === 'accounting' && <DollarSign className="h-5 w-5 text-blue-600 dark:text-blue-400" />}
+                                        {activeTab === 'maintenance' && <Wrench className="h-5 w-5 text-blue-600 dark:text-blue-400" />}
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="center" className="w-[180px] p-1.5 rounded-xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-xl">
+                                    <DropdownMenuItem onClick={() => setActiveTab('inventory')} className={`rounded-lg mb-1 focus:bg-slate-100 dark:focus:bg-slate-800 cursor-pointer ${activeTab === 'inventory' ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400' : ''}`}>
+                                        <LayoutDashboard className="mr-2 h-4 w-4" />
+                                        <span className="font-medium">Inventario</span>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => setActiveTab('accounting')} className={`rounded-lg mb-1 focus:bg-slate-100 dark:focus:bg-slate-800 cursor-pointer ${activeTab === 'accounting' ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400' : ''}`}>
+                                        <DollarSign className="mr-2 h-4 w-4" />
+                                        <span className="font-medium">Contabilidad</span>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => setActiveTab('maintenance')} className={`rounded-lg focus:bg-slate-100 dark:focus:bg-slate-800 cursor-pointer ${activeTab === 'maintenance' ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400' : ''}`}>
+                                        <Wrench className="mr-2 h-4 w-4" />
+                                        <span className="font-medium">Mantenimiento</span>
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        </div>
+
+                        {/* CENTER: Main Navigation Toggle */}
+                        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden xl:flex items-center bg-slate-100/80 dark:bg-slate-800/80 p-1 rounded-full border border-slate-200/60 dark:border-slate-700 backdrop-blur-sm shadow-inner">
+                            {/* Animated Background Pill */}
+                            <div
+                                className="absolute top-1 bottom-1 left-1 w-32 bg-white dark:bg-slate-600 rounded-full shadow-sm ring-1 ring-black/5 dark:ring-white/10 transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]"
+                                style={{
+                                    transform: `translateX(${activeTab === 'inventory' ? 0 : activeTab === 'accounting' ? '128px' : '256px'})`
+                                }}
+                            />
+
+                            <button
+                                onClick={() => setActiveTab('inventory')}
+                                className={`relative z-10 w-32 py-1.5 text-sm font-semibold transition-colors duration-200 ${activeTab === 'inventory' ? 'text-slate-900 dark:text-white' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'}`}
+                            >
+                                Inventario
+                            </button>
+                            <button
+                                onClick={() => setActiveTab('accounting')}
+                                className={`relative z-10 w-32 py-1.5 text-sm font-semibold transition-colors duration-200 ${activeTab === 'accounting' ? 'text-slate-900 dark:text-white' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'}`}
+                            >
+                                Contabilidad
+                            </button>
+                            <button
+                                onClick={() => setActiveTab('maintenance')}
+                                className={`relative z-10 w-32 py-1.5 text-sm font-semibold transition-colors duration-200 ${activeTab === 'maintenance' ? 'text-slate-900 dark:text-white' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'}`}
+                            >
+                                Mantenimiento
+                            </button>
+                        </div>
+
                         {/* RIGHT: Search, Notifications, Profile */}
-                        <div className="flex items-center gap-6">
+                        <div className="flex items-center gap-0">
 
                             {/* Search Input (Minimalist) */}
-                            <div className="hidden md:flex items-center relative">
+                            <div className="hidden md:flex items-center relative mr-2">
                                 <Search className="h-4 w-4 text-slate-400 absolute left-3" />
                                 <Input
                                     placeholder="Search"
@@ -131,7 +195,7 @@ export function Header({ sidebarCollapsed, onToggleSidebar, onLogout }: Dashboar
                             {/* Notification Center */}
                             <DropdownMenu modal={false}>
                                 <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" size="icon" className="relative text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors rounded-full h-10 w-10">
+                                    <Button variant="ghost" className="relative rounded-full h-10 w-10 p-0 border border-slate-200 dark:border-slate-700 flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-600 dark:text-slate-300">
                                         <Bell className="h-6 w-6" strokeWidth={2} />
                                         <span className="absolute top-2 right-2.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white dark:border-slate-950 pointer-events-none" />
                                     </Button>
@@ -152,7 +216,6 @@ export function Header({ sidebarCollapsed, onToggleSidebar, onLogout }: Dashboar
                                                 <span className="text-[10px] text-slate-400 font-medium mt-1">Hace 2 min</span>
                                             </div>
                                         </DropdownMenuItem>
-
                                         <DropdownMenuItem className="flex items-start gap-3 p-4 cursor-pointer focus:bg-slate-50 dark:focus:bg-slate-900 border-b border-slate-50 dark:border-slate-800 last:border-0">
                                             <div className="h-8 w-8 rounded-full bg-orange-50 dark:bg-orange-900/20 flex items-center justify-center flex-shrink-0 mt-0.5">
                                                 <div className="h-2 w-2 rounded-full bg-orange-500" />
@@ -163,7 +226,6 @@ export function Header({ sidebarCollapsed, onToggleSidebar, onLogout }: Dashboar
                                                 <span className="text-[10px] text-slate-400 font-medium mt-1">Hace 1 hora</span>
                                             </div>
                                         </DropdownMenuItem>
-
                                         <DropdownMenuItem className="flex items-start gap-3 p-4 cursor-pointer focus:bg-slate-50 dark:focus:bg-slate-900 border-b border-slate-50 dark:border-slate-800 last:border-0">
                                             <div className="h-8 w-8 rounded-full bg-green-50 dark:bg-green-900/20 flex items-center justify-center flex-shrink-0 mt-0.5">
                                                 <div className="h-2 w-2 rounded-full bg-green-500" />
@@ -215,7 +277,6 @@ export function Header({ sidebarCollapsed, onToggleSidebar, onLogout }: Dashboar
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
-
                         </div>
                     </div>
 
