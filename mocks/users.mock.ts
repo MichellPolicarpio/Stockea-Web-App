@@ -19,9 +19,9 @@ export const mockUsersWithPasswords: UserWithPassword[] = [
   },
   {
     id: 'owner-1',
-    name: 'Juan Pérez',
-    email: 'juan.perez@example.com',
-    username: 'juan.perez',
+    name: 'Victor Alejandro Olvera Mendez',
+    email: 'victor.olvera@gmail.com',
+    username: 'victor.olvera',
     password: 'owner123',
     role: 'owner',
     createdAt: new Date('2024-01-15'),

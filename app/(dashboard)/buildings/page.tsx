@@ -8,7 +8,8 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Building2, ArrowRight, Plus, Upload, Home, MapPin, Building as BuildingIcon, User, Layers } from 'lucide-react'
+import { Slider } from "@/components/ui/slider"
+import { Building2, ArrowRight, Plus, Upload, Home, MapPin, Building as BuildingIcon, User, Layers, MoveVertical } from 'lucide-react'
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
 import {
     Dialog,
@@ -63,7 +64,8 @@ export default function BuildingsPage() {
         address: '',
         ownerId: '',
         totalApartments: '',
-        imageUrl: null as string | null
+        imageUrl: null as string | null,
+        imagePos: 50 // Posición vertical (0-100%)
     })
 
     // Ref para input file
@@ -97,7 +99,11 @@ export default function BuildingsPage() {
             try {
                 const reader = new FileReader()
                 reader.onload = (ev) => {
-                    setFormData(prev => ({ ...prev, imageUrl: ev.target?.result as string }))
+                    setFormData(prev => ({
+                        ...prev,
+                        imageUrl: ev.target?.result as string,
+                        imagePos: 50 // Resetear posición al cambiar imagen
+                    }))
                 }
                 reader.readAsDataURL(file)
             } catch (e) {
@@ -119,12 +125,17 @@ export default function BuildingsPage() {
                 imageUrl: formData.imageUrl || undefined
             })
 
-            // Guardar imagen en caché local para persistencia simulada
-            if (formData.imageUrl && newBuilding?.id) {
-                localStorage.setItem(`building-image-${newBuilding.id}`, formData.imageUrl)
+            // Guardar imagen y posición en caché local para persistencia simulada
+            if (newBuilding?.id) {
+                if (formData.imageUrl) {
+                    localStorage.setItem(`building-image-${newBuilding.id}`, formData.imageUrl)
+                }
+                // Guardar posición siempre (si hay imagen)
+                localStorage.setItem(`building-pos-${newBuilding.id}`, formData.imagePos.toString())
+
                 // Forzar repintado
                 setTimeout(forceUpdate, 50)
-                setTimeout(forceUpdate, 500) // Doble check por si el mock tarda
+                setTimeout(forceUpdate, 500)
             }
 
             // Reset form
@@ -133,10 +144,11 @@ export default function BuildingsPage() {
                 address: '',
                 ownerId: '',
                 totalApartments: '',
-                imageUrl: null
+                imageUrl: null,
+                imagePos: 50
             })
             setIsAddOpen(false)
-            refetch() // Recargar lista
+            refetch()
         } catch (error) {
             console.error("Error al crear edificio", error)
         } finally {
@@ -164,74 +176,125 @@ export default function BuildingsPage() {
         return <div>Cargando edificios...</div>
     }
 
-    // COMPONENTE DE FORMULARIO REUTILIZABLE
-    const AddFormContent = (
+    // FUNCIÓN DE RENDERIZADO DEL FORMULARIO
+    const renderForm = () => (
         <form onSubmit={handleSubmit} className="space-y-6 py-4 px-1">
-            {/* Upload de Imagen */}
-            <div className="space-y-2">
-                <Label>Fotografía del Edificio</Label>
-                <div
-                    className="border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl p-4 flex flex-col items-center justify-center min-h-[200px] cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors relative overflow-hidden group"
-                    onClick={() => fileInputRef.current?.click()}
-                >
-                    {formData.imageUrl ? (
-                        <>
-                            <img
-                                src={formData.imageUrl}
-                                alt="Preview"
-                                className="absolute inset-0 w-full h-full object-cover"
-                            />
-                            <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                <p className="text-white font-medium flex items-center">
-                                    <Upload className="mr-2 h-4 w-4" /> Cambiar imagen
-                                </p>
-                            </div>
-                        </>
-                    ) : (
-                        <div className="text-center space-y-2">
-                            <div className="h-12 w-12 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto text-slate-400">
-                                <BuildingIcon className="h-6 w-6" />
-                            </div>
-                            <div className="space-y-1">
-                                <p className="text-sm font-medium text-slate-900 dark:text-white">Haz clic para subir una imagen</p>
-                                <p className="text-xs text-slate-500">PNG, JPG hasta 5MB</p>
-                            </div>
-                        </div>
+
+            {/* Upload de Imagen con Ajuste de Posición */}
+            <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                    <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+                        Fotografía del Edificio
+                    </Label>
+                    {formData.imageUrl && (
+                        <span className="text-xs text-blue-600 font-medium animate-pulse">
+                            ¡Arrastra el slider para ajustar el encuadre!
+                        </span>
                     )}
-                    <input
-                        type="file"
-                        ref={fileInputRef}
-                        className="hidden"
-                        accept="image/*"
-                        onChange={handleFileChange}
-                    />
+                </div>
+
+                <div className="relative">
+                    <div
+                        className="group border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-400 bg-white dark:bg-slate-900/30 rounded-xl transition-all duration-300 cursor-pointer relative overflow-hidden min-h-[220px] flex flex-col items-center justify-center shadow-sm hover:shadow-md"
+                        onClick={(e) => {
+                            // Evitar click si se está usando el slider
+                            if ((e.target as HTMLElement).closest('.position-slider')) return;
+                            fileInputRef.current?.click()
+                        }}
+                    >
+                        {formData.imageUrl ? (
+                            <>
+                                <img
+                                    src={formData.imageUrl}
+                                    alt="Preview"
+                                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700"
+                                    style={{ objectPosition: `center ${formData.imagePos}%` }}
+                                />
+
+                                {/* Overlay hover para cambiar imagen */}
+                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white backdrop-blur-[2px] z-10 pointer-events-none">
+                                    <Upload className="h-6 w-6 mb-2" />
+                                    <span className="font-semibold text-xs">Click para cambiar imagen</span>
+                                </div>
+
+                                {/* Slider Overlay - Siempre visible si hay imagen */}
+                                <div className="absolute right-4 top-4 bottom-4 w-1.5 bg-black/20 backdrop-blur-sm rounded-full overflow-visible flex flex-col items-center justify-center z-20 position-slider group/slider"
+                                    onClick={(e) => e.stopPropagation()}
+                                >
+                                    {/* Custom Vertical Slider implementation using standard input range rotated or generic slider styled */}
+                                    <div className="h-full relative w-6 flex items-center justify-center">
+                                        <Slider
+                                            orientation="vertical"
+                                            value={[100 - formData.imagePos]} // Invertimos para que arriba sea 0% (top) y abajo 100% (bottom) visualmente, o ajustamos logica
+                                            max={100}
+                                            step={1}
+                                            onValueChange={(vals) => setFormData({ ...formData, imagePos: 100 - vals[0] })}
+                                            className="h-full py-2 cursor-grab active:cursor-grabbing"
+                                        />
+                                    </div>
+                                    <div className="absolute -left-8 top-1/2 -translate-y-1/2 bg-black/70 text-white text-[10px] px-1.5 py-0.5 rounded opacity-0 group-hover/slider:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
+                                        Posición
+                                    </div>
+                                </div>
+                                <div className="absolute bottom-2 right-12 z-20 text-[10px] text-white/80 bg-black/30 px-2 rounded pointer-events-none">
+                                    <MoveVertical className="inline w-3 h-3 mr-1" /> Ajustar vertical
+                                </div>
+                            </>
+                        ) : (
+                            <div className="flex flex-col items-center p-4 text-center space-y-2">
+                                <div className="h-12 w-12 bg-slate-50 dark:bg-slate-800 rounded-full shadow-inner flex items-center justify-center text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform duration-300">
+                                    <Upload className="h-6 w-6" />
+                                </div>
+                                <div className="space-y-1">
+                                    <p className="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-blue-600 transition-colors">
+                                        Subir imagen
+                                    </p>
+                                    <p className="text-[10px] text-slate-500">
+                                        JPG, PNG, WEBP (Max 5MB)
+                                    </p>
+                                </div>
+                            </div>
+                        )}
+                        <input
+                            type="file"
+                            ref={fileInputRef}
+                            className="hidden"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                        />
+                    </div>
                 </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                    <Label htmlFor="name">Nombre del Edificio</Label>
-                    <div className="relative">
-                        <BuildingIcon className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                    <Label htmlFor="name" className="text-sm font-semibold text-slate-700">Nombre</Label>
+                    <div className="relative group">
+                        <div className="absolute left-3 top-2.5 p-0.5 text-slate-400 group-focus-within:text-blue-600 transition-colors">
+                            <BuildingIcon className="h-4 w-4" />
+                        </div>
                         <Input
                             id="name"
-                            placeholder="Ej. Casa Tortuga"
-                            className="pl-9"
+                            placeholder="Ej. Torre Altamira"
+                            className="pl-10 h-10 text-sm bg-white shadow-sm focus-visible:ring-blue-500 border-slate-200"
                             value={formData.name}
                             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                             required
                         />
                     </div>
                 </div>
+
                 <div className="space-y-2">
-                    <Label htmlFor="apartments">Nº de Departamentos</Label>
-                    <div className="relative">
-                        <Layers className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                    <Label htmlFor="apartments" className="text-sm font-semibold text-slate-700">Departamentos</Label>
+                    <div className="relative group">
+                        <div className="absolute left-3 top-2.5 p-0.5 text-slate-400 group-focus-within:text-blue-600 transition-colors">
+                            <Layers className="h-4 w-4" />
+                        </div>
                         <Input
                             id="apartments"
                             type="number"
                             placeholder="0"
-                            className="pl-9"
+                            className="pl-10 h-10 text-sm bg-white shadow-sm focus-visible:ring-blue-500 border-slate-200"
                             value={formData.totalApartments}
                             onChange={(e) => setFormData({ ...formData, totalApartments: e.target.value })}
                             required
@@ -241,13 +304,15 @@ export default function BuildingsPage() {
             </div>
 
             <div className="space-y-2">
-                <Label htmlFor="address">Dirección Completa</Label>
-                <div className="relative">
-                    <MapPin className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                <Label htmlFor="address" className="text-sm font-semibold text-slate-700">Ubicación</Label>
+                <div className="relative group">
+                    <div className="absolute left-3 top-2.5 p-0.5 text-slate-400 group-focus-within:text-blue-600 transition-colors">
+                        <MapPin className="h-4 w-4" />
+                    </div>
                     <Input
                         id="address"
-                        placeholder="Calle, Número, Colonia, Ciudad"
-                        className="pl-9"
+                        placeholder="Dirección completa"
+                        className="pl-10 h-10 text-sm bg-white shadow-sm focus-visible:ring-blue-500 border-slate-200"
                         value={formData.address}
                         onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                         required
@@ -256,35 +321,43 @@ export default function BuildingsPage() {
             </div>
 
             <div className="space-y-2">
-                <Label htmlFor="owner">Propietario Asignado (Opcional)</Label>
+                <Label htmlFor="owner" className="text-sm font-semibold text-slate-700">Propietario</Label>
                 <Select
                     value={formData.ownerId}
                     onValueChange={(val) => setFormData({ ...formData, ownerId: val })}
                 >
-                    <SelectTrigger className="w-full pl-9 relative">
-                        <User className="absolute left-3 top-2.5 h-4 w-4 text-slate-400 z-10" />
-                        <SelectValue placeholder="Seleccionar un propietario" />
+                    <SelectTrigger className="w-full pl-10 h-10 relative bg-white shadow-sm border-slate-200">
+                        <div className="absolute left-3 top-2.5 p-0.5 text-slate-400 transition-colors">
+                            <User className="h-4 w-4" />
+                        </div>
+                        <SelectValue placeholder="Seleccionar..." />
                     </SelectTrigger>
                     <SelectContent>
                         {owners.map(owner => (
-                            <SelectItem key={owner.id} value={owner.id}>
-                                {owner.name} ({owner.email})
+                            <SelectItem key={owner.id} value={owner.id} className="cursor-pointer">
+                                {owner.name}
                             </SelectItem>
                         ))}
-                        {owners.length === 0 && <SelectItem value="none" disabled>No hay propietarios registrados</SelectItem>}
+                        {owners.length === 0 && <SelectItem value="none" disabled>No hay propietarios</SelectItem>}
                     </SelectContent>
                 </Select>
             </div>
 
-            <div className="flex gap-4 pt-4">
+            {/* Actions Footer - Compact & Right Aligned on Desktop */}
+            <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-4 mt-6">
                 {isMobile ? (
                     <DrawerClose asChild>
-                        <Button type="button" variant="outline" className="w-full">Cancelar</Button>
+                        <Button type="button" variant="outline" className="w-full sm:w-auto h-10 text-sm">Cancelar</Button>
                     </DrawerClose>
                 ) : (
-                    <Button type="button" variant="outline" className="w-full" onClick={() => setIsAddOpen(false)}>Cancelar</Button>
+                    <Button type="button" variant="outline" className="w-full sm:w-auto h-10 text-sm" onClick={() => setIsAddOpen(false)}>Cancelar</Button>
                 )}
-                <Button type="submit" disabled={isSubmitting} className="w-full btn-airbnb-effect text-white border-0">
+
+                <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full sm:w-auto h-10 bg-blue-600 hover:bg-blue-700 text-white shadow-sm font-medium text-sm px-6"
+                >
                     {isSubmitting ? 'Guardando...' : 'Guardar Edificio'}
                 </Button>
             </div>
@@ -292,7 +365,7 @@ export default function BuildingsPage() {
     )
 
     return (
-        <div className="space-y-8 animate-in fade-in duration-500 max-w-7xl mx-auto p-4 pb-24 md:px-8 md:pb-8 md:pt-0 md:-mt-2">
+        <div className="space-y-8 animate-in fade-in duration-500 max-w-7xl mx-auto p-4 pb-24 md:p-8">
             <div className="flex items-center justify-end">
 
                 {isMobile ? (
@@ -310,7 +383,7 @@ export default function BuildingsPage() {
                                 </DrawerDescription>
                             </DrawerHeader>
                             <div className="px-4 pb-8 overflow-y-auto max-h-[80vh]">
-                                {AddFormContent}
+                                {renderForm()}
                             </div>
                         </DrawerContent>
                     </Drawer>
@@ -321,14 +394,14 @@ export default function BuildingsPage() {
                                 <Plus className="mr-2 h-4 w-4" /> Agregar Edificio
                             </Button>
                         </DialogTrigger>
-                        <DialogContent className="sm:max-w-[600px] overflow-y-auto max-h-[90vh]">
+                        <DialogContent className="sm:max-w-[600px] overflow-y-auto max-h-[90vh]" key={isAddOpen ? 'open' : 'closed'}>
                             <DialogHeader>
                                 <DialogTitle>Agregar Nuevo Edificio</DialogTitle>
                                 <DialogDescription>
-                                    Ingrese los detalles de la propiedad para registrarla en el sistema.
+                                    Ingrese los detalles de la propiedad.
                                 </DialogDescription>
                             </DialogHeader>
-                            {AddFormContent}
+                            {renderForm()}
                         </DialogContent>
                     </Dialog>
                 )}

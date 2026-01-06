@@ -106,7 +106,7 @@ export default function LoginPage() {
                   </div>
                   <div className="flex justify-between px-3 py-2 rounded hover:bg-white/5 transition-colors cursor-pointer group">
                     <span>Owner</span>
-                    <span className="text-white group-hover:text-blue-200">juan.perez / owner123</span>
+                    <span className="text-white group-hover:text-blue-200">victor.olvera / owner123</span>
                   </div>
                   <div className="flex justify-between px-3 py-2 rounded hover:bg-white/5 transition-colors cursor-pointer group">
                     <span>Verifier</span>

@@ -401,7 +401,7 @@ export default function BuildingDetailPage() {
 
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500">
+    <div className="space-y-6 animate-in fade-in duration-500 max-w-7xl mx-auto p-4 pb-24 md:p-8">
       {/* HEADER CON EDICIÓN */}
       <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
         <div className="space-y-3">
