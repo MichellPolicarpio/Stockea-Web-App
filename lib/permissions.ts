@@ -22,12 +22,12 @@ export function getMenuByRole(role: UserRole): SidebarItem[] {
           icon: LayoutDashboard,
         },
         {
-          title: 'Edificios',
+          title: 'Propiedades',
           url: '/buildings',
           icon: Building2,
           items: [
             {
-              title: 'Lista de edificios',
+              title: 'Lista de propiedades',
               url: '/buildings',
             },
           ],

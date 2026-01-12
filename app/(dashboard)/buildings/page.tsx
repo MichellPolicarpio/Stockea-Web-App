@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Slider } from "@/components/ui/slider"
-import { Building2, ArrowRight, Plus, Upload, Home, MapPin, Building as BuildingIcon, User, Layers, MoveVertical } from 'lucide-react'
+import { Building2, ArrowRight, Plus, Upload, Home, MapPin, Building as BuildingIcon, User, Layers, MoveVertical, ChevronDown, List, LayoutGrid } from 'lucide-react'
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
 import {
     Dialog,
@@ -43,12 +43,16 @@ import {
 import { buildingService } from '@/services/buildingService.mock'
 // Importar mocks de usuarios para la lista de dueños
 import { mockUsers } from '@/mocks/users.mock'
+import { mockApartments } from '@/mocks/apartments.mock'
 
 export default function BuildingsPage() {
     const { user } = useAuth()
     const { buildings, loading, refetch } = useBuildings()
     const router = useRouter()
     const isMobile = useIsMobile()
+
+    // Estado para modo de vista: 'cards' (Propiedades) o 'list' (Todos los departamentos)
+    const [viewMode, setViewMode] = useState<'cards' | 'list'>('cards')
 
     // Estado para forzar re-renderizado al detectar cambios
     const [tick, setTick] = useState(0)
@@ -57,6 +61,9 @@ export default function BuildingsPage() {
     // Estado del Modal
     const [isAddOpen, setIsAddOpen] = useState(false)
     const [isSubmitting, setIsSubmitting] = useState(false)
+
+    // Estado para expansión de acordeón
+    const [expandedBuildingId, setExpandedBuildingId] = useState<string | null>(null)
 
     // Estado del Formulario
     const [formData, setFormData] = useState({
@@ -173,7 +180,7 @@ export default function BuildingsPage() {
     }
 
     if (loading) {
-        return <div>Cargando edificios...</div>
+        return <div>Cargando propiedades...</div>
     }
 
     // FUNCIÓN DE RENDERIZADO DEL FORMULARIO
@@ -184,7 +191,7 @@ export default function BuildingsPage() {
             <div className="space-y-3">
                 <div className="flex justify-between items-center">
                     <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
-                        Fotografía del Edificio
+                        Fotografía de la Propiedad
                     </Label>
                     {formData.imageUrl && (
                         <span className="text-xs text-blue-600 font-medium animate-pulse">
@@ -358,26 +365,48 @@ export default function BuildingsPage() {
                     disabled={isSubmitting}
                     className="w-full sm:w-auto h-10 bg-blue-600 hover:bg-blue-700 text-white shadow-sm font-medium text-sm px-6"
                 >
-                    {isSubmitting ? 'Guardando...' : 'Guardar Edificio'}
+                    {isSubmitting ? 'Guardando...' : 'Guardar Propiedad'}
                 </Button>
             </div>
         </form>
     )
 
     return (
-        <div className="space-y-8 animate-in fade-in duration-500 max-w-7xl mx-auto p-4 pb-24 md:p-8">
-            <div className="flex items-center justify-end">
+        <div className="space-y-8 animate-in fade-in duration-500 max-w-5xl mx-auto p-4 pb-24 md:p-8">
+            <div className="flex items-center justify-between">
+
+                {/* View Toggles */}
+                <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-lg">
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setViewMode('cards')}
+                        className={`h-8 px-3 rounded-md gap-2 ${viewMode === 'cards' ? 'bg-white shadow-sm dark:bg-slate-700 text-slate-900 dark:text-white' : 'text-slate-500 hover:text-slate-700'}`}
+                    >
+                        <LayoutGrid className="h-4 w-4" />
+                        <span className="text-xs font-medium">Propiedades</span>
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setViewMode('list')}
+                        className={`h-8 px-3 rounded-md gap-2 ${viewMode === 'list' ? 'bg-white shadow-sm dark:bg-slate-700 text-slate-900 dark:text-white' : 'text-slate-500 hover:text-slate-700'}`}
+                    >
+                        <List className="h-4 w-4" />
+                        <span className="text-xs font-medium">Departamentos</span>
+                    </Button>
+                </div>
 
                 {isMobile ? (
                     <Drawer open={isAddOpen} onOpenChange={setIsAddOpen}>
                         <DrawerTrigger asChild>
                             <Button className="shadow-lg hover:shadow-xl transition-all btn-airbnb-effect text-white border-0">
-                                <Plus className="mr-2 h-4 w-4" /> Agregar Edificio
+                                <Plus className="mr-2 h-4 w-4" /> Agregar Propiedad
                             </Button>
                         </DrawerTrigger>
                         <DrawerContent>
                             <DrawerHeader>
-                                <DrawerTitle>Agregar Nuevo Edificio</DrawerTitle>
+                                <DrawerTitle>Agregar Nueva Propiedad</DrawerTitle>
                                 <DrawerDescription>
                                     Ingrese los detalles de la propiedad.
                                 </DrawerDescription>
@@ -391,12 +420,12 @@ export default function BuildingsPage() {
                     <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
                         <DialogTrigger asChild>
                             <Button className="shadow-lg hover:shadow-xl transition-all btn-airbnb-effect text-white border-0">
-                                <Plus className="mr-2 h-4 w-4" /> Agregar Edificio
+                                <Plus className="mr-2 h-4 w-4" /> Agregar Propiedad
                             </Button>
                         </DialogTrigger>
                         <DialogContent className="sm:max-w-[600px] overflow-y-auto max-h-[90vh]" key={isAddOpen ? 'open' : 'closed'}>
                             <DialogHeader>
-                                <DialogTitle>Agregar Nuevo Edificio</DialogTitle>
+                                <DialogTitle>Agregar Nueva Propiedad</DialogTitle>
                                 <DialogDescription>
                                     Ingrese los detalles de la propiedad.
                                 </DialogDescription>
@@ -413,71 +442,197 @@ export default function BuildingsPage() {
                         <Building2 className="h-12 w-12" />
                     </EmptyMedia>
                     <EmptyHeader>
-                        <EmptyTitle>No hay edificios</EmptyTitle>
+                        <EmptyTitle>No hay propiedades</EmptyTitle>
                         <EmptyDescription>
-                            Comienza agregando tu primer edificio al sistema
+                            Comienza agregando tu primera propiedad al sistema
                         </EmptyDescription>
                     </EmptyHeader>
                 </Empty>
+            ) : viewMode === 'list' ? (
+                /* LIST VIEW (Table of all apartments) */
+                <Card className="overflow-hidden border-slate-200 dark:border-slate-800 min-h-[500px]">
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-sm text-left">
+                            <thead className="bg-white dark:bg-slate-800 text-slate-500 border-b border-slate-200 dark:border-slate-800">
+                                <tr>
+                                    <th className="px-6 py-3 font-medium">Depto</th>
+                                    <th className="px-6 py-3 font-medium">Piso</th>
+                                    <th className="px-6 py-3 font-medium">Edificio</th>
+                                    <th className="px-6 py-3 font-medium">Dirección</th>
+                                    <th className="px-6 py-3 font-end text-right">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                                {mockApartments.map(apt => {
+                                    const building = buildings.find(b => b.id === apt.buildingId)
+                                    // Image logic for table row
+                                    const cachedImg = mounted && building ? localStorage.getItem(`building-image-${building.id}`) : null
+                                    const displayImage = cachedImg || building?.imageUrl
+
+                                    return (
+                                        <tr key={apt.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
+                                            <td className="px-6 py-4 font-semibold text-slate-900 dark:text-white">
+                                                {apt.number}
+                                            </td>
+                                            <td className="px-6 py-4 text-slate-600 dark:text-slate-400">
+                                                {apt.floor}
+                                            </td>
+                                            <td className="px-6 py-4 text-slate-600 dark:text-slate-400">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="h-10 w-10 rounded-md overflow-hidden bg-slate-100 dark:bg-slate-800 flex-shrink-0 border border-slate-200 dark:border-slate-700">
+                                                        {displayImage ? (
+                                                            <img src={displayImage} alt={building?.name} className="h-full w-full object-cover" />
+                                                        ) : (
+                                                            <div className="h-full w-full flex items-center justify-center">
+                                                                <Building2 className="h-5 w-5 text-slate-400" />
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    <span className="font-medium">{building?.name || 'Desconocido'}</span>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4 text-slate-500 dark:text-slate-500 truncate max-w-[200px]">
+                                                {building?.address}
+                                            </td>
+                                            <td className="px-6 py-4 text-right">
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    className="text-blue-600 h-8 font-medium"
+                                                    onClick={() => router.push(`/buildings/${apt.buildingId}`)}
+                                                >
+                                                    Ver Edificio
+                                                </Button>
+                                            </td>
+                                        </tr>
+                                    )
+                                })}
+                                {mockApartments.length === 0 && (
+                                    <tr>
+                                        <td colSpan={5} className="px-6 py-8 text-center text-slate-500">
+                                            No hay departamentos registrados.
+                                        </td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+                </Card>
             ) : (
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3" onMouseEnter={forceUpdate}>
+                <div className="flex flex-col gap-4" onMouseEnter={forceUpdate}>
                     {buildings.map((building) => {
                         // Leer directamente del storage para sincronización instantánea
-                        // Usamos 'tick' como dependencia invisible para obligar el re-render
                         const cachedImg = mounted ? localStorage.getItem(`building-image-${building.id}`) : null
                         const cachedPos = mounted ? localStorage.getItem(`building-pos-${building.id}`) : null
 
                         const displayImage = cachedImg || building.imageUrl
                         const displayPos = cachedPos ? `center ${cachedPos}%` : 'center'
 
+                        // Estado de expansión local para este card
+                        const isExpanded = expandedBuildingId === building.id;
+
+                        // Filtrar departamentos de este edificio
+                        const buildingApartments = mockApartments.filter(a => a.buildingId === building.id);
+
                         return (
-                            <Card key={building.id} className="p-0 gap-0 cursor-pointer hover:shadow-xl transition-all duration-300 overflow-hidden group border-slate-200 dark:border-slate-800">
-                                {/* Imagen de Preview */}
-                                <div className="h-48 w-full overflow-hidden bg-slate-100 relative">
-                                    {displayImage ? (
-                                        <img
-                                            src={displayImage}
-                                            alt={building.name}
-                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                                            style={{ objectPosition: displayPos }}
-                                        />
-                                    ) : (
-                                        <div className="w-full h-full flex items-center justify-center bg-slate-100 dark:bg-slate-800">
-                                            <Building2 className="h-16 w-16 text-slate-300 dark:text-slate-600" />
-                                        </div>
-                                    )}
-                                    <div className="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors" />
-                                </div>
+                            <div key={building.id} className="w-full">
+                                <Card className="p-0 overflow-hidden border-slate-200 dark:border-slate-800 hover:shadow-lg transition-all duration-300">
+                                    <div
+                                        className="flex flex-col sm:flex-row h-full sm:h-52 cursor-pointer group/card"
+                                        onClick={() => router.push(`/buildings/${building.id}`)}
+                                    >
 
-                                <CardContent className="p-5">
-                                    <div className="space-y-3">
-                                        <div>
-                                            <h3 className="font-bold text-lg text-slate-900 dark:text-white leading-tight mb-1">{building.name}</h3>
-                                            <p className="text-sm text-slate-500 dark:text-slate-400 flex items-center gap-1 line-clamp-1">
-                                                <MapPin className="h-3 w-3 shrink-0" /> {building.address}
-                                            </p>
+                                        {/* Left: Image (Horizontal Layout) */}
+                                        <div className="w-full sm:w-64 h-48 sm:h-full overflow-hidden bg-slate-100 flex-shrink-0 relative border-r border-slate-100 dark:border-slate-800">
+                                            {displayImage ? (
+                                                <img
+                                                    src={displayImage}
+                                                    alt={building.name}
+                                                    className="w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-105"
+                                                    style={{ objectPosition: displayPos }}
+                                                />
+                                            ) : (
+                                                <div className="w-full h-full flex items-center justify-center bg-slate-100 dark:bg-slate-800">
+                                                    <Building2 className="h-10 w-10 text-slate-300 dark:text-slate-600" />
+                                                </div>
+                                            )}
                                         </div>
 
-                                        <div className="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800">
-                                            <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                                                <Home className="h-4 w-4" />
-                                                <span>{building.totalApartments} Deptos</span>
+                                        {/* Right: Content */}
+                                        <div className="flex-1 p-5 flex flex-col justify-between">
+                                            <div className="flex justify-between items-start">
+                                                <div className="space-y-1">
+                                                    <h3 className="font-bold text-xl text-slate-900 dark:text-white group-hover/card:text-blue-600 transition-colors">{building.name}</h3>
+                                                    <p className="text-sm text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                                                        <MapPin className="h-3.5 w-3.5" /> {building.address}
+                                                    </p>
+                                                </div>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    className="text-slate-400 hover:text-blue-600"
+                                                >
+                                                    <ArrowRight className="h-5 w-5" />
+                                                </Button>
                                             </div>
-                                            <Button
-                                                variant="ghost"
-                                                size="sm"
-                                                className="text-blue-600 p-0 h-auto font-medium hover:bg-transparent hover:text-blue-700 hover:underline"
-                                                onClick={(e) => {
-                                                    e.stopPropagation()
-                                                    router.push(`/buildings/${building.id}`)
-                                                }}
-                                            >
-                                                Ver detalles
-                                            </Button>
+
+                                            {/* Footer Actions */}
+                                            <div className="flex items-center justify-between pt-4 mt-2 border-t border-slate-100 dark:border-slate-800">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-xs font-medium text-slate-600 dark:text-slate-300">
+                                                        <Home className="h-3.5 w-3.5" />
+                                                        <span>{building.totalApartments} Deptos</span>
+                                                    </div>
+                                                </div>
+
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        setExpandedBuildingId(isExpanded ? null : building.id)
+                                                    }}
+                                                    className={`gap-1.5 transition-colors ${isExpanded ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}
+                                                >
+                                                    <span className="text-sm font-medium">Ver Departamentos</span>
+                                                    <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
+                                                </Button>
+                                            </div>
                                         </div>
                                     </div>
-                                </CardContent>
-                            </Card>
+
+                                    {/* Expanded Section: Apartments List */}
+                                    {isExpanded && (
+                                        <div className="border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 animate-in slide-in-from-top-2 duration-200">
+                                            <div className="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                                                {buildingApartments.length > 0 ? (
+                                                    buildingApartments.map(apt => (
+                                                        <div
+                                                            key={apt.id}
+                                                            className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-3 flex items-center gap-3 shadow-sm hover:border-blue-300 hover:shadow-md hover:scale-[1.02] transition-all cursor-pointer"
+                                                            onClick={() => router.push(`/buildings/${building.id}/apartments/${apt.id}`)}
+                                                        >
+                                                            <div className="h-8 w-8 bg-slate-100 dark:bg-slate-700 rounded-full flex items-center justify-center flex-shrink-0">
+                                                                <Home className="h-4 w-4 text-slate-500 dark:text-slate-400" />
+                                                            </div>
+                                                            <span className="font-medium text-sm text-slate-700 dark:text-slate-200">Depto {apt.number}</span>
+                                                        </div>
+                                                    ))
+                                                ) : (
+                                                    <div className="col-span-full py-4 text-center text-slate-500 text-sm italic">
+                                                        No hay departamentos registrados aún.
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div className="px-6 pb-4 flex justify-end">
+                                                <Button variant="link" size="sm" className="text-blue-600 h-auto p-0" onClick={() => router.push(`/buildings/${building.id}`)}>
+                                                    Gestionar todos los departamentos &rarr;
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    )}
+                                </Card>
+                            </div>
                         )
                     })}
                 </div>

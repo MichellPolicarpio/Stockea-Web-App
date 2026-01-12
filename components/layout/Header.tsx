@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { useRouter, usePathname } from 'next/navigation'
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -28,13 +28,14 @@ export function Header({ sidebarCollapsed, onToggleSidebar, onLogout }: Dashboar
     const router = useRouter()
     const pathname = usePathname()
     const [isMenuOpen, setIsMenuOpen] = React.useState(false)
+    const searchParams = useSearchParams()
 
-    // Estado para tabs visuales solamente (Animación sin navegación real)
-    const [activeTab, setActiveTab] = React.useState<'inventory' | 'accounting' | 'maintenance'>(() => {
-        if (pathname.includes('/accounting')) return 'accounting'
+    // Calcular tab activo basado en URL
+    const activeTab = React.useMemo(() => {
         if (pathname.includes('/inspections')) return 'maintenance'
+        if (searchParams.get('view') === 'accounting') return 'accounting'
         return 'inventory'
-    })
+    }, [pathname, searchParams])
 
     if (!user) return null
 
@@ -49,8 +50,8 @@ export function Header({ sidebarCollapsed, onToggleSidebar, onLogout }: Dashboar
         if (pathname.startsWith('/buildings')) return (
             <div className="flex items-center gap-2">
                 <Building2 className="h-8 w-8 text-slate-700 dark:text-slate-300" />
-                <span className="md:hidden">Edificios</span>
-                <span className="hidden md:inline">Gestión de Edificios</span>
+                <span className="md:hidden">Propiedades</span>
+                <span className="hidden md:inline">Gestión de Propiedades</span>
             </div>
         )
         if (pathname.startsWith('/users')) return (
@@ -134,15 +135,15 @@ export function Header({ sidebarCollapsed, onToggleSidebar, onLogout }: Dashboar
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="center" className="w-[180px] p-1.5 rounded-xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-xl">
-                                    <DropdownMenuItem onClick={() => setActiveTab('inventory')} className={`rounded-lg mb-1 focus:bg-slate-100 dark:focus:bg-slate-800 cursor-pointer ${activeTab === 'inventory' ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400' : ''}`}>
+                                    <DropdownMenuItem onClick={() => router.push('/?view=inventory')} className={`rounded-lg mb-1 focus:bg-slate-100 dark:focus:bg-slate-800 cursor-pointer ${activeTab === 'inventory' ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400' : ''}`}>
                                         <LayoutDashboard className="mr-2 h-4 w-4" />
                                         <span className="font-medium">Inventario</span>
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem onClick={() => setActiveTab('accounting')} className={`rounded-lg mb-1 focus:bg-slate-100 dark:focus:bg-slate-800 cursor-pointer ${activeTab === 'accounting' ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400' : ''}`}>
+                                    <DropdownMenuItem onClick={() => router.push('/?view=accounting')} className={`rounded-lg mb-1 focus:bg-slate-100 dark:focus:bg-slate-800 cursor-pointer ${activeTab === 'accounting' ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400' : ''}`}>
                                         <DollarSign className="mr-2 h-4 w-4" />
                                         <span className="font-medium">Contabilidad</span>
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem onClick={() => setActiveTab('maintenance')} className={`rounded-lg focus:bg-slate-100 dark:focus:bg-slate-800 cursor-pointer ${activeTab === 'maintenance' ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400' : ''}`}>
+                                    <DropdownMenuItem onClick={() => router.push('/inspections')} className={`rounded-lg focus:bg-slate-100 dark:focus:bg-slate-800 cursor-pointer ${activeTab === 'maintenance' ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400' : ''}`}>
                                         <Wrench className="mr-2 h-4 w-4" />
                                         <span className="font-medium">Mantenimiento</span>
                                     </DropdownMenuItem>
@@ -150,45 +151,47 @@ export function Header({ sidebarCollapsed, onToggleSidebar, onLogout }: Dashboar
                             </DropdownMenu>
                         </div>
 
-                        {/* CENTER: Main Navigation Toggle */}
-                        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden xl:flex items-center bg-slate-100/80 dark:bg-slate-800/80 p-1 rounded-full border border-slate-200/60 dark:border-slate-700 backdrop-blur-sm shadow-inner">
-                            {/* Animated Background Pill */}
-                            <div
-                                className="absolute top-1 bottom-1 left-1 w-32 bg-white dark:bg-slate-600 rounded-full shadow-sm ring-1 ring-black/5 dark:ring-white/10 transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]"
-                                style={{
-                                    transform: `translateX(${activeTab === 'inventory' ? 0 : activeTab === 'accounting' ? '128px' : '256px'})`
-                                }}
-                            />
+                        {/* CENTER: Main Navigation Toggle - ONLY ON DASHBOARD */}
+                        {pathname === '/' && (
+                            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden xl:flex items-center bg-slate-100/80 dark:bg-slate-800/80 p-1 rounded-full border border-slate-200/60 dark:border-slate-700 backdrop-blur-sm shadow-inner">
+                                {/* Animated Background Pill */}
+                                <div
+                                    className="absolute top-1 bottom-1 left-1 w-32 bg-white dark:bg-slate-600 rounded-full shadow-sm ring-1 ring-black/5 dark:ring-white/10 transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]"
+                                    style={{
+                                        transform: `translateX(${activeTab === 'inventory' ? 0 : activeTab === 'accounting' ? '128px' : '256px'})`
+                                    }}
+                                />
 
-                            <button
-                                onClick={() => setActiveTab('inventory')}
-                                className={`relative z-10 w-32 py-1.5 text-sm font-semibold transition-colors duration-200 ${activeTab === 'inventory' ? 'text-slate-900 dark:text-white' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'}`}
-                            >
-                                Inventario
-                            </button>
-                            <button
-                                onClick={() => setActiveTab('accounting')}
-                                className={`relative z-10 w-32 py-1.5 text-sm font-semibold transition-colors duration-200 ${activeTab === 'accounting' ? 'text-slate-900 dark:text-white' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'}`}
-                            >
-                                Contabilidad
-                            </button>
-                            <button
-                                onClick={() => setActiveTab('maintenance')}
-                                className={`relative z-10 w-32 py-1.5 text-sm font-semibold transition-colors duration-200 ${activeTab === 'maintenance' ? 'text-slate-900 dark:text-white' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'}`}
-                            >
-                                Mantenimiento
-                            </button>
-                        </div>
+                                <button
+                                    onClick={() => router.push('/?view=inventory')}
+                                    className={`relative z-10 w-32 py-1.5 text-sm font-semibold transition-colors duration-200 ${activeTab === 'inventory' ? 'text-slate-900 dark:text-white' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'}`}
+                                >
+                                    Inventario
+                                </button>
+                                <button
+                                    onClick={() => router.push('/?view=accounting')}
+                                    className={`relative z-10 w-32 py-1.5 text-sm font-semibold transition-colors duration-200 ${activeTab === 'accounting' ? 'text-slate-900 dark:text-white' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'}`}
+                                >
+                                    Contabilidad
+                                </button>
+                                <button
+                                    onClick={() => router.push('/inspections')}
+                                    className={`relative z-10 w-32 py-1.5 text-sm font-semibold transition-colors duration-200 ${activeTab === 'maintenance' ? 'text-slate-900 dark:text-white' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'}`}
+                                >
+                                    Mantenimiento
+                                </button>
+                            </div>
+                        )}
 
                         {/* RIGHT: Search, Notifications, Profile */}
                         <div className="flex items-center gap-1">
 
                             {/* Search Input (Minimalist) */}
-                            <div className="hidden md:flex items-center relative mr-2">
+                            <div className="hidden md:flex items-center relative mr-14 xl:mr-2">
                                 <Search className="h-4 w-4 text-slate-400 absolute left-3" />
                                 <Input
                                     placeholder="Search"
-                                    className="pl-9 h-10 w-64 border-none bg-transparent hover:bg-slate-50 dark:hover:bg-slate-800 focus:bg-white dark:focus:bg-slate-950 dark:text-white transition-colors placeholder:text-slate-400"
+                                    className="pl-9 h-10 w-64 xl:w-52 2xl:w-64 border-none bg-transparent hover:bg-slate-50 dark:hover:bg-slate-800 focus:bg-white dark:focus:bg-slate-950 dark:text-white transition-colors placeholder:text-slate-400"
                                 />
                             </div>
 

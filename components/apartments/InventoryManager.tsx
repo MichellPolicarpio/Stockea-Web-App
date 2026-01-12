@@ -18,6 +18,8 @@ import {
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useToast } from '@/hooks/use-toast'
+import { AreaConfigurator } from './AreaConfigurator'
+import { CheckSquare } from 'lucide-react'
 
 interface InventoryManagerProps {
     initialItems: InventoryItem[]
@@ -36,6 +38,7 @@ const STATUSES: { value: InventoryStatus; label: string; color: string }[] = [
 export function InventoryManager({ initialItems, apartmentId, onUpdate }: InventoryManagerProps) {
     const [items, setItems] = useState<InventoryItem[]>(initialItems)
     const [isDialogOpen, setIsDialogOpen] = useState(false)
+    const [isAreasOpen, setIsAreasOpen] = useState(false)
     const [newItem, setNewItem] = useState<Partial<InventoryItem>>({
         category: 'Mobiliario',
         status: 'ok',
@@ -153,119 +156,142 @@ export function InventoryManager({ initialItems, apartmentId, onUpdate }: Invent
         <div className="space-y-4">
             <div className="flex justify-between items-center">
                 <h3 className="text-lg font-medium">Gestión de Inventario</h3>
-                <Dialog open={isDialogOpen} onOpenChange={(open) => {
-                    setIsDialogOpen(open)
-                    if (!open) {
-                        setEditingId(null)
-                        setNewItem({ category: 'Mobiliario', status: 'ok', quantity: 1, name: '', description: '', image: undefined })
-                    }
-                }}>
-                    <DialogTrigger asChild>
-                        <Button>
-                            <Plus className="h-4 w-4 mr-2" />
-                            Agregar Objeto
-                        </Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[500px]">
-                        <DialogHeader>
-                            <DialogTitle>{editingId ? 'Editar Objeto' : 'Nuevo Objeto de Inventario'}</DialogTitle>
-                        </DialogHeader>
-                        <div className="grid gap-6 py-4">
-                            {/* Image Upload Area */}
-                            <div className="flex justify-center">
-                                <div className="relative group">
-                                    <div className="h-32 w-32 rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 flex flex-col items-center justify-center overflow-hidden cursor-pointer hover:border-blue-500 transition-colors">
-                                        {newItem.image ? (
-                                            <img src={newItem.image} alt="Preview" className="h-full w-full object-cover" />
-                                        ) : (
-                                            <>
-                                                <Camera className="h-8 w-8 text-slate-400 mb-2" />
-                                                <span className="text-xs text-slate-500">Subir foto</span>
-                                            </>
+                <div className="flex gap-2">
+                    {/* Botón Gestión de Áreas */}
+                    <Dialog open={isAreasOpen} onOpenChange={setIsAreasOpen}>
+                        <DialogTrigger asChild>
+                            <Button variant="outline" className="gap-2 bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300">
+                                <CheckSquare className="h-4 w-4" />
+                                <span className="hidden sm:inline">Gestionar Áreas</span>
+                                <span className="sm:hidden">Áreas</span>
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-5xl h-[90vh] overflow-y-auto w-full p-0 gap-0">
+                            <DialogHeader className="p-6 pb-2 border-b">
+                                <DialogTitle>Evaluación de Áreas Físicas</DialogTitle>
+                            </DialogHeader>
+                            <div className="p-6">
+                                <AreaConfigurator apartmentId={apartmentId} />
+                            </div>
+                        </DialogContent>
+                    </Dialog>
+
+                    {/* Botón Agregar Item */}
+                    <Dialog open={isDialogOpen} onOpenChange={(open) => {
+                        setIsDialogOpen(open)
+                        if (!open) {
+                            setEditingId(null)
+                            setNewItem({ category: 'Mobiliario', status: 'ok', quantity: 1, name: '', description: '', image: undefined })
+                        }
+                    }}>
+                        <DialogTrigger asChild>
+                            <Button className="gap-2 shadow-sm">
+                                <Plus className="h-4 w-4" />
+                                <span className="hidden sm:inline">Agregar Objeto</span>
+                                <span className="sm:hidden">Nuevo</span>
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[500px]">
+                            <DialogHeader>
+                                <DialogTitle>{editingId ? 'Editar Objeto' : 'Nuevo Objeto de Inventario'}</DialogTitle>
+                            </DialogHeader>
+                            <div className="grid gap-6 py-4">
+                                {/* Image Upload Area */}
+                                <div className="flex justify-center">
+                                    <div className="relative group">
+                                        <div className="h-32 w-32 rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 flex flex-col items-center justify-center overflow-hidden cursor-pointer hover:border-blue-500 transition-colors">
+                                            {newItem.image ? (
+                                                <img src={newItem.image} alt="Preview" className="h-full w-full object-cover" />
+                                            ) : (
+                                                <>
+                                                    <Camera className="h-8 w-8 text-slate-400 mb-2" />
+                                                    <span className="text-xs text-slate-500">Subir foto</span>
+                                                </>
+                                            )}
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                                onChange={handleImageChange}
+                                            />
+                                        </div>
+                                        {newItem.image && (
+                                            <Button
+                                                variant="destructive"
+                                                size="icon"
+                                                className="absolute -top-2 -right-2 h-6 w-6 rounded-full shadow-md"
+                                                onClick={handleRemoveImage}
+                                            >
+                                                <X className="h-3 w-3" />
+                                            </Button>
                                         )}
-                                        <input
-                                            type="file"
-                                            accept="image/*"
-                                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                                            onChange={handleImageChange}
+                                    </div>
+                                </div>
+
+                                <div className="space-y-4">
+                                    <div className="grid grid-cols-4 items-center gap-4">
+                                        <Label className="text-right">Nombre</Label>
+                                        <Input
+                                            className="col-span-3"
+                                            value={newItem.name || ''}
+                                            onChange={e => setNewItem({ ...newItem, name: e.target.value })}
+                                            placeholder="Ej. Sofá cama"
                                         />
                                     </div>
-                                    {newItem.image && (
-                                        <Button
-                                            variant="destructive"
-                                            size="icon"
-                                            className="absolute -top-2 -right-2 h-6 w-6 rounded-full shadow-md"
-                                            onClick={handleRemoveImage}
+                                    <div className="grid grid-cols-4 items-center gap-4">
+                                        <Label className="text-right">Categoría</Label>
+                                        <Select
+                                            value={newItem.category}
+                                            onValueChange={val => setNewItem({ ...newItem, category: val as InventoryCategoryType })}
                                         >
-                                            <X className="h-3 w-3" />
-                                        </Button>
-                                    )}
+                                            <SelectTrigger className="col-span-3">
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {CATEGORIES.map(cat => <SelectItem key={cat} value={cat}>{cat}</SelectItem>)}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                    <div className="grid grid-cols-4 items-center gap-4">
+                                        <Label className="text-right">Estado</Label>
+                                        <Select
+                                            value={newItem.status}
+                                            onValueChange={val => setNewItem({ ...newItem, status: val as InventoryStatus })}
+                                        >
+                                            <SelectTrigger className="col-span-3">
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {STATUSES.map(s => <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>)}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                    <div className="grid grid-cols-4 items-center gap-4">
+                                        <Label className="text-right">Cantidad</Label>
+                                        <Input
+                                            type="number"
+                                            className="col-span-3"
+                                            value={newItem.quantity}
+                                            onChange={e => setNewItem({ ...newItem, quantity: parseInt(e.target.value) || 1 })}
+                                        />
+                                    </div>
+                                    <div className="grid grid-cols-4 items-center gap-4">
+                                        <Label className="text-right">Notas</Label>
+                                        <Input
+                                            className="col-span-3"
+                                            value={newItem.notes || ''}
+                                            onChange={e => setNewItem({ ...newItem, notes: e.target.value })}
+                                            placeholder="Detalles adicionales..."
+                                        />
+                                    </div>
                                 </div>
                             </div>
-
-                            <div className="space-y-4">
-                                <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label className="text-right">Nombre</Label>
-                                    <Input
-                                        className="col-span-3"
-                                        value={newItem.name || ''}
-                                        onChange={e => setNewItem({ ...newItem, name: e.target.value })}
-                                        placeholder="Ej. Sofá cama"
-                                    />
-                                </div>
-                                <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label className="text-right">Categoría</Label>
-                                    <Select
-                                        value={newItem.category}
-                                        onValueChange={val => setNewItem({ ...newItem, category: val as InventoryCategoryType })}
-                                    >
-                                        <SelectTrigger className="col-span-3">
-                                            <SelectValue />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {CATEGORIES.map(cat => <SelectItem key={cat} value={cat}>{cat}</SelectItem>)}
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                                <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label className="text-right">Estado</Label>
-                                    <Select
-                                        value={newItem.status}
-                                        onValueChange={val => setNewItem({ ...newItem, status: val as InventoryStatus })}
-                                    >
-                                        <SelectTrigger className="col-span-3">
-                                            <SelectValue />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {STATUSES.map(s => <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>)}
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                                <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label className="text-right">Cantidad</Label>
-                                    <Input
-                                        type="number"
-                                        className="col-span-3"
-                                        value={newItem.quantity}
-                                        onChange={e => setNewItem({ ...newItem, quantity: parseInt(e.target.value) || 1 })}
-                                    />
-                                </div>
-                                <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label className="text-right">Notas</Label>
-                                    <Input
-                                        className="col-span-3"
-                                        value={newItem.notes || ''}
-                                        onChange={e => setNewItem({ ...newItem, notes: e.target.value })}
-                                        placeholder="Detalles adicionales..."
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <DialogFooter>
-                            <Button onClick={handleSaveItem}>{editingId ? 'Guardar Cambios' : 'Guardar Objeto'}</Button>
-                        </DialogFooter>
-                    </DialogContent>
-                </Dialog>
+                            <DialogFooter>
+                                <Button onClick={handleSaveItem}>{editingId ? 'Guardar Cambios' : 'Guardar Objeto'}</Button>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
+                </div>
             </div>
 
             <Tabs defaultValue="Mobiliario" className="w-full">

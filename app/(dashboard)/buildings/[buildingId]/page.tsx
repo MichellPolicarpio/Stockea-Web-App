@@ -6,7 +6,7 @@ import { useState, useRef, useEffect } from 'react'
 import { Apartment } from '@/types/apartment'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Home, ArrowLeft, ArrowRight, Edit, Trash2, Plus, Building as BuildingIcon, MapPin, User, Save, Upload, X, MoveVertical, AlignStartVertical, AlignCenterVertical, AlignEndVertical, Monitor, ArrowUp, ArrowDown } from 'lucide-react'
+import { Home, ArrowLeft, ArrowRight, Edit, Trash2, Plus, Building as BuildingIcon, MapPin, User, Save, Upload, X, MoveVertical, AlignStartVertical, AlignCenterVertical, AlignEndVertical, Monitor, ArrowUp, ArrowDown, Layers, Box, PlusCircle } from 'lucide-react'
 import { useRouter, useParams } from 'next/navigation'
 import { Spinner } from '@/components/ui/spinner'
 import {
@@ -64,6 +64,11 @@ export default function BuildingDetailPage() {
   // Estados para Edición de Edificio
   const [isEditBuildingOpen, setIsEditBuildingOpen] = useState(false)
 
+  // Estados para Áreas Comunes
+  const [isCommonAreasOpen, setIsCommonAreasOpen] = useState(false)
+  const [commonAreas, setCommonAreas] = useState<string[]>([])
+  const [newCommonArea, setNewCommonArea] = useState('')
+
   // Posiciones posibles: 0, 25, 50, 75, 100
   const [buildingForm, setBuildingForm] = useState({
     name: '',
@@ -98,6 +103,16 @@ export default function BuildingDetailPage() {
           // Intentar recuperar imagen y posición guardada en localStorage
           const savedPos = localStorage.getItem(`building-pos-${buildingId}`)
           const savedImage = localStorage.getItem(`building-image-${buildingId}`)
+          // Recuperar Áreas Comunes
+          const savedAreas = localStorage.getItem(`building-common-areas-${buildingId}`)
+          if (savedAreas) {
+            try {
+              setCommonAreas(JSON.parse(savedAreas))
+            } catch (e) { console.error("Error parsing areas", e) }
+          } else {
+            // Default areas example
+            setCommonAreas(['Pasillo Principal', 'Escaleras', 'Azotea'])
+          }
 
           const initialPos = savedPos ? parseInt(savedPos) : 50
           const initialImage = savedImage || buildingData.imageUrl
@@ -175,6 +190,22 @@ export default function BuildingDetailPage() {
     setBuildingForm(prev => ({ ...prev, imageUrl: null }))
   }
 
+  // --- LOGICA AREAS COMUNES ---
+  const handleAddCommonArea = () => {
+    if (!newCommonArea.trim()) return
+    const updated = [...commonAreas, newCommonArea.trim()]
+    setCommonAreas(updated)
+    setNewCommonArea('')
+    // Auto save
+    localStorage.setItem(`building-common-areas-${buildingId}`, JSON.stringify(updated))
+  }
+
+  const handleDeleteCommonArea = (index: number) => {
+    const updated = commonAreas.filter((_, i) => i !== index)
+    setCommonAreas(updated)
+    localStorage.setItem(`building-common-areas-${buildingId}`, JSON.stringify(updated))
+  }
+
   const handleAddApartment = () => {
     if (!newApartment.number) {
       // ...
@@ -234,6 +265,57 @@ export default function BuildingDetailPage() {
   }
 
   // --- CONTENIDO DE LOS FORMULARIOS EXTRAÍDO ---
+
+  const CommonAreasFormContent = (
+    <div className="space-y-6 py-4 px-1">
+      <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg flex items-center gap-3">
+        <Box className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+        <div className="text-sm text-slate-600 dark:text-slate-300">
+          Registra áreas compartidas como pasillos, escaleras, piscina o jardín para asignar tareas de mantenimiento.
+        </div>
+      </div>
+
+      <div className="space-y-4">
+        <Label>Áreas Registradas</Label>
+        {commonAreas.length === 0 ? (
+          <div className="text-center py-8 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-lg text-slate-400 text-sm">
+            No hay áreas comunes registradas
+          </div>
+        ) : (
+          <div className="space-y-2 max-h-[200px] overflow-y-auto pr-2">
+            {commonAreas.map((area, idx) => (
+              <div key={idx} className="flex items-center justify-between p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-sm group">
+                <span className="font-medium text-slate-700 dark:text-slate-200">{area}</span>
+                <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-red-500" onClick={() => handleDeleteCommonArea(idx)}>
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="flex items-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+        <div className="flex-1 space-y-2">
+          <Label htmlFor="new-area">Agregar Nueva Área</Label>
+          <Input
+            id="new-area"
+            placeholder="Ej. Piscina, Elevador..."
+            value={newCommonArea}
+            onChange={(e) => setNewCommonArea(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleAddCommonArea()}
+          />
+        </div>
+        <Button onClick={handleAddCommonArea} disabled={!newCommonArea.trim()}>
+          <PlusCircle className="h-4 w-4 md:mr-2" /> <span className="hidden md:inline">Agregar</span>
+        </Button>
+      </div>
+
+      <div className="flex justify-end pt-4">
+        <Button onClick={() => setIsCommonAreasOpen(false)} className="w-full md:w-auto">Listo</Button>
+      </div>
+    </div>
+  )
 
   const EditBuildingFormContent = (
     <div className="grid gap-6 py-4 px-1">
@@ -423,46 +505,95 @@ export default function BuildingDetailPage() {
                   <span>Propietario: {building.owner}</span>
                 </div>
               )}
+              {commonAreas.length > 0 && (
+                <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400 mt-1">
+                  <Box className="h-4 w-4" />
+                  <span>{commonAreas.length} Áreas Comunes</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
 
-        {isMobile ? (
-          <Drawer open={isEditBuildingOpen} onOpenChange={setIsEditBuildingOpen}>
-            <DrawerTrigger asChild>
-              <Button className="gap-2">
-                <Edit className="h-4 w-4" />
-                Editar Edificio
-              </Button>
-            </DrawerTrigger>
-            <DrawerContent>
-              <DrawerHeader>
-                <DrawerTitle>Editar Edificio</DrawerTitle>
-                <DrawerDescription>Actualiza la foto y detalles.</DrawerDescription>
-              </DrawerHeader>
-              <div className="px-4 pb-8 overflow-y-auto max-h-[80vh]">
-                {EditBuildingFormContent}
-              </div>
-            </DrawerContent>
-          </Drawer>
-        ) : (
-          <Dialog open={isEditBuildingOpen} onOpenChange={setIsEditBuildingOpen}>
-            <DialogTrigger asChild>
-              <Button className="gap-2">
-                <Edit className="h-4 w-4" />
-                Editar Edificio
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[600px] overflow-visible">
-              <DialogHeader>
-                <DialogTitle>Editar Edificio</DialogTitle>
-                <DialogDescription>Actualiza la foto y detalles del edificio.</DialogDescription>
-              </DialogHeader>
-              {EditBuildingFormContent}
-              {/* Footer ya incluido en form content */}
-            </DialogContent>
-          </Dialog>
-        )}
+        <div className="flex gap-2 w-full md:w-auto">
+          {isMobile ? (
+            <>
+              {/* AREAS COMUNES MOBILE */}
+              <Drawer open={isCommonAreasOpen} onOpenChange={setIsCommonAreasOpen}>
+                <DrawerTrigger asChild>
+                  <Button variant="outline" className="gap-2 flex-1 md:flex-none">
+                    <Box className="h-4 w-4" />
+                    Áreas Comunes
+                  </Button>
+                </DrawerTrigger>
+                <DrawerContent>
+                  <DrawerHeader>
+                    <DrawerTitle>Gestión de Áreas Comunes</DrawerTitle>
+                    <DrawerDescription>Administra los espacios compartidos del edificio.</DrawerDescription>
+                  </DrawerHeader>
+                  <div className="px-4 pb-8 overflow-y-auto max-h-[80vh]">
+                    {CommonAreasFormContent}
+                  </div>
+                </DrawerContent>
+              </Drawer>
+
+              {/* EDITAR MOBILE */}
+              <Drawer open={isEditBuildingOpen} onOpenChange={setIsEditBuildingOpen}>
+                <DrawerTrigger asChild>
+                  <Button className="gap-2 flex-1 md:flex-none">
+                    <Edit className="h-4 w-4" />
+                    Editar Edificio
+                  </Button>
+                </DrawerTrigger>
+                <DrawerContent>
+                  <DrawerHeader>
+                    <DrawerTitle>Editar Edificio</DrawerTitle>
+                    <DrawerDescription>Actualiza la foto y detalles.</DrawerDescription>
+                  </DrawerHeader>
+                  <div className="px-4 pb-8 overflow-y-auto max-h-[80vh]">
+                    {EditBuildingFormContent}
+                  </div>
+                </DrawerContent>
+              </Drawer>
+            </>
+          ) : (
+            <>
+              {/* AREAS COMUNES DESKTOP */}
+              <Dialog open={isCommonAreasOpen} onOpenChange={setIsCommonAreasOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="outline" className="gap-2">
+                    <Box className="h-4 w-4" />
+                    Áreas Comunes
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[500px]">
+                  <DialogHeader>
+                    <DialogTitle>Gestión de Áreas Comunes</DialogTitle>
+                    <DialogDescription>Administra los espacios compartidos del edificio.</DialogDescription>
+                  </DialogHeader>
+                  {CommonAreasFormContent}
+                </DialogContent>
+              </Dialog>
+
+              {/* EDITAR DESKTOP */}
+              <Dialog open={isEditBuildingOpen} onOpenChange={setIsEditBuildingOpen}>
+                <DialogTrigger asChild>
+                  <Button className="gap-2">
+                    <Edit className="h-4 w-4" />
+                    Editar Edificio
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[600px] overflow-visible">
+                  <DialogHeader>
+                    <DialogTitle>Editar Edificio</DialogTitle>
+                    <DialogDescription>Actualiza la foto y detalles del edificio.</DialogDescription>
+                  </DialogHeader>
+                  {EditBuildingFormContent}
+                </DialogContent>
+              </Dialog>
+            </>
+          )}
+        </div>
       </div>
 
       <Card>
@@ -538,15 +669,9 @@ export default function BuildingDetailPage() {
                         Depto {apartment.number}
                       </span>
                     </CardTitle>
-                    <div className="flex items-center gap-2 mt-2">
-                      <span className={`text-xs px-2.5 py-0.5 rounded-full font-medium ${apartment.status === 'occupied' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
-                        apartment.status === 'vacant' ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400' :
-                          'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-400'
-                        }`}>
-                        {apartment.status === 'occupied' ? 'Ocupado' : apartment.status === 'vacant' ? 'Vacante' : apartment.status}
-                      </span>
-                      <span className="text-xs text-muted-foreground border-l pl-2 border-slate-300 dark:border-slate-700">
-                        Piso {apartment.floor}
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="text-xs text-muted-foreground flex items-center gap-1">
+                        <Layers className="h-3 w-3" /> Piso {apartment.floor}
                       </span>
                     </div>
                   </CardHeader>
