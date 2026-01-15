@@ -8,6 +8,7 @@ import {
   Smartphone, Zap, BarChart3, Building, FileText,
   Lock, Globe, Users
 } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
 
 // Assets Imports
 import heroImg from "@/assets/GerenteSonrienteTablet.png"
@@ -198,38 +199,89 @@ export default function LoginPage() {
 
       <main className="pt-20">
 
-        {/* HERO SECTION */}
-        <section className="relative pt-12 pb-4 lg:pt-8 lg:pb-8 overflow-hidden">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+        {/* HERO SECTION - ANIMATED */}
+        <section className="relative pt-12 pb-4 lg:pt-20 lg:pb-16 overflow-hidden">
+          {/* Fondo Animado Dinámico */}
+          <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+            <motion.div
+              animate={{ x: [0, 100, 0], y: [0, -50, 0], scale: [1, 1.2, 1] }}
+              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-100/40 rounded-full blur-[100px]"
+            />
+            <motion.div
+              animate={{ x: [0, -80, 0], y: [0, 60, 0], scale: [1, 1.1, 1] }}
+              transition={{ duration: 15, repeat: Infinity, ease: "linear", delay: 2 }}
+              className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-indigo-100/40 rounded-full blur-[100px]"
+            />
+          </div>
+
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-8 lg:gap-12 items-center relative z-10">
 
             {/* Texto Hero */}
-            <div className="space-y-6 lg:space-y-8 animate-in slide-in-from-bottom-5 fade-in duration-700">
-              <div className="hidden lg:inline-block px-4 py-1.5 rounded-full bg-blue-50 text-[#041442] text-xs lg:text-sm font-semibold tracking-wide mb-2 lg:mb-4 border border-blue-100">
+            <div className="space-y-6 lg:space-y-8">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="hidden lg:inline-block px-4 py-1.5 rounded-full bg-blue-50 text-[#041442] text-xs lg:text-sm font-semibold tracking-wide mb-2 lg:mb-4 border border-blue-100"
+              >
                 🚀 La nueva era de la gestión inmobiliaria
-              </div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold tracking-tight text-[#041442] leading-[1.1]">
-                Stockea: Control Total de tu <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Inventario Inmobiliario</span>
-              </h1>
-              <p className="text-lg lg:text-xl text-slate-600 leading-relaxed max-w-lg">
-                Gestiona el inventario de tus propiedades con tecnología profesional. Desde un departamento Airbnb hasta una cadena hotelera completa.
-              </p>
+              </motion.div>
 
-              <div className="flex flex-col sm:flex-row gap-3 lg:gap-4 pt-2 lg:pt-4">
-                <button
+              <motion.h1
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold tracking-tight text-[#041442] leading-[1.1]"
+              >
+                Stockea: Control Total de tu <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Inventario Inmobiliario</span>
+              </motion.h1>
+
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="text-lg lg:text-xl text-slate-600 leading-relaxed max-w-lg"
+              >
+                Gestiona el inventario de tus propiedades con tecnología profesional. Desde un departamento Airbnb hasta una cadena hotelera completa.
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="flex flex-col sm:flex-row gap-3 lg:gap-4 pt-2 lg:pt-4"
+              >
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={() => setShowLogin(true)}
-                  className="bg-[#041442] text-white px-6 py-3 lg:px-8 lg:py-4 rounded-xl font-bold text-base lg:text-lg hover:shadow-xl hover:-translate-y-1 transition-all flex items-center justify-center gap-2"
+                  className="bg-[#041442] text-white px-6 py-3 lg:px-8 lg:py-4 rounded-xl font-bold text-base lg:text-lg shadow-xl shadow-blue-900/10 flex items-center justify-center gap-2"
                 >
                   Solicitar Demo Gratuita <ArrowRight className="h-5 w-5" />
-                </button>
-                <button className="px-6 py-3 lg:px-8 lg:py-4 rounded-xl font-bold text-base lg:text-lg text-[#041442] bg-blue-50 hover:bg-blue-100 transition-all border border-blue-200">
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-6 py-3 lg:px-8 lg:py-4 rounded-xl font-bold text-base lg:text-lg text-[#041442] bg-blue-50 hover:bg-blue-100 border border-blue-200"
+                >
                   Ver Video Demostración
-                </button>
-              </div>
+                </motion.button>
+              </motion.div>
             </div>
 
-            {/* Imagen Hero - OPTIMIZED */}
-            <div className="relative animate-in slide-in-from-right-5 fade-in duration-1000 delay-200 flex justify-center">
-              <div className="relative w-full max-w-lg lg:max-w-xl">
+            {/* Imagen Hero - FLOTANTE */}
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="relative flex justify-center"
+            >
+              <motion.div
+                animate={{ y: [0, -15, 0] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                className="relative w-full max-w-lg lg:max-w-xl"
+              >
                 <Image
                   src={heroImg}
                   alt="Gerente gestionando inventario"
@@ -237,8 +289,8 @@ export default function LoginPage() {
                   priority
                   placeholder="blur"
                 />
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </div>
         </section>
 
@@ -279,12 +331,17 @@ export default function LoginPage() {
                   </div>
                 ))}
 
-                <div className="mt-8 p-6 bg-emerald-50 rounded-2xl border border-emerald-100">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5 }}
+                  className="mt-8 p-6 bg-emerald-50 rounded-2xl border border-emerald-100"
+                >
                   <p className="text-emerald-800 font-bold text-lg flex items-center gap-2">
                     <Check className="h-6 w-6" />
                     Solución: De caos a control en minutos con Stockea.
                   </p>
-                </div>
+                </motion.div>
               </div>
             </div>
           </div>
@@ -300,7 +357,13 @@ export default function LoginPage() {
 
             {/* Feature 1 */}
             <div className="grid lg:grid-cols-2 gap-12 items-center">
-              <div className="space-y-6">
+              <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="space-y-6"
+              >
                 <div className="h-12 w-12 bg-blue-500 rounded-xl flex items-center justify-center text-white mb-4">
                   <BarChart3 className="h-6 w-6" />
                 </div>
@@ -308,19 +371,31 @@ export default function LoginPage() {
                 <p className="text-lg text-slate-400 leading-relaxed">
                   Visualiza en tiempo real la salud de tu inventario. Identifica artículos dañados, porcentajes de ocupación y métricas clave de un vistazo, sin tener que bucear en datos.
                 </p>
-              </div>
-              <div className="flex flex-col items-center justify-center">
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, x: 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="flex flex-col items-center justify-center"
+              >
                 <Image
                   src={dashboardImg}
                   alt="Dashboard Inteligente con Gráficas"
-                  className="w-full h-auto object-contain max-h-[350px]"
+                  className="w-full h-auto object-contain max-h-[350px] hover:scale-105 transition-transform duration-500"
                 />
-              </div>
+              </motion.div>
             </div>
 
             {/* Feature 2 (Reverse) */}
             <div className="grid lg:grid-cols-2 gap-12 items-center">
-              <div className="lg:order-2 space-y-6">
+              <motion.div
+                initial={{ opacity: 0, x: 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="lg:order-2 space-y-6"
+              >
                 <div className="h-12 w-12 bg-indigo-500 rounded-xl flex items-center justify-center text-white mb-4">
                   <LayoutDashboard className="h-6 w-6" />
                 </div>
@@ -328,19 +403,31 @@ export default function LoginPage() {
                 <p className="text-lg text-slate-400 leading-relaxed">
                   Organiza desde edificios completos hasta habitaciones individuales. Crea jerarquías lógicas: Edificio → Piso → Departamento → Áreas → Objetos.
                 </p>
-              </div>
-              <div className="lg:order-1 flex flex-col items-center justify-center">
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="lg:order-1 flex flex-col items-center justify-center"
+              >
                 <Image
                   src={treeStructureImg}
                   alt="Estructura de Árbol Multinivel"
-                  className="w-full h-auto object-contain max-h-[350px]"
+                  className="w-full h-auto object-contain max-h-[350px] hover:scale-105 transition-transform duration-500"
                 />
-              </div>
+              </motion.div>
             </div>
 
             {/* Feature 3 */}
             <div className="grid lg:grid-cols-2 gap-12 items-center">
-              <div className="space-y-6">
+              <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="space-y-6"
+              >
                 <div className="h-12 w-12 bg-emerald-500 rounded-xl flex items-center justify-center text-white mb-4">
                   <Smartphone className="h-6 w-6" />
                 </div>
@@ -348,19 +435,31 @@ export default function LoginPage() {
                 <p className="text-lg text-slate-400 leading-relaxed">
                   Tu equipo de campo realiza inspecciones con checklist inteligentes. Entrada y salida de huéspedes, mantenimiento preventivo, todo documentado profesionalmente desde una tablet o móvil.
                 </p>
-              </div>
-              <div className="flex flex-col items-center justify-center">
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, x: 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="flex flex-col items-center justify-center"
+              >
                 <Image
                   src={verifierImg}
                   alt="Verificador realizando inspección"
-                  className="w-full h-auto object-contain max-h-[350px]"
+                  className="w-full h-auto object-contain max-h-[350px] hover:scale-105 transition-transform duration-500"
                 />
-              </div>
+              </motion.div>
             </div>
 
             {/* Feature 4 (Reverse) */}
             <div className="grid lg:grid-cols-2 gap-12 items-center">
-              <div className="lg:order-2 space-y-6">
+              <motion.div
+                initial={{ opacity: 0, x: 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="lg:order-2 space-y-6"
+              >
                 <div className="h-12 w-12 bg-amber-500 rounded-xl flex items-center justify-center text-white mb-4">
                   <FileText className="h-6 w-6" />
                 </div>
@@ -368,14 +467,20 @@ export default function LoginPage() {
                 <p className="text-lg text-slate-400 leading-relaxed">
                   Genera reportes PDF detallados en segundos. Ideales para seguros, auditorías o históricos. Olvida el "copy-paste" manual.
                 </p>
-              </div>
-              <div className="lg:order-1 flex flex-col items-center justify-center">
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="lg:order-1 flex flex-col items-center justify-center"
+              >
                 <Image
                   src={reportImg}
                   alt="Reporte PDF Automatizado"
-                  className="w-full h-auto object-contain max-h-[350px]"
+                  className="w-full h-auto object-contain max-h-[350px] hover:scale-105 transition-transform duration-500"
                 />
-              </div>
+              </motion.div>
             </div>
           </div>
         </section>
@@ -390,7 +495,14 @@ export default function LoginPage() {
 
             <div className="grid md:grid-cols-3 gap-8 mb-16">
               {/* Rol Admin */}
-              <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 hover:shadow-lg transition-all hover:-translate-y-1">
+              <motion.div
+                whileHover={{ y: -10, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                viewport={{ once: true }}
+                className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200"
+              >
                 <div className="w-12 h-12 bg-slate-900 text-white rounded-lg flex items-center justify-center mb-6">
                   <ShieldCheck className="h-6 w-6" />
                 </div>
@@ -401,10 +513,17 @@ export default function LoginPage() {
                   <li className="flex items-center gap-2"><Check className="h-4 w-4 text-emerald-500" /> Crea usuarios y permisos</li>
                   <li className="flex items-center gap-2"><Check className="h-4 w-4 text-emerald-500" /> Reportes financieros</li>
                 </ul>
-              </div>
+              </motion.div>
 
               {/* Rol Owner */}
-              <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 hover:shadow-lg transition-all hover:-translate-y-1 relative overflow-hidden">
+              <motion.div
+                whileHover={{ y: -10, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                viewport={{ once: true }}
+                className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 relative overflow-hidden"
+              >
                 <div className="absolute top-0 right-0 bg-blue-500 text-white text-[10px] uppercase font-bold px-3 py-1 rounded-bl-xl">Popular</div>
                 <div className="w-12 h-12 bg-blue-600 text-white rounded-lg flex items-center justify-center mb-6">
                   <Building className="h-6 w-6" />
@@ -416,10 +535,17 @@ export default function LoginPage() {
                   <li className="flex items-center gap-2"><Check className="h-4 w-4 text-blue-500" /> Gestión de inventario</li>
                   <li className="flex items-center gap-2"><Check className="h-4 w-4 text-blue-500" /> Alertas personalizadas</li>
                 </ul>
-              </div>
+              </motion.div>
 
               {/* Rol Verificador */}
-              <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 hover:shadow-lg transition-all hover:-translate-y-1">
+              <motion.div
+                whileHover={{ y: -10, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                viewport={{ once: true }}
+                className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200"
+              >
                 <div className="w-12 h-12 bg-emerald-500 text-white rounded-lg flex items-center justify-center mb-6">
                   <Smartphone className="h-6 w-6" />
                 </div>
@@ -430,7 +556,7 @@ export default function LoginPage() {
                   <li className="flex items-center gap-2"><Check className="h-4 w-4 text-emerald-500" /> Actualiza estados y fotos</li>
                   <li className="flex items-center gap-2"><Check className="h-4 w-4 text-emerald-500" /> Sincronización automática</li>
                 </ul>
-              </div>
+              </motion.div>
             </div>
 
             <div className="max-w-4xl mx-auto flex flex-col items-center justify-center">
@@ -487,26 +613,26 @@ export default function LoginPage() {
             <div className="space-y-8">
               <h2 className="text-4xl lg:text-5xl font-bold">Potencia que impulsa tu crecimiento</h2>
               <div className="grid sm:grid-cols-2 gap-6">
-                <div className="bg-white/10 backdrop-blur border border-white/10 p-6 rounded-xl">
-                  <Zap className="h-8 w-8 text-yellow-400 mb-4" />
-                  <h4 className="font-bold text-lg mb-2">Tecnología Moderna</h4>
-                  <p className="text-sm text-white/70">Next.js 14 y TypeScript. Rápido y seguro.</p>
-                </div>
-                <div className="bg-white/10 backdrop-blur border border-white/10 p-6 rounded-xl">
-                  <LayoutDashboard className="h-8 w-8 text-cyan-400 mb-4" />
-                  <h4 className="font-bold text-lg mb-2">Interfaz Intuitiva</h4>
-                  <p className="text-sm text-white/70">Tailwind CSS. Aprende en minutos.</p>
-                </div>
-                <div className="bg-white/10 backdrop-blur border border-white/10 p-6 rounded-xl">
-                  <BarChart3 className="h-8 w-8 text-purple-400 mb-4" />
-                  <h4 className="font-bold text-lg mb-2">Escalable</h4>
-                  <p className="text-sm text-white/70">De 1 a 100+ propiedades sin fricción.</p>
-                </div>
-                <div className="bg-white/10 backdrop-blur border border-white/10 p-6 rounded-xl">
-                  <Globe className="h-8 w-8 text-emerald-400 mb-4" />
-                  <h4 className="font-bold text-lg mb-2">Soporte Español</h4>
-                  <p className="text-sm text-white/70">Pensado para LATAM.</p>
-                </div>
+                {[
+                  { icon: Zap, color: "text-yellow-400", title: "Tecnología Moderna", desc: "Next.js 14 y TypeScript. Rápido y seguro." },
+                  { icon: LayoutDashboard, color: "text-cyan-400", title: "Interfaz Intuitiva", desc: "Tailwind CSS. Aprende en minutos." },
+                  { icon: BarChart3, color: "text-purple-400", title: "Escalable", desc: "De 1 a 100+ propiedades sin fricción." },
+                  { icon: Globe, color: "text-emerald-400", title: "Soporte Español", desc: "Pensado para LATAM." }
+                ].map((feature, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.1, duration: 0.5 }}
+                    whileHover={{ scale: 1.05 }}
+                    className="bg-white/10 backdrop-blur border border-white/10 p-6 rounded-xl hover:bg-white/20 transition-colors"
+                  >
+                    <feature.icon className={`h-8 w-8 ${feature.color} mb-4`} />
+                    <h4 className="font-bold text-lg mb-2">{feature.title}</h4>
+                    <p className="text-sm text-white/70">{feature.desc}</p>
+                  </motion.div>
+                ))}
               </div>
             </div>
 
