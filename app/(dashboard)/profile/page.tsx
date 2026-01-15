@@ -19,7 +19,12 @@ import {
   Edit2,
   Lock,
   Loader2,
-  KeyRound
+  KeyRound,
+  FileText,
+  Printer,
+  Building2,
+  Upload,
+  ImageIcon
 } from 'lucide-react'
 
 const roleLabels: Record<string, string> = {
@@ -55,6 +60,14 @@ export default function ProfilePage() {
   // Estado para Foto
   const [avatarUrl, setAvatarUrl] = useState(user?.avatar || '')
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  // Estado para Branding
+  const [branding, setBranding] = useState({
+    logo: null as string | null,
+    companyName: '',
+    displayOption: 'logo_company' as 'logo_company' | 'company_only' | 'admin_name'
+  })
+  const logoInputRef = useRef<HTMLInputElement>(null)
 
   // Sincronizar datos
   useEffect(() => {
@@ -138,6 +151,27 @@ export default function ProfilePage() {
   const initials = user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
   const registerDate = new Date(user.createdAt).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })
   const fullName = `${formData.firstName} ${formData.lastName}`.trim() || user.name
+
+  // Handlers para Branding
+  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onload = (ev) => {
+        setBranding(prev => ({ ...prev, logo: ev.target?.result as string }))
+        toast({ title: "Logo cargado", description: "El logo se ha adjuntado para la vista previa." })
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  const handleSaveBranding = () => {
+    setIsLoading(true)
+    setTimeout(() => {
+      setIsLoading(false)
+      toast({ title: "Configuración guardada", description: "Tus preferencias de documentos se han actualizado." })
+    }, 1000)
+  }
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500 max-w-7xl mx-auto p-4 md:px-8 md:pb-8 md:pt-0 md:-mt-2">
@@ -254,6 +288,200 @@ export default function ProfilePage() {
             <Button onClick={() => setIsPasswordOpen(true)} className="w-full" variant="outline">
               Cambiar Contraseña
             </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* TARJETA SECUNDARIA: BRANDING DE DOCUMENTOS */}
+      <Card className="border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+        <CardHeader className="pb-4 pt-8 px-8 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-blue-100 dark:bg-blue-900/30 text-blue-600 rounded-lg">
+              <Printer className="h-5 w-5" />
+            </div>
+            <div>
+              <CardTitle className="text-lg">Personalización de Reportes y Documentos</CardTitle>
+              <CardDescription>Configura cómo aparece tu identidad en los reportes PDF impresos.</CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="p-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+
+            {/* Columna Izquierda: Configuración */}
+            <div className="space-y-8">
+
+              {/* Sección Logo */}
+              <div className="space-y-4">
+                <Label className="text-base font-semibold flex items-center gap-2">
+                  <ImageIcon className="h-4 w-4 text-slate-500" /> Logo de la Empresa
+                </Label>
+                <div className="flex items-start gap-4">
+                  <div
+                    onClick={() => logoInputRef.current?.click()}
+                    className="h-24 w-24 rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-700 flex flex-col items-center justify-center text-slate-400 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors bg-slate-50 dark:bg-slate-900 overflow-hidden relative group"
+                  >
+                    {branding.logo ? (
+                      <>
+                        <img src={branding.logo} alt="Logo" className="w-full h-full object-contain p-2" />
+                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                          <Edit2 className="h-5 w-5 text-white" />
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="h-6 w-6 mb-1" />
+                        <span className="text-[10px] font-medium">Subir</span>
+                      </>
+                    )}
+                  </div>
+                  <div className="flex-1 space-y-2">
+                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                      Sube tu logo corporativo. Este aparecerá en la esquina superior de todos los reportes generados.
+                    </p>
+                    <p className="text-xs text-slate-400">Recomendado: PNG con fondo transparente, máx 2MB.</p>
+                    <input
+                      type="file"
+                      ref={logoInputRef}
+                      className="hidden"
+                      accept="image/*"
+                      onChange={handleLogoUpload}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Sección Opciones de Visualización */}
+              <div className="space-y-4">
+                <Label className="text-base font-semibold flex items-center gap-2">
+                  <FileText className="h-4 w-4 text-slate-500" /> Preferencias de Encabezado
+                </Label>
+
+                <div className="space-y-3">
+                  {/* Opción 1: Logo + Nombre Empresa */}
+                  <div
+                    onClick={() => setBranding({ ...branding, displayOption: 'logo_company' })}
+                    className={`flex items-start gap-3 p-3 rounded-lg border cursor-pointer transition-all ${branding.displayOption === 'logo_company' ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-sm' : 'border-slate-200 dark:border-slate-800 hover:border-slate-300'}`}
+                  >
+                    <div className={`mt-0.5 h-4 w-4 rounded-full border flex items-center justify-center ${branding.displayOption === 'logo_company' ? 'border-blue-500' : 'border-slate-300'}`}>
+                      {branding.displayOption === 'logo_company' && <div className="h-2 w-2 rounded-full bg-blue-500" />}
+                    </div>
+                    <div>
+                      <span className={`text-sm font-medium ${branding.displayOption === 'logo_company' ? 'text-blue-700 dark:text-blue-300' : 'text-slate-700 dark:text-slate-200'}`}>Logo y Nombre de Empresa</span>
+                      <p className="text-xs text-slate-500 mt-0.5">Muestra tu logo y el nombre de la organización.</p>
+                    </div>
+                  </div>
+
+                  {/* Opción 2: Solo Nombre Empresa */}
+                  <div
+                    onClick={() => setBranding({ ...branding, displayOption: 'company_only' })}
+                    className={`flex items-start gap-3 p-3 rounded-lg border cursor-pointer transition-all ${branding.displayOption === 'company_only' ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-sm' : 'border-slate-200 dark:border-slate-800 hover:border-slate-300'}`}
+                  >
+                    <div className={`mt-0.5 h-4 w-4 rounded-full border flex items-center justify-center ${branding.displayOption === 'company_only' ? 'border-blue-500' : 'border-slate-300'}`}>
+                      {branding.displayOption === 'company_only' && <div className="h-2 w-2 rounded-full bg-blue-500" />}
+                    </div>
+                    <div>
+                      <span className={`text-sm font-medium ${branding.displayOption === 'company_only' ? 'text-blue-700 dark:text-blue-300' : 'text-slate-700 dark:text-slate-200'}`}>Solo Nombre de Empresa</span>
+                      <p className="text-xs text-slate-500 mt-0.5">Si no tienes logo, se mostrará el nombre de tu empresa en texto grande.</p>
+                    </div>
+                  </div>
+
+                  {/* Opción 3: Nombre del Admin */}
+                  <div
+                    onClick={() => setBranding({ ...branding, displayOption: 'admin_name' })}
+                    className={`flex items-start gap-3 p-3 rounded-lg border cursor-pointer transition-all ${branding.displayOption === 'admin_name' ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-sm' : 'border-slate-200 dark:border-slate-800 hover:border-slate-300'}`}
+                  >
+                    <div className={`mt-0.5 h-4 w-4 rounded-full border flex items-center justify-center ${branding.displayOption === 'admin_name' ? 'border-blue-500' : 'border-slate-300'}`}>
+                      {branding.displayOption === 'admin_name' && <div className="h-2 w-2 rounded-full bg-blue-500" />}
+                    </div>
+                    <div>
+                      <span className={`text-sm font-medium ${branding.displayOption === 'admin_name' ? 'text-blue-700 dark:text-blue-300' : 'text-slate-700 dark:text-slate-200'}`}>Usar mi Nombre ({fullName})</span>
+                      <p className="text-xs text-slate-500 mt-0.5">Para gestores independientes. Se usará tu nombre personal como cabecera.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Input Nombre Empresa */}
+              {(branding.displayOption === 'logo_company' || branding.displayOption === 'company_only') && (
+                <div className="space-y-2 animate-in fade-in slide-in-from-top-2">
+                  <Label htmlFor="company-name">Nombre de la Empresa / Organización</Label>
+                  <div className="relative">
+                    <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                    <Input
+                      id="company-name"
+                      placeholder="Ej. Gestión Inmobiliaria SA de CV"
+                      className="pl-9"
+                      value={branding.companyName}
+                      onChange={(e) => setBranding({ ...branding, companyName: e.target.value })}
+                    />
+                  </div>
+                </div>
+              )}
+
+              <Button onClick={handleSaveBranding} disabled={isLoading} className="w-full md:w-auto btn-airbnb-effect border-0 text-white shadow-md">
+                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Guardar Preferencias
+              </Button>
+
+            </div>
+
+            {/* Columna Derecha: Live Preview */}
+            <div className="bg-slate-100 dark:bg-slate-950 rounded-xl p-8 flex flex-col items-center justify-center border border-slate-200 dark:border-slate-800">
+              <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Vista Previa Documento</p>
+
+              {/* Hoja A4 Simulada */}
+              <div className="w-full aspect-[1/1.41] max-w-[320px] bg-white text-slate-900 shadow-2xl rounded-sm p-6 flex flex-col relative overflow-hidden transition-all duration-300 transform hover:scale-[1.02]">
+                {/* Header Documento */}
+                <div className="flex justify-between items-start border-b-2 border-slate-800 pb-4 mb-6">
+                  <div className="flex flex-col">
+                    <span className="text-[10px] bg-slate-100 px-1 py-0.5 rounded text-slate-500 w-fit mb-1">REPORTE #001</span>
+                    <span className="text-lg font-bold leading-tight uppercase">
+                      INFORME DE<br />ESTADO
+                    </span>
+                  </div>
+
+                  {/* Branding Logic */}
+                  <div className="flex flex-col items-end text-right max-w-[120px]">
+                    {branding.displayOption === 'logo_company' && (
+                      <>
+                        {branding.logo ? (
+                          <img src={branding.logo} className="h-8 object-contain mb-1" alt="Logo" />
+                        ) : (
+                          <div className="h-8 w-8 bg-slate-200 rounded mb-1 flex items-center justify-center text-[8px] text-slate-500">LOGO</div>
+                        )}
+                        <span className="text-[10px] font-bold truncate w-full">{branding.companyName || 'Nombre Empresa'}</span>
+                      </>
+                    )}
+                    {branding.displayOption === 'company_only' && (
+                      <span className="text-sm font-bold truncate w-full">{branding.companyName || 'Nombre Empresa'}</span>
+                    )}
+                    {branding.displayOption === 'admin_name' && (
+                      <span className="text-xs font-bold truncate w-full">{fullName}</span>
+                    )}
+                    <span className="text-[8px] text-slate-400 mt-0.5">Gestión Profesional</span>
+                  </div>
+                </div>
+
+                {/* Dummy Content */}
+                <div className="space-y-3 flex-1 opacity-40">
+                  <div className="h-2 bg-slate-200 rounded w-3/4" />
+                  <div className="h-2 bg-slate-200 rounded w-full" />
+                  <div className="h-2 bg-slate-200 rounded w-5/6" />
+
+                  <div className="mt-6 grid grid-cols-2 gap-2">
+                    <div className="h-20 bg-slate-100 rounded border border-slate-200" />
+                    <div className="h-20 bg-slate-100 rounded border border-slate-200" />
+                  </div>
+                </div>
+
+                {/* Footer */}
+                <div className="mt-auto pt-4 border-t border-slate-100 flex justify-between items-center opacity-60">
+                  <div className="h-1.5 w-16 bg-slate-200 rounded" />
+                  <div className="h-1.5 w-4 bg-slate-300 rounded" />
+                </div>
+              </div>
+            </div>
           </div>
         </CardContent>
       </Card>
