@@ -232,6 +232,12 @@ function CategoriesView({ filter, setFilter }: { filter: string, setFilter: any 
                     <div className="h-[300px]">
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart data={sortedData} layout="vertical" margin={{ left: 20 }}>
+                                <defs>
+                                    <linearGradient id="blueGradient" x1="0" y1="0" x2="1" y2="0">
+                                        <stop offset="0%" stopColor="#3b82f6" stopOpacity={1} />
+                                        <stop offset="100%" stopColor="#60a5fa" stopOpacity={0.6} />
+                                    </linearGradient>
+                                </defs>
                                 <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#e2e8f0" />
                                 <XAxis type="number" hide />
                                 <YAxis dataKey="name" type="category" width={100} tick={{ fontSize: 12 }} />
@@ -252,11 +258,20 @@ function CategoriesView({ filter, setFilter }: { filter: string, setFilter: any 
                                         return null
                                     }}
                                 />
-                                <Bar dataKey={filter === 'value' ? 'value' : 'items'} fill="#3b82f6" radius={[0, 4, 4, 0]} barSize={24}>
-                                    {sortedData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={entry.color} />
-                                    ))}
-                                </Bar>
+                                <Bar
+                                    dataKey={filter === 'value' ? 'value' : 'items'}
+                                    fill="url(#blueGradient)"
+                                    barSize={24}
+                                    shape={(props: any) => {
+                                        const { fill, x, y, width, height } = props;
+                                        return (
+                                            <g>
+                                                <rect x={x} y={y} width={width} height={height} fill={fill} rx={4} ry={4} />
+                                                <rect x={x + width - 4} y={y} width={4} height={height} fill="#2563eb" rx={2} ry={2} />
+                                            </g>
+                                        );
+                                    }}
+                                />
                             </BarChart>
                         </ResponsiveContainer>
                     </div>
