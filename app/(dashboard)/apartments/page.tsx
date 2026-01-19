@@ -57,7 +57,7 @@ export default function AssignedApartmentsPage() {
   }
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500">
+    <div className="space-y-4 animate-in fade-in duration-500 -mt-2">
       <div className="flex flex-col md:flex-row md:items-center justify-end gap-4">
         {/* Search / Filters */}
         <div className="flex gap-2 w-full md:w-auto">

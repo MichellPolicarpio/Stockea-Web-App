@@ -50,7 +50,7 @@ export function Header({ sidebarCollapsed, onToggleSidebar, onLogout }: Dashboar
         if (pathname.startsWith('/buildings')) return (
             <div className="flex items-center gap-2">
                 <Building2 className="h-8 w-8 text-slate-700 dark:text-slate-300" />
-                <span className="md:hidden">Propiedades</span>
+                <span className="md:hidden text-lg truncate">Propiedades</span>
                 <span className="hidden md:inline">Gestión de Propiedades</span>
             </div>
         )
@@ -124,32 +124,34 @@ export function Header({ sidebarCollapsed, onToggleSidebar, onLogout }: Dashboar
                             </h1>
                         </div>
 
-                        {/* CENTER: Mobile Dropdown Toggle (< XL) - ALIGNED RIGHT ON MOBILE */}
-                        <div className="absolute right-[88px] top-1/2 -translate-y-1/2 xl:hidden flex items-center z-50">
-                            <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" className="rounded-full h-10 w-10 p-0 border border-slate-200 dark:border-slate-700 flex items-center justify-center">
-                                        {activeTab === 'inventory' && <LayoutDashboard className="h-5 w-5 text-blue-600 dark:text-blue-400" />}
-                                        {activeTab === 'accounting' && <DollarSign className="h-5 w-5 text-blue-600 dark:text-blue-400" />}
-                                        {activeTab === 'maintenance' && <Wrench className="h-5 w-5 text-blue-600 dark:text-blue-400" />}
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="center" className="w-[180px] p-1.5 rounded-xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-xl">
-                                    <DropdownMenuItem onClick={() => router.push('/?view=inventory')} className={`rounded-lg mb-1 focus:bg-slate-100 dark:focus:bg-slate-800 cursor-pointer ${activeTab === 'inventory' ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400' : ''}`}>
-                                        <LayoutDashboard className="mr-2 h-4 w-4" />
-                                        <span className="font-medium">Inventario</span>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem onClick={() => router.push('/?view=accounting')} className={`rounded-lg mb-1 focus:bg-slate-100 dark:focus:bg-slate-800 cursor-pointer ${activeTab === 'accounting' ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400' : ''}`}>
-                                        <DollarSign className="mr-2 h-4 w-4" />
-                                        <span className="font-medium">Contabilidad</span>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem onClick={() => router.push('/inspections')} className={`rounded-lg focus:bg-slate-100 dark:focus:bg-slate-800 cursor-pointer ${activeTab === 'maintenance' ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400' : ''}`}>
-                                        <Wrench className="mr-2 h-4 w-4" />
-                                        <span className="font-medium">Mantenimiento</span>
-                                    </DropdownMenuItem>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                        </div>
+                        {/* CENTER: Mobile Dropdown Toggle (< XL) - ALIGNED RIGHT ON MOBILE - ONLY ON DASHBOARD */}
+                        {pathname === '/' && (
+                            <div className="absolute right-[88px] top-1/2 -translate-y-1/2 xl:hidden flex items-center z-50">
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button variant="ghost" className="rounded-full h-10 w-10 p-0 border border-slate-200 dark:border-slate-700 flex items-center justify-center">
+                                            {activeTab === 'inventory' && <LayoutDashboard className="h-5 w-5 text-blue-600 dark:text-blue-400" />}
+                                            {activeTab === 'accounting' && <DollarSign className="h-5 w-5 text-blue-600 dark:text-blue-400" />}
+                                            {activeTab === 'maintenance' && <Wrench className="h-5 w-5 text-blue-600 dark:text-blue-400" />}
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent align="center" className="w-[180px] p-1.5 rounded-xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-xl">
+                                        <DropdownMenuItem onClick={() => router.push('/?view=inventory')} className={`rounded-lg mb-1 focus:bg-slate-100 dark:focus:bg-slate-800 cursor-pointer ${activeTab === 'inventory' ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400' : ''}`}>
+                                            <LayoutDashboard className="mr-2 h-4 w-4" />
+                                            <span className="font-medium">Inventario</span>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem onClick={() => router.push('/?view=accounting')} className={`rounded-lg mb-1 focus:bg-slate-100 dark:focus:bg-slate-800 cursor-pointer ${activeTab === 'accounting' ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400' : ''}`}>
+                                            <DollarSign className="mr-2 h-4 w-4" />
+                                            <span className="font-medium">Contabilidad</span>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem onClick={() => router.push('/inspections')} className={`rounded-lg focus:bg-slate-100 dark:focus:bg-slate-800 cursor-pointer ${activeTab === 'maintenance' ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400' : ''}`}>
+                                            <Wrench className="mr-2 h-4 w-4" />
+                                            <span className="font-medium">Mantenimiento</span>
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </div>
+                        )}
 
                         {/* CENTER: Main Navigation Toggle - ONLY ON DASHBOARD */}
                         {pathname === '/' && (

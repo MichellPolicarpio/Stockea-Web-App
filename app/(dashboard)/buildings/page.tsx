@@ -373,15 +373,15 @@ export default function BuildingsPage() {
 
     return (
         <div className="space-y-8 animate-in fade-in duration-500 max-w-5xl mx-auto p-4 pb-24 md:p-8">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
 
                 {/* View Toggles */}
-                <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-lg">
+                <div className="flex w-full sm:w-auto bg-slate-100 dark:bg-slate-800 p-1 rounded-lg">
                     <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => setViewMode('cards')}
-                        className={`h-8 px-3 rounded-md gap-2 ${viewMode === 'cards' ? 'bg-white shadow-sm dark:bg-slate-700 text-slate-900 dark:text-white' : 'text-slate-500 hover:text-slate-700'}`}
+                        className={`flex-1 sm:flex-none h-8 px-3 rounded-md gap-2 ${viewMode === 'cards' ? 'bg-white shadow-sm dark:bg-slate-700 text-slate-900 dark:text-white' : 'text-slate-500 hover:text-slate-700'}`}
                     >
                         <LayoutGrid className="h-4 w-4" />
                         <span className="text-xs font-medium">Propiedades</span>
@@ -390,7 +390,7 @@ export default function BuildingsPage() {
                         variant="ghost"
                         size="sm"
                         onClick={() => setViewMode('list')}
-                        className={`h-8 px-3 rounded-md gap-2 ${viewMode === 'list' ? 'bg-white shadow-sm dark:bg-slate-700 text-slate-900 dark:text-white' : 'text-slate-500 hover:text-slate-700'}`}
+                        className={`flex-1 sm:flex-none h-8 px-3 rounded-md gap-2 ${viewMode === 'list' ? 'bg-white shadow-sm dark:bg-slate-700 text-slate-900 dark:text-white' : 'text-slate-500 hover:text-slate-700'}`}
                     >
                         <List className="h-4 w-4" />
                         <span className="text-xs font-medium">Departamentos</span>
@@ -400,7 +400,7 @@ export default function BuildingsPage() {
                 {isMobile ? (
                     <Drawer open={isAddOpen} onOpenChange={setIsAddOpen}>
                         <DrawerTrigger asChild>
-                            <Button className="shadow-lg hover:shadow-xl transition-all btn-airbnb-effect text-white border-0">
+                            <Button className="w-full sm:w-auto shadow-lg hover:shadow-xl transition-all btn-airbnb-effect text-white border-0">
                                 <Plus className="mr-2 h-4 w-4" /> Agregar Propiedad
                             </Button>
                         </DrawerTrigger>
