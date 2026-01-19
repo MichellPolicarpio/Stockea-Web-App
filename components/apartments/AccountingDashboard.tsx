@@ -59,6 +59,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { motion, AnimatePresence } from 'framer-motion'
+import { ExpandedCardOverlay } from '@/components/dashboard/ExpandedCardOverlay'
 
 export function AccountingDashboard({ apartmentId }: { apartmentId: string }) {
     const isDemo = apartmentId === 'apt-2'
@@ -68,6 +70,7 @@ export function AccountingDashboard({ apartmentId }: { apartmentId: string }) {
     const [selectedFile, setSelectedFile] = useState<File | null>(null)
     const [isUploadOpen, setIsUploadOpen] = useState(false)
     const [viewMode, setViewMode] = useState<'month' | 'year'>('month')
+    const [expandedCard, setExpandedCard] = useState<string | null>(null)
 
     // Form States
     const [formData, setFormData] = useState({
@@ -242,198 +245,184 @@ export function AccountingDashboard({ apartmentId }: { apartmentId: string }) {
                 </div>
             </div>
 
-            {/* Summary Cards */}
-            <div className="grid gap-4 md:grid-cols-3">
-                <Card className="bg-emerald-50 border-emerald-100 dark:bg-emerald-900/10 dark:border-emerald-900/30">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium text-emerald-900 dark:text-emerald-100">Ingresos Totales</CardTitle>
-                        <TrendingUp className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold text-emerald-700 dark:text-emerald-300">${financialData.income.toLocaleString()}</div>
-                        <p className="text-xs text-emerald-600/80 dark:text-emerald-400/80 mt-1">
-                            +12% vs mes anterior
-                        </p>
-                    </CardContent>
-                </Card>
-                <Card className="bg-rose-50 border-rose-100 dark:bg-rose-900/10 dark:border-rose-900/30">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium text-rose-900 dark:text-rose-100">Gastos Operativos</CardTitle>
-                        <TrendingDown className="h-4 w-4 text-rose-600 dark:text-rose-400" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold text-rose-700 dark:text-rose-300">${financialData.expenses.toLocaleString()}</div>
-                        <p className="text-xs text-rose-600/80 dark:text-rose-400/80 mt-1">
-                            Servicios, Gestión y Manto.
-                        </p>
-                    </CardContent>
-                </Card>
-                <Card className="bg-blue-50 border-blue-100 dark:bg-blue-900/10 dark:border-blue-900/30">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium text-blue-900 dark:text-blue-100">Balance Neto</CardTitle>
-                        <DollarSign className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold text-blue-700 dark:text-blue-300">${financialData.balance.toLocaleString()}</div>
-                        <p className="text-xs text-blue-600/80 dark:text-blue-400/80 mt-1">
-                            {financialData.income > 0 ? `Margen: ${Math.round((financialData.balance / financialData.income) * 100)}%` : 'Sin ingresos'}
-                        </p>
-                    </CardContent>
-                </Card>
-            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full">
+                {/* LEFT COLUMN: Main Content (KPIs, Chart, Transactions) */}
+                <div className="lg:col-span-2 flex flex-col gap-6">
 
-            {/* Services Section */}
-            <div className="space-y-4">
-                <div className="flex items-center justify-between">
+                    {/* 1. Minimalist KPIs (Compact) */}
+                    {/* 1. KPIs Cards (Inventory Style) */}
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
+                        <motion.div
+                            layoutId="card-balance"
+                            onClick={() => setExpandedCard('balance')}
+                            className="bg-white dark:bg-slate-900 p-4 rounded-xl shadow-sm border border-slate-200/60 dark:border-slate-800 flex flex-col justify-center gap-1 group hover:border-slate-300 dark:hover:border-slate-700 transition-colors cursor-pointer relative"
+                        >
+                            <span className="text-2xl font-bold text-slate-900 dark:text-white px-1">${financialData.balance.toLocaleString()}</span>
+                            <div className="flex items-center gap-2 text-slate-500 text-[10px] uppercase font-bold tracking-wider px-1">
+                                <div className="h-1.5 w-1.5 rounded-full bg-slate-400"></div> Balance Total
+                            </div>
+                        </motion.div>
+
+                        <motion.div
+                            layoutId="card-income"
+                            onClick={() => setExpandedCard('income')}
+                            className="bg-white dark:bg-slate-900 p-4 rounded-xl shadow-sm border border-slate-200/60 dark:border-slate-800 flex flex-col justify-center gap-1 group hover:border-blue-300 dark:hover:border-blue-900 transition-colors cursor-pointer relative"
+                        >
+                            <span className="text-2xl font-bold text-slate-900 dark:text-white px-1">${financialData.income.toLocaleString()}</span>
+                            <div className="flex items-center gap-2 text-slate-500 text-[10px] uppercase font-bold tracking-wider px-1">
+                                <div className="h-1.5 w-1.5 rounded-full bg-blue-500"></div> Ingresos
+                            </div>
+                        </motion.div>
+
+                        <motion.div
+                            layoutId="card-expenses"
+                            onClick={() => setExpandedCard('expenses')}
+                            className="bg-white dark:bg-slate-900 p-4 rounded-xl shadow-sm border border-slate-200/60 dark:border-slate-800 flex flex-col justify-center gap-1 group hover:border-rose-300 dark:hover:border-rose-900 transition-colors cursor-pointer relative"
+                        >
+                            <span className="text-2xl font-bold text-slate-900 dark:text-white px-1">${financialData.expenses.toLocaleString()}</span>
+                            <div className="flex items-center gap-2 text-slate-500 text-[10px] uppercase font-bold tracking-wider px-1">
+                                <div className="h-1.5 w-1.5 rounded-full bg-rose-500"></div> Gastos
+                            </div>
+                        </motion.div>
+
+                        <motion.div
+                            layoutId="card-margin"
+                            onClick={() => setExpandedCard('margin')}
+                            className="bg-white dark:bg-slate-900 p-4 rounded-xl shadow-sm border border-slate-200/60 dark:border-slate-800 flex flex-col justify-center gap-1 group hover:border-emerald-300 dark:hover:border-emerald-900 transition-colors cursor-pointer relative"
+                        >
+                            <span className="text-2xl font-bold text-slate-900 dark:text-white px-1">
+                                {financialData.income > 0 ? Math.round((financialData.balance / financialData.income) * 100) : 0}%
+                            </span>
+                            <div className="flex items-center gap-2 text-slate-500 text-[10px] uppercase font-bold tracking-wider px-1">
+                                <div className="h-1.5 w-1.5 rounded-full bg-emerald-500"></div> Margen
+                            </div>
+                        </motion.div>
+                    </div>
+
+                    {/* 2. Finances Chart (Compact) */}
+                    <div className="bg-slate-50/50 dark:bg-slate-900/20 rounded-xl p-4 border border-slate-100 dark:border-slate-800">
+                        <div className="flex items-center justify-between mb-2">
+                            <h3 className="text-sm font-bold text-slate-900 dark:text-white">Tendencia Financiera</h3>
+                            <div className="flex items-center gap-3 text-xs">
+                                <div className="flex items-center gap-1.5">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                                    <span className="text-slate-500">Ingresos</span>
+                                </div>
+                                <div className="flex items-center gap-1.5">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-rose-400"></span>
+                                    <span className="text-slate-500">Gastos</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="h-[160px] w-full">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <AreaChart data={[
+                                    { name: '1', inc: 12000, exp: 3000 },
+                                    { name: '2', inc: 18000, exp: 4500 },
+                                    { name: '3', inc: 15000, exp: 3200 },
+                                    { name: '4', inc: 24000, exp: 6000 },
+                                    { name: '5', inc: 21000, exp: 4800 },
+                                    { name: '6', inc: 28000, exp: 5200 },
+                                ]}>
+                                    <defs>
+                                        <linearGradient id="colorInc" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.1} />
+                                            <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                                        </linearGradient>
+                                        <linearGradient id="colorExp" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="5%" stopColor="#f43f5e" stopOpacity={0.1} />
+                                            <stop offset="95%" stopColor="#f43f5e" stopOpacity={0} />
+                                        </linearGradient>
+                                    </defs>
+                                    <CartesianGrid strokeDasharray="3 3" vertical={false} strokeOpacity={0.3} />
+                                    <XAxis hide />
+                                    <Tooltip
+                                        contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 10px rgba(0,0,0,0.1)', fontSize: '12px' }}
+                                    />
+                                    <Area type="monotone" dataKey="inc" stroke="#3b82f6" strokeWidth={2} fillOpacity={1} fill="url(#colorInc)" />
+                                    <Area type="monotone" dataKey="exp" stroke="#f43f5e" strokeWidth={2} fillOpacity={1} fill="url(#colorExp)" />
+                                </AreaChart>
+                            </ResponsiveContainer>
+                        </div>
+                    </div>
+
+                    {/* 3. Transaction History (Very Compact) */}
                     <div>
-                        <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Gastos y Servicios</h3>
-                        <p className="text-sm text-slate-500">Gestión de propiedad, mantenimiento y servicios básicos.</p>
+                        <div className="flex items-center justify-between mb-3">
+                            <h3 className="text-sm font-bold text-slate-900 dark:text-white">Últimos Movimientos</h3>
+                            <Button variant="ghost" size="sm" className="h-6 text-xs text-slate-500 hover:text-slate-900 px-2" onClick={() => handleOpenUpload('income', 'rent')}>
+                                + Nuevo
+                            </Button>
+                        </div>
+                        <div className="space-y-3">
+                            {transactions.slice(0, 4).map((tx) => (
+                                <div key={tx.id} className="flex items-center justify-between group py-1">
+                                    <div className="flex items-center gap-3">
+                                        <div className={`h-8 w-8 rounded-full flex items-center justify-center ${tx.type === 'income' ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'}`}>
+                                            {tx.type === 'income' ? <DollarSign className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
+                                        </div>
+                                        <div>
+                                            <p className="font-semibold text-sm text-slate-900 dark:text-white leading-none">{tx.description}</p>
+                                            <p className="text-[10px] text-slate-500 mt-0.5">{tx.category} • {tx.date}</p>
+                                        </div>
+                                    </div>
+                                    <div className="text-right">
+                                        <p className={`font-bold text-sm ${tx.type === 'income' ? 'text-emerald-600' : 'text-slate-900 dark:text-white'}`}>
+                                            {tx.type === 'income' ? '+' : '-'}${tx.amount.toLocaleString()}
+                                        </p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
 
-                {services.length === 0 ? (
-                    <div className="text-center py-10 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50/50 dark:bg-slate-900/50">
-                        <div className="flex flex-col items-center justify-center">
-                            <div className="bg-white dark:bg-slate-800 p-3 rounded-full shadow-sm mb-3">
-                                <Zap className="h-6 w-6 text-slate-400" />
-                            </div>
-                            <h3 className="text-sm font-medium text-slate-900 dark:text-white">Sin servicios configurados</h3>
-                            <p className="text-xs text-slate-500 max-w-xs mt-1 mb-4">Registra luz, agua, administración o internet.</p>
-                            <Button variant="outline" size="sm" onClick={() => handleOpenUpload('expense', 'new')}>
-                                <Upload className="h-4 w-4 mr-2" /> Agregar Primer Gasto
-                            </Button>
-                        </div>
+                {/* RIGHT COLUMN: Sidebar (Services/My Cards style) */}
+                <div className="lg:col-span-1 border-l border-slate-100 dark:border-slate-800 pl-0 lg:pl-6 space-y-6">
+
+                    {/* Actions / Services Header */}
+                    <div className="flex items-center justify-between">
+                        <h3 className="text-sm font-bold text-slate-900 dark:text-white">Servicios</h3>
+                        <Button size="icon" variant="ghost" className="h-6 w-6 bg-slate-100 dark:bg-slate-800 rounded-md" onClick={() => handleOpenUpload('expense', 'new')}>
+                            <Upload className="h-3 w-3" />
+                        </Button>
                     </div>
-                ) : (
-                    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+
+                    {/* Services 'Cards' List (Compact Grid 2 Cols) */}
+                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
                         {services.map((service) => (
-                            <div
+                            <motion.div
                                 key={service.id}
-                                onClick={() => setSelectedService(service)}
-                                className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 shadow-sm hover:shadow-md transition-all cursor-pointer relative group"
+                                layoutId={`card-service-${service.id}`}
+                                onClick={() => setExpandedCard(`service-${service.id}`)}
+                                className="group relative bg-slate-50 dark:bg-slate-900/50 rounded-xl p-3 cursor-pointer hover:bg-white hover:shadow-md hover:shadow-slate-200/50 dark:hover:bg-slate-800 transition-all duration-300 border border-transparent hover:border-slate-100 dark:hover:border-slate-700 flex flex-col justify-between h-[80px]"
                             >
-                                <div className="flex justify-between items-start mb-3">
-                                    <div className={`p-2.5 rounded-2xl ${service.color} bg-opacity-20 transition-transform group-hover:scale-105`}>
-                                        <service.icon className="h-5 w-5" />
+                                <div className="flex justify-between items-start">
+                                    <div className={`p-1.5 rounded-lg ${service.color} bg-opacity-20`}>
+                                        <service.icon className="h-4 w-4" />
                                     </div>
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                                            <Button variant="ghost" size="icon" className="h-8 w-8 -mr-2 text-slate-400 hover:text-slate-600">
-                                                <MoreVertical className="h-4 w-4" />
-                                            </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="end">
-                                            <DropdownMenuLabel>Gestión</DropdownMenuLabel>
-                                            <DropdownMenuItem>
-                                                <Pencil className="h-4 w-4 mr-2" /> Editar
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem>
-                                                <RefreshCw className="h-4 w-4 mr-2" /> Proveedor
-                                            </DropdownMenuItem>
-                                            <DropdownMenuSeparator />
-                                            <DropdownMenuItem className="text-red-600 focus:text-red-600">
-                                                <Trash2 className="h-4 w-4 mr-2" /> Eliminar
-                                            </DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
+                                    <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full ${service.status === 'paid' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30'}`}>
+                                        {service.status === 'paid' ? 'OK' : 'PEND'}
+                                    </span>
                                 </div>
-
-                                <div className="mb-3">
-                                    <div className="font-semibold text-slate-900 dark:text-white leading-tight pr-2 truncate" title={service.name}>{service.name}</div>
-                                    <div className="flex items-center gap-2 mt-1">
-                                        {service.status === 'paid' && <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 text-[10px] px-1.5 h-5">Pagado</Badge>}
-                                        {service.status === 'pending' && <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200 text-[10px] px-1.5 h-5">Pendiente</Badge>}
-                                        <span className="text-xs text-slate-500">Vence: {new Date(service.dueDate).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}</span>
-                                    </div>
+                                <div>
+                                    <div className="font-bold text-sm text-slate-900 dark:text-white leading-none mb-1">${service.amount}</div>
+                                    <h4 className="font-medium text-[10px] text-slate-500 truncate" title={service.name}>{service.name}</h4>
                                 </div>
-
-                                <div className="flex items-end justify-between pt-3 border-t border-slate-100 dark:border-slate-800">
-                                    <div className="text-xs text-slate-400">Último: {new Date(service.lastPaid).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}</div>
-                                    <div className="font-bold text-lg text-slate-900 dark:text-white">${service.amount}</div>
-                                </div>
-                            </div>
+                            </motion.div>
                         ))}
-                    </div>
-                )}
-            </div>
 
-            {/* Recent Transactions Table */}
-            <Card className="border-slate-200 dark:border-slate-800">
-                <CardHeader>
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                        <div>
-                            <CardTitle className="text-lg">Registro de Movimientos</CardTitle>
-                            <CardDescription>Consolidado de ingresos y egresos del periodo.</CardDescription>
-                        </div>
-                        <div className="flex w-full sm:w-auto gap-2">
-                            <Button variant="default" size="sm" onClick={() => handleOpenUpload('income', 'rent')} className="flex-1 sm:flex-none bg-emerald-600 hover:bg-emerald-700 text-white border-none">
-                                <DollarSign className="h-4 w-4 mr-2" />
-                                <span className="sm:hidden">Ingreso</span>
-                                <span className="hidden sm:inline">Registrar Ingreso</span>
-                            </Button>
-                            <Button variant="outline" size="sm" onClick={() => handleOpenUpload('expense', 'new')} className="flex-1 sm:flex-none">
-                                <Upload className="h-4 w-4 mr-2" />
-                                <span className="sm:hidden">Gasto</span>
-                                <span className="hidden sm:inline">Registrar Gasto</span>
-                            </Button>
+                        {/* Add New Service Placeholder */}
+                        <div
+                            onClick={() => handleOpenUpload('expense', 'new')}
+                            className="border border-dashed border-slate-200 dark:border-slate-800 rounded-xl p-3 flex flex-col items-center justify-center text-center cursor-pointer hover:border-slate-300 dark:hover:border-slate-700 transition-colors h-[80px]"
+                        >
+                            <TrendingUp className="h-5 w-5 text-slate-400 mb-1" />
+                            <span className="text-[10px] font-medium text-slate-500">Agregar</span>
                         </div>
                     </div>
-                </CardHeader>
-                <CardContent className="p-0 sm:p-6">
-                    <Table>
-                        <TableHeader className="hidden sm:table-header-group">
-                            <TableRow>
-                                <TableHead>Fecha</TableHead>
-                                <TableHead>Concepto</TableHead>
-                                <TableHead>Categoría</TableHead>
-                                <TableHead className="text-right">Monto</TableHead>
-                                <TableHead className="text-center">Evidencia</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {transactions.length === 0 && (
-                                <TableRow>
-                                    <TableCell colSpan={5} className="h-24 text-center text-slate-500">
-                                        No hay movimientos registrados en este periodo.
-                                    </TableCell>
-                                </TableRow>
-                            )}
-                            {transactions.map((tx) => (
-                                <TableRow key={tx.id} className="block sm:table-row border-b border-slate-100 dark:border-slate-800 last:border-0 p-4 sm:p-0">
-                                    <TableCell className="hidden sm:table-cell font-medium text-slate-600">{tx.date}</TableCell>
-                                    <TableCell className="block sm:table-cell p-4 sm:p-4">
-                                        <div className="flex justify-between items-start mb-1 sm:hidden">
-                                            <span className="text-xs text-slate-400">{tx.date}</span>
-                                            <span className={`font-bold ${tx.type === 'income' ? 'text-green-600' : 'text-slate-700 dark:text-slate-300'}`}>
-                                                {tx.type === 'income' ? '+' : '-'}${tx.amount.toLocaleString()}
-                                            </span>
-                                        </div>
-                                        <div className="font-medium text-slate-900 dark:text-white mb-1 sm:mb-0">{tx.description}</div>
-                                        <div className="flex items-center gap-2 sm:hidden">
-                                            <Badge variant="outline" className="font-normal text-[10px] h-5 px-1.5 text-slate-500">
-                                                {tx.category}
-                                            </Badge>
-                                        </div>
-                                    </TableCell>
-                                    <TableCell className="hidden sm:table-cell">
-                                        <Badge variant="outline" className="font-normal text-xs text-slate-500">
-                                            {tx.category}
-                                        </Badge>
-                                    </TableCell>
-                                    <TableCell className={`hidden sm:table-cell text-right font-bold ${tx.type === 'income' ? 'text-green-600' : 'text-slate-700 dark:text-slate-300'}`}>
-                                        {tx.type === 'income' ? '+' : '-'}${tx.amount.toLocaleString()}
-                                    </TableCell>
-                                    <TableCell className="hidden sm:table-cell text-center">
-                                        <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-blue-500">
-                                            <Download className="h-4 w-4" />
-                                        </Button>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </CardContent>
-            </Card>
+                </div>
+            </div>
 
             {/* Dialog Form: TRANSACTION UPLOAD (Existing) */}
             <Dialog open={isUploadOpen} onOpenChange={setIsUploadOpen}>
@@ -684,6 +673,13 @@ export function AccountingDashboard({ apartmentId }: { apartmentId: string }) {
                     </DialogContent>
                 </Dialog>
             )}
+
+            {/* EXPANDED CARD OVERLAY */}
+            <AnimatePresence>
+                {expandedCard && (
+                    <ExpandedCardOverlay activeCard={expandedCard} onClose={() => setExpandedCard(null)} />
+                )}
+            </AnimatePresence>
         </div>
     )
 }

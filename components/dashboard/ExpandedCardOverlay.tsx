@@ -14,10 +14,14 @@ import {
     AlertTriangle,
     XCircle,
     HelpCircle,
-    ChevronLeft
+    ChevronLeft,
+    Upload,
+    Pencil,
+    FileText
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import {
     Table,
     TableBody,
@@ -111,7 +115,14 @@ export function ExpandedCardOverlay({ activeCard, onClose }: ExpandedCardOverlay
     const [filter, setFilter] = useState('all')
     const [searchTerm, setSearchTerm] = useState('')
 
-    const normalizedCard = activeCard.includes('mini') ? activeCard.split('-')[0] : activeCard
+    // Helper to get base type
+    const getCardType = (card: string) => {
+        if (card.includes('mini')) return card.split('-')[0]
+        if (card.startsWith('service-')) return 'service'
+        return card
+    }
+
+    const type = getCardType(activeCard)
 
     const getTitle = (card: string) => {
         const type = card.includes('mini') ? card.split('-')[0] : card
@@ -122,12 +133,17 @@ export function ExpandedCardOverlay({ activeCard, onClose }: ExpandedCardOverlay
             case 'buildings': return 'Gestión por Edificios'
             case 'damaged': return 'Reporte de Daños y Alertas'
             case 'units': return 'Inventario por Unidades'
+            case 'balance': return 'Balance General'
+            case 'income': return 'Reporte de Ingresos'
+            case 'expenses': return 'Desglose de Gastos'
+            case 'margin': return 'Rentabilidad y Margen'
+            case 'service': return 'Detalle de Servicio'
             default: return 'Detalle'
         }
     }
 
     const renderContent = () => {
-        const type = activeCard.includes('mini') ? activeCard.split('-')[0] : activeCard
+        const type = getCardType(activeCard)
         switch (type) {
             case 'categories':
                 return <CategoriesView filter={filter} setFilter={setFilter} />
@@ -140,6 +156,13 @@ export function ExpandedCardOverlay({ activeCard, onClose }: ExpandedCardOverlay
             case 'buildings':
             case 'units':
                 return <BuildingsView subview={type === 'units'} />
+            case 'balance':
+            case 'income':
+            case 'expenses':
+            case 'margin':
+                return <FinancialView type={type} />
+            case 'service':
+                return <ServiceDetailView serviceId={activeCard.replace('service-', '')} />
             default:
                 return <div className="p-10 text-center text-slate-500">Contenido en desarrollo</div>
         }
@@ -688,4 +711,144 @@ function BuildingsView({ subview }: { subview: boolean }) {
             </div>
         </div>
     )
+}
+
+function FinancialView({ type }: { type: string }) {
+    return (
+        <div className="space-y-6">
+            <div className="bg-white dark:bg-slate-900 p-8 rounded-xl border border-slate-200 dark:border-slate-800 text-center">
+                <div className="mx-auto w-16 h-16 bg-blue-50 dark:bg-blue-900/20 rounded-full flex items-center justify-center mb-4">
+                    <BarChart2 className="h-8 w-8 text-blue-500" />
+                </div>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
+                    Detalle de {type === 'balance' ? 'Balance' : type === 'income' ? 'Ingresos' : type === 'expenses' ? 'Gastos' : 'Margen'}
+                </h3>
+                <p className="text-slate-500 max-w-md mx-auto">
+                    Esta vista está en desarrollo. Aquí se mostrarán gráficos detallados, historial de transacciones filtrado y proyecciones financieras específicas para {type}.
+                </p>
+                <div className="mt-8 flex justify-center gap-4">
+                    <Button variant="outline">Descargar Reporte</Button>
+                    <Button>Ver Transacciones</Button>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+function ServiceDetailView({ serviceId }: { serviceId: string }) {
+    // Mock service data look up (in a real app this would be a find or fetch)
+    // Using default mock values for display purposes
+    const serviceName = serviceId === 'cfe' ? 'Comisión Federal de Electricidad' :
+        serviceId === 'water' ? 'Servicio de Agua Potable' :
+            serviceId === 'admin-fee' ? 'Administración' :
+                serviceId === 'internet' ? 'Internet Fibra Óptica' :
+                    serviceId === 'cleaning' ? 'Servicio de Limpieza' : 'Servicio General'
+
+    return (
+        <div className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* CHART SECTION */}
+                <div className="lg:col-span-2 h-[300px] w-full bg-white dark:bg-slate-900 rounded-xl p-6 border border-slate-200 dark:border-slate-800">
+                    <div className="flex justify-between items-center mb-4">
+                        <h4 className="text-sm font-bold uppercase text-slate-500 tracking-wider">Historial de Gasto (6 Meses)</h4>
+                    </div>
+                    <ResponsiveContainer width="100%" height="90%">
+                        <AreaChart data={getServiceHistory(serviceId)}>
+                            <defs>
+                                <linearGradient id="colorCost" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8} />
+                                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                                </linearGradient>
+                            </defs>
+                            <CartesianGrid strokeDasharray="3 3" vertical={false} strokeOpacity={0.1} />
+                            <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 12 }} />
+                            <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12 }} tickFormatter={(val) => `$${val}`} />
+                            <Tooltip
+                                contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+                                formatter={(value: any) => [`$${value}`, 'Costo']}
+                            />
+                            <Area type="monotone" dataKey="amount" stroke="#3b82f6" fillOpacity={1} fill="url(#colorCost)" strokeWidth={3} />
+                        </AreaChart>
+                    </ResponsiveContainer>
+                </div>
+
+                {/* DETAILS & ACTIONS */}
+                <div className="space-y-4">
+                    <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 space-y-4">
+                        <h4 className="font-bold text-slate-900 dark:text-white">Estado del Servicio</h4>
+                        <div className="space-y-1">
+                            <Label className="text-xs text-slate-500">Estatus Actual</Label>
+                            <div className="flex items-center gap-2">
+                                <Badge variant="default" className="bg-green-600 hover:bg-green-700">
+                                    Pagado
+                                </Badge>
+                                <span className="text-xs text-slate-400">Hace 3 días</span>
+                            </div>
+                        </div>
+                        <div className="space-y-1">
+                            <Label className="text-xs text-slate-500">Promedio Mensual</Label>
+                            <div className="flex items-center gap-2">
+                                <span className="text-2xl font-bold text-slate-900 dark:text-white">$850.00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 space-y-3">
+                        <h4 className="font-bold text-slate-900 dark:text-white mb-2">Acciones Rápidas</h4>
+                        <div className="p-3 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-lg flex flex-col items-center justify-center text-center cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors group">
+                            <div className="h-8 w-8 bg-blue-50 dark:bg-blue-900/20 rounded-full flex items-center justify-center mb-1 group-hover:scale-110 transition-transform">
+                                <Upload className="h-4 w-4 text-blue-600" />
+                            </div>
+                            <span className="text-xs font-medium text-slate-600 dark:text-slate-400">Subir Recibo PDF</span>
+                        </div>
+                        <Button variant="outline" className="w-full justify-start text-xs" size="sm">
+                            <Download className="h-3.5 w-3.5 mr-2" />
+                            Ver Último Recibo
+                        </Button>
+                        <Button variant="outline" className="w-full justify-start text-xs" size="sm">
+                            <FileText className="h-3.5 w-3.5 mr-2" />
+                            Historial de Pagos
+                        </Button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+// Helper to generate fake history data based on service type
+function getServiceHistory(serviceId: string) {
+    const months = ['Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic', 'Ene']
+    return months.map((month, index) => {
+        let amount = 0
+
+        if (serviceId === 'cfe') {
+            if (index % 2 !== 0) {
+                amount = 850 + (Math.random() * 200 - 50)
+            } else {
+                amount = 58 // Cargo mínimo fijo
+            }
+        } else if (serviceId === 'water') {
+            if (month === 'Ene') {
+                amount = 4500
+            } else {
+                amount = 0
+            }
+        } else if (serviceId === 'predial') {
+            if (month === 'Ene') {
+                amount = 12000
+            } else {
+                amount = 0
+            }
+        } else {
+            const baseAmount = serviceId === 'internet' ? 600 :
+                serviceId === 'gas' ? 450 : 1500
+            amount = baseAmount + (Math.random() * 80)
+        }
+
+        return {
+            month,
+            amount: Math.max(0, Math.round(amount))
+        }
+    })
 }
