@@ -174,7 +174,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500 max-w-7xl mx-auto p-4 md:px-8 md:pb-8 md:pt-0 md:-mt-2">
+    <div className="space-y-6 animate-in fade-in duration-500 max-w-7xl mx-auto">
 
       {/* TARJETA PRINCIPAL: DATOS PERSONALES */}
       <Card className="border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden relative">

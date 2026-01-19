@@ -859,55 +859,69 @@ function AdminDashboard() {
                             </div>
 
                             {/* Breakdown de Gastos Pie */}
-                            <div className="bg-white dark:bg-slate-900 rounded-lg p-6 shadow-sm border border-slate-200/50 dark:border-slate-800 flex-1">
-                                <div className="flex items-center justify-between mb-2">
+                            <div className="bg-white dark:bg-slate-900 rounded-lg p-6 shadow-sm border border-slate-200/50 dark:border-slate-800 flex-1 flex flex-col justify-center">
+                                <div className="flex items-center justify-between mb-4">
                                     <h3 className="text-base font-bold text-slate-900 dark:text-white">Desglose de Gastos</h3>
                                 </div>
-                                <div className="h-[200px] w-full relative">
-                                    <ResponsiveContainer width="100%" height="100%">
-                                        <PieChart>
-                                            <defs>
-                                                <linearGradient id="gradPieBlue" x1="0" y1="0" x2="0" y2="1">
-                                                    <stop offset="0%" stopColor="#3b82f6" stopOpacity={1} />
-                                                    <stop offset="100%" stopColor="#3b82f6" stopOpacity={0.4} />
-                                                </linearGradient>
-                                                <linearGradient id="gradPieOrange" x1="0" y1="0" x2="0" y2="1">
-                                                    <stop offset="0%" stopColor="#f97316" stopOpacity={1} />
-                                                    <stop offset="100%" stopColor="#f97316" stopOpacity={0.4} />
-                                                </linearGradient>
-                                                <linearGradient id="gradPieRed" x1="0" y1="0" x2="0" y2="1">
-                                                    <stop offset="0%" stopColor="#ef4444" stopOpacity={1} />
-                                                    <stop offset="100%" stopColor="#ef4444" stopOpacity={0.4} />
-                                                </linearGradient>
-                                                <linearGradient id="gradPieEmerald" x1="0" y1="0" x2="0" y2="1">
-                                                    <stop offset="0%" stopColor="#10b981" stopOpacity={1} />
-                                                    <stop offset="100%" stopColor="#10b981" stopOpacity={0.4} />
-                                                </linearGradient>
-                                            </defs>
-                                            <Pie data={expenseCategories} innerRadius={60} outerRadius={80} paddingAngle={5} dataKey="value" stroke="none">
-                                                {expenseCategories.map((entry, index) => {
-                                                    let fillUrl = 'url(#gradPieBlue)';
-                                                    if (entry.color === '#f97316') fillUrl = 'url(#gradPieOrange)';
-                                                    if (entry.color === '#ef4444') fillUrl = 'url(#gradPieRed)';
-                                                    if (entry.color === '#10b981') fillUrl = 'url(#gradPieEmerald)';
-                                                    return <Cell key={`cell-${index}`} fill={fillUrl} />;
-                                                })}
-                                            </Pie>
-                                            <Tooltip contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }} />
-                                        </PieChart>
-                                    </ResponsiveContainer>
-                                    <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                                        <span className="text-xs font-medium text-slate-400">Total</span>
-                                        <span className="text-xl font-bold text-slate-900 dark:text-white">$386k</span>
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-2 gap-2 mt-4">
-                                    {expenseCategories.map((cat, i) => (
-                                        <div key={i} className="flex items-center gap-2 text-xs">
-                                            <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: cat.color }} />
-                                            <span className="text-slate-600 dark:text-slate-400">{cat.name}</span>
+                                <div className="flex items-center justify-between gap-4">
+                                    <div className="relative h-[140px] w-[140px] mx-auto md:mx-0 shrink-0">
+                                        <ResponsiveContainer width="100%" height="100%">
+                                            <PieChart>
+                                                <defs>
+                                                    <linearGradient id="gradPieBlue" x1="0" y1="0" x2="0" y2="1">
+                                                        <stop offset="0%" stopColor="#3b82f6" stopOpacity={1} />
+                                                        <stop offset="100%" stopColor="#3b82f6" stopOpacity={0.4} />
+                                                    </linearGradient>
+                                                    <linearGradient id="gradPieOrange" x1="0" y1="0" x2="0" y2="1">
+                                                        <stop offset="0%" stopColor="#f97316" stopOpacity={1} />
+                                                        <stop offset="100%" stopColor="#f97316" stopOpacity={0.4} />
+                                                    </linearGradient>
+                                                    <linearGradient id="gradPieRed" x1="0" y1="0" x2="0" y2="1">
+                                                        <stop offset="0%" stopColor="#ef4444" stopOpacity={1} />
+                                                        <stop offset="100%" stopColor="#ef4444" stopOpacity={0.4} />
+                                                    </linearGradient>
+                                                    <linearGradient id="gradPieEmerald" x1="0" y1="0" x2="0" y2="1">
+                                                        <stop offset="0%" stopColor="#10b981" stopOpacity={1} />
+                                                        <stop offset="100%" stopColor="#10b981" stopOpacity={0.4} />
+                                                    </linearGradient>
+                                                </defs>
+                                                <Pie
+                                                    data={expenseCategories}
+                                                    innerRadius={45}
+                                                    outerRadius={60}
+                                                    cornerRadius={6}
+                                                    paddingAngle={6}
+                                                    dataKey="value"
+                                                    stroke="none"
+                                                >
+                                                    {expenseCategories.map((entry, index) => {
+                                                        let fillUrl = 'url(#gradPieBlue)';
+                                                        if (entry.color === '#f97316') fillUrl = 'url(#gradPieOrange)';
+                                                        if (entry.color === '#ef4444') fillUrl = 'url(#gradPieRed)';
+                                                        if (entry.color === '#10b981') fillUrl = 'url(#gradPieEmerald)';
+                                                        return <Cell key={`cell-${index}`} fill={fillUrl} />;
+                                                    })}
+                                                </Pie>
+                                                <Tooltip contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }} />
+                                            </PieChart>
+                                        </ResponsiveContainer>
+                                        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                                            <span className="text-xl font-bold text-slate-900 dark:text-white">$386k</span>
+                                            <span className="text-[10px] text-slate-400 font-medium">Total</span>
                                         </div>
-                                    ))}
+                                    </div>
+
+                                    <div className="flex flex-col gap-3 flex-1 min-w-[100px] justify-center">
+                                        {expenseCategories.map((cat, i) => (
+                                            <div key={i} className="flex items-center justify-between text-xs">
+                                                <div className="flex items-center gap-2">
+                                                    <span className="w-2.5 h-2.5 rounded-full shadow-sm" style={{ backgroundColor: cat.color }} />
+                                                    <span className="text-slate-600 dark:text-slate-400 font-medium">{cat.name}</span>
+                                                </div>
+                                                <span className="font-bold text-slate-900 dark:text-white">{cat.value}%</span>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -960,18 +974,67 @@ function AdminDashboard() {
                                     <h3 className="text-base font-bold text-slate-900 dark:text-white mb-4">Utilidad Neta por Propiedad</h3>
                                     <div className="h-[200px] w-full">
                                         <ResponsiveContainer width="100%" height="100%">
-                                            <BarChart data={propertyFinancials} layout="vertical" margin={{ left: -20, right: 10 }}>
+                                            <BarChart data={propertyFinancials} barCategoryGap={0} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
                                                 <defs>
-                                                    <linearGradient id="gradBarBlue" x1="0" y1="0" x2="1" y2="0">
-                                                        <stop offset="0%" stopColor="#3b82f6" stopOpacity={1} />
-                                                        <stop offset="100%" stopColor="#3b82f6" stopOpacity={0.3} />
+                                                    <linearGradient id="blueBarGradient" x1="0" y1="0" x2="0" y2="1">
+                                                        <stop offset="0%" stopColor="#3b82f6" stopOpacity={0.5} />
+                                                        <stop offset="100%" stopColor="#3b82f6" stopOpacity={0.1} />
+                                                    </linearGradient>
+                                                    <linearGradient id="orangeBarGradient" x1="0" y1="0" x2="0" y2="1">
+                                                        <stop offset="0%" stopColor="#f97316" stopOpacity={0.5} />
+                                                        <stop offset="100%" stopColor="#f97316" stopOpacity={0.1} />
                                                     </linearGradient>
                                                 </defs>
-                                                <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke={isDark ? "#1e293b" : "#f1f5f9"} />
-                                                <XAxis type="number" hide />
-                                                <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b' }} width={80} />
-                                                <Tooltip cursor={{ fill: 'transparent' }} contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }} />
-                                                <Bar dataKey="net" fill="url(#gradBarBlue)" radius={[0, 4, 4, 0]} barSize={20} />
+                                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={isDark ? "#1e293b" : "#f1f5f9"} />
+                                                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 11, fontWeight: 600 }} dy={10} interval={0} />
+                                                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 11 }} width={30} hide />
+                                                <Tooltip
+                                                    cursor={{ fill: 'transparent' }}
+                                                    contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)', padding: '12px 16px', backgroundColor: isDark ? '#1e293b' : '#fff' }}
+                                                />
+                                                <Bar dataKey="net"
+                                                    shape={(props: any) => {
+                                                        const { fill, x, y, width, height, index } = props;
+                                                        const isBlue = index % 2 === 0;
+                                                        const strokeColor = isBlue ? '#3b82f6' : '#f97316';
+                                                        return (
+                                                            <g>
+                                                                <rect x={x} y={y} width={width} height={height} fill={fill} rx={0} ry={0} />
+                                                                <rect x={x} y={y} width={width} height={5} fill={strokeColor} />
+                                                            </g>
+                                                        );
+                                                    }}
+                                                >
+                                                    <LabelList
+                                                        dataKey="net"
+                                                        position="top"
+                                                        formatter={(value: any) => `$${(value / 1000).toFixed(0)}k`}
+                                                        style={{ fontSize: '20px', fontWeight: 400, fill: isDark ? '#fff' : '#0f172a' }}
+                                                        dy={-5}
+                                                    />
+                                                    <LabelList
+                                                        dataKey="net"
+                                                        position="insideBottom"
+                                                        content={(props: any) => {
+                                                            const { x, y, width, height, index } = props;
+                                                            const isBlue = index % 2 === 0;
+                                                            const bgColor = isBlue ? '#3b82f6' : '#f97316';
+                                                            const margin = Math.round((propertyFinancials[index].net / propertyFinancials[index].income) * 100);
+
+                                                            return (
+                                                                <g>
+                                                                    <rect x={x + width / 2 - 20} y={y + height - 26} width={40} height={18} rx={9} fill={bgColor} />
+                                                                    <text x={x + width / 2} y={y + height - 14} textAnchor="middle" fontSize={10} fill="white" fontWeight="bold">
+                                                                        {margin}%
+                                                                    </text>
+                                                                </g>
+                                                            );
+                                                        }}
+                                                    />
+                                                    {propertyFinancials.map((entry, index) => (
+                                                        <Cell key={`cell-${index}`} fill={index % 2 === 0 ? "url(#blueBarGradient)" : "url(#orangeBarGradient)"} />
+                                                    ))}
+                                                </Bar>
                                             </BarChart>
                                         </ResponsiveContainer>
                                     </div>
@@ -983,7 +1046,7 @@ function AdminDashboard() {
                                         <h3 className="text-base font-bold text-slate-900 dark:text-white">Últimos Movimientos</h3>
                                         <Button variant="ghost" size="sm" className="h-6 text-xs text-blue-500">Ver todo</Button>
                                     </div>
-                                    <div className="flex-1 space-y-3 overflow-auto custom-scrollbar pr-1 max-h-[220px]">
+                                    <div className="flex-1 space-y-3 overflow-auto custom-scrollbar pr-1">
                                         {[
                                             { desc: 'Renta Ene - Casa Tortuga', amount: '+$18,000', type: 'income', date: 'Hoy' },
                                             { desc: 'Pago CFE - Villa Sol', amount: '-$3,450', type: 'expense', date: 'Ayer' },

@@ -22,7 +22,9 @@ import {
   Shield,
   FileCheck,
   AlertTriangle,
-  FileEdit
+  FileEdit,
+  Camera,
+  Loader2
 } from 'lucide-react'
 
 export default function SettingsPage() {
@@ -41,6 +43,10 @@ export default function SettingsPage() {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isEditingPassword, setIsEditingPassword] = useState(false)
+
+  // Estado para Intervalo de Fotos
+  const [refreshInterval, setRefreshInterval] = useState('optional')
+  const [isSavingInterval, setIsSavingInterval] = useState(false)
 
   const handlePasswordUpdate = () => {
     setIsLoading(true)
@@ -90,6 +96,14 @@ export default function SettingsPage() {
     }, 1000)
   }
 
+  const handleSaveInterval = () => {
+    setIsSavingInterval(true)
+    setTimeout(() => {
+      setIsSavingInterval(false)
+      toast({ title: "Frecuencia actualizada", description: `El ciclo de renovación de fotos se ha establecido correctamente.` })
+    }, 1000)
+  }
+
   if (user?.role !== 'admin') {
     return (
       <div className="flex items-center justify-center p-8 h-[50vh]">
@@ -107,23 +121,23 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="space-y-8 max-w-7xl mx-auto p-4 pb-24 md:px-8 md:pb-8 md:pt-0 md:-mt-2">
+    <div className="space-y-6 max-w-7xl mx-auto">
 
 
 
-      <div className="grid gap-6 md:grid-cols-2 items-start">
+      <div className="grid gap-6 md:grid-cols-2">
         {/* --- NOTIFICATIONS SECTION --- */}
-        <section className="space-y-4">
+        <section className="space-y-4 h-full flex flex-col">
           <h2 className="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2">
             <Bell className="h-5 w-5 text-primary" />
             Notificaciones
           </h2>
-          <Card>
+          <Card className="h-full flex flex-col">
             <CardHeader>
               <CardTitle>Alertas de Inspección</CardTitle>
               <CardDescription>Configura cuándo deseas recibir notificaciones automáticas.</CardDescription>
             </CardHeader>
-            <CardContent className="grid gap-6">
+            <CardContent className="grid gap-6 flex-1">
 
               <div className="flex items-center justify-between space-x-4 border-b border-slate-100 dark:border-slate-800 pb-4 last:border-0 last:pb-0">
                 <div className="flex items-start gap-4">
@@ -169,17 +183,17 @@ export default function SettingsPage() {
         </section>
 
         {/* --- GENERAL SECTION --- */}
-        <section className="space-y-4">
+        <section className="space-y-4 h-full flex flex-col">
           <h2 className="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2">
             <Settings className="h-5 w-5 text-primary" />
             General
           </h2>
-          <Card>
+          <Card className="h-full flex flex-col">
             <CardHeader>
               <CardTitle>Preferencias de Interfaz</CardTitle>
               <CardDescription>Personaliza tu experiencia visual y de idioma.</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-6 flex-1">
 
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div className="flex items-start gap-4">
@@ -245,18 +259,72 @@ export default function SettingsPage() {
           </Card>
         </section>
 
+
+
+        {/* --- INVENTORY & AUDIT SECTION --- */}
+        <section className="space-y-4 h-full flex flex-col">
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+            <Camera className="h-5 w-5 text-primary" />
+            Inventario & Auditoría
+          </h2>
+          <Card className="h-full flex flex-col">
+            <CardHeader>
+              <CardTitle>Auditoría Visual</CardTitle>
+              <CardDescription>Frecuencia de renovación de fotos.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6 flex-1">
+
+              <div className="bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-800 p-4 rounded-lg flex gap-3 text-sm text-blue-800 dark:text-blue-300">
+                <Shield className="h-5 w-5 shrink-0" />
+                <p>
+                  Alertar a verificadores cuando las fotos caduquen.
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <Label className="text-sm font-semibold">Ciclo de Renovación:</Label>
+                <Select value={refreshInterval} onValueChange={setRefreshInterval}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Seleccionar frecuencia" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="3_months">Cada 3 Meses (Alta Rotación)</SelectItem>
+                    <SelectItem value="6_months">Cada 6 Meses (Estándar)</SelectItem>
+                    <SelectItem value="9_months">Cada 9 Meses (Balanceado)</SelectItem>
+                    <SelectItem value="12_months">Anualmente (Largo Plazo)</SelectItem>
+                    <SelectItem value="optional">Opcional (Sin alertas)</SelectItem>
+                  </SelectContent>
+                </Select>
+                <p className="text-[10px] text-slate-500 pt-1">
+                  {refreshInterval === 'optional'
+                    ? 'No se enviarán notificaciones de caducidad.'
+                    : `Se notificará al cumplir ${refreshInterval.split('_')[0]} meses sin fotos nuevas.`}
+                </p>
+              </div>
+
+              <div className="pt-2 flex justify-end">
+                <Button onClick={handleSaveInterval} disabled={isSavingInterval} className="btn-airbnb-effect border-0 text-white shadow-md w-full sm:w-auto">
+                  {isSavingInterval && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  Guardar Preferencia
+                </Button>
+              </div>
+
+            </CardContent>
+          </Card>
+        </section>
+
         {/* --- SECURITY SECTION --- */}
-        <section className="space-y-4">
+        <section className="space-y-4 h-full flex flex-col">
           <h2 className="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2">
             <Lock className="h-5 w-5 text-primary" />
             Seguridad
           </h2>
-          <Card>
+          <Card className="h-full flex flex-col">
             <CardHeader>
               <CardTitle>Cambiar Contraseña</CardTitle>
               <CardDescription>Actualiza tu contraseña para mantener tu cuenta segura.</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 flex-1">
               <div className="space-y-2">
                 <Label htmlFor="current-password">Contraseña Actual</Label>
                 <Input
@@ -326,6 +394,6 @@ export default function SettingsPage() {
 
 
 
-    </div>
+    </div >
   )
 }
